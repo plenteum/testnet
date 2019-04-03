@@ -41,7 +41,8 @@ namespace DaemonConfig {
       version = false;
       osVersion = false;
       printGenesisTx = false;
-      dumpConfig = false; 
+      dumpConfig = false;
+      useSqliteForLocalCaches = false;
     }
 
     std::string dataDirectory;
@@ -80,6 +81,7 @@ namespace DaemonConfig {
     bool osVersion;
     bool printGenesisTx;
     bool dumpConfig;
+    bool useSqliteForLocalCaches;
   };
 
   DaemonConfiguration initConfiguration(const char* path);

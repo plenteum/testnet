@@ -22,6 +22,7 @@
 #include "CryptoNoteCore/DatabaseBlockchainCache.h"
 #include "CryptoNoteCore/DatabaseBlockchainCacheFactory.h"
 #include "CryptoNoteCore/MainChainStorage.h"
+#include "CryptoNoteCore/MainChainStorageSqlite.h"
 #include "CryptoNoteCore/RocksDBWrapper.h"
 #include "CryptoNoteProtocol/CryptoNoteProtocolHandler.h"
 #include "P2p/NetNode.h"
@@ -290,7 +291,10 @@ int main(int argc, char* argv[])
       std::move(checkpoints),
       dispatcher,
       std::unique_ptr<IBlockchainCacheFactory>(new DatabaseBlockchainCacheFactory(database, logger.getLogger())),
-      createSwappedMainChainStorage(config.dataDirectory, currency));
+      (config.useSqliteForLocalCaches) ?
+        createSwappedMainChainStorageSqlite(config.dataDirectory, currency) :
+        createSwappedMainChainStorage(config.dataDirectory, currency)
+    );
 
     ccore.load();
     logger(INFO) << "Core initialized OK";
