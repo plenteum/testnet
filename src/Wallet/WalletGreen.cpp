@@ -3,6 +3,7 @@
 // Copyright (c) 2018, The BBSCoin Developers
 // Copyright (c) 2018, The Karbo Developers
 // Copyright (c) 2018-2019, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The Plenteum Developers
 //
 // Please see the included LICENSE file for more information.
 
@@ -323,8 +324,6 @@ void WalletGreen::initWithKeys(const std::string& path, const std::string& passw
   ContainerStoragePrefix* prefix = reinterpret_cast<ContainerStoragePrefix*>(newStorage.prefix());
   prefix->version = static_cast<uint8_t>(WalletSerializerV2::SERIALIZATION_VERSION);
   prefix->nextIv = Crypto::randomChachaIV();
-
-  Crypto::generate_chacha8_key(password, m_key);
 
   uint64_t creationTimestamp;
 
@@ -1491,18 +1490,76 @@ void WalletGreen::prepareTransaction(std::vector<WalletOuts>&& wallets,
   preparedTransaction.changeAmount = foundMoney - preparedTransaction.neededMoney - donationAmount;
 
   std::vector<ReceiverAmounts> decomposedOutputs = splitDestinations(preparedTransaction.destinations, m_currency.defaultDustThreshold(m_node.getLastKnownBlockHeight()), m_currency);
-  if (preparedTransaction.changeAmount != 0) {
-    WalletTransfer changeTransfer;
-    changeTransfer.type = WalletTransferType::CHANGE;
-    changeTransfer.address = m_currency.accountAddressAsString(changeDestination);
-    changeTransfer.amount = static_cast<int64_t>(preparedTransaction.changeAmount);
-    preparedTransaction.destinations.emplace_back(std::move(changeTransfer));
+  if (CryptoNote::parameters::UPGRADE_HEIGHT_V5 > m_node.getLastKnownBlockHeight())
+  {
+	  //add the change back to the original wallet
+	  if (preparedTransaction.changeAmount != 0) {
+		  WalletTransfer changeTransfer;
+		  changeTransfer.type = WalletTransferType::CHANGE;
+		  changeTransfer.address = m_currency.accountAddressAsString(changeDestination);
+		  changeTransfer.amount = static_cast<int64_t>(preparedTransaction.changeAmount);
+		  preparedTransaction.destinations.emplace_back(std::move(changeTransfer));
+		  auto splittedChange = splitAmount(preparedTransaction.changeAmount, changeDestination, m_currency.defaultDustThreshold(m_node.getLastKnownBlockHeight()));
+		  decomposedOutputs.emplace_back(std::move(splittedChange));
+	  }
 
-    auto splittedChange = splitAmount(preparedTransaction.changeAmount, changeDestination, m_currency.defaultDustThreshold(m_node.getLastKnownBlockHeight()));
-    decomposedOutputs.emplace_back(std::move(splittedChange));
+	  preparedTransaction.transaction = makeTransaction(decomposedOutputs, keysInfo, extra, unlockTimestamp);
   }
+  else {
+	  ////extract dust from decomposed outs (excluding change) and add new DUST transfer
+	  uint64_t dustLimit = CryptoNote::parameters::CRYPTONOTE_DUST_OUT_LIMIT;
+	  uint64_t dustAmount = 0;
 
-  preparedTransaction.transaction = makeTransaction(decomposedOutputs, keysInfo, extra, unlockTimestamp);
+	  std::vector<ReceiverAmounts> newDecomposedOutputs;
+	  for (const auto& output : decomposedOutputs) {
+		  uint64_t destinationAmount = 0;
+		  for (auto amount : output.amounts) {
+			  if (amount < dustLimit) {
+				  dustAmount += amount;
+			  }
+			  else {
+				  destinationAmount += amount;
+			  }
+		  }
+
+		  auto splittedDestinationAmounts = clearAndSplitAmount(destinationAmount, output.receiver, m_currency.defaultDustThreshold(m_node.getLastKnownBlockHeight()));
+		  newDecomposedOutputs.emplace_back(std::move(splittedDestinationAmounts));
+	  }
+	  //So what we are doing here is removing all the tiny outs (less than 1000000) and sending them to a specified address - which is just an ordinary wallet
+	  //The reason we are using a standard wallet to store all the dust is threefold
+	  //1. it leaves open the possibility of being able to trace back users contributions to the dust fund
+	  //2. it does not require changes to the Tx paramaters with a possible risk of an old software version creating a fork which could wipe the accumulated dust
+	  //3. it keeps our options open for how we progress the emission side of the dust fund for future rewards
+
+	  //create the DUST Destination
+	  if (dustAmount > 0) {
+		  WalletTransfer dustTransfer;
+		  dustTransfer.type = WalletTransferType::DUST;
+		  AccountPublicAddress dustDestination;
+		  std::string dustAddress = std::string(CryptoNote::parameters::CRYPTONOTE_DUST_OUT_ADDRESS);
+		  m_currency.parseAccountAddressString(dustAddress, dustDestination);
+		  dustTransfer.address = dustAddress;
+		  dustTransfer.amount = static_cast<int64_t>(dustAmount);
+		  preparedTransaction.destinations.emplace_back(std::move(dustTransfer));
+
+		  auto splittedDust = splitAmount(dustAmount, dustDestination, m_currency.defaultDustThreshold(m_node.getLastKnownBlockHeight()));
+		  newDecomposedOutputs.emplace_back(std::move(splittedDust));
+	  }
+
+	  //finally, add the change to return to the original wallet 
+	  //we don't extract change from DUST as this would cause major issues for pools where available balance is calculated from the amount sent out
+	  if (preparedTransaction.changeAmount != 0) {
+		  WalletTransfer changeTransfer;
+		  changeTransfer.type = WalletTransferType::CHANGE;
+		  changeTransfer.address = m_currency.accountAddressAsString(changeDestination);
+		  changeTransfer.amount = static_cast<int64_t>(preparedTransaction.changeAmount);
+		  preparedTransaction.destinations.emplace_back(std::move(changeTransfer));
+		  auto splittedChange = splitAmount(preparedTransaction.changeAmount, changeDestination, m_currency.defaultDustThreshold(m_node.getLastKnownBlockHeight()));
+		  newDecomposedOutputs.emplace_back(std::move(splittedChange));
+	  }
+
+	  preparedTransaction.transaction = makeTransaction(newDecomposedOutputs, keysInfo, extra, unlockTimestamp);
+  }
 }
 
 void WalletGreen::validateSourceAddresses(const std::vector<std::string>& sourceAddresses) const {
@@ -2297,14 +2354,17 @@ size_t WalletGreen::validateSaveAndSendTransaction(const ITransactionReader& tra
     throw std::system_error(make_error_code(error::INTERNAL_WALLET_ERROR), "Failed to deserialize created transaction");
   }
 
-  if (cryptoNoteTransaction.extra.size() >= CryptoNote::parameters::MAX_EXTRA_SIZE_V2)
+  if (m_node.getLastKnownBlockHeight() > CryptoNote::parameters::MAX_EXTRA_SIZE_V2_HEIGHT)
   {
-      m_logger(ERROR, BRIGHT_RED) << "Transaction extra is too large. Allowed: "
-                                  << CryptoNote::parameters::MAX_EXTRA_SIZE_V2
-                                  << ", actual: " << cryptoNoteTransaction.extra.size()
-                                  << ".";
+	  if (cryptoNoteTransaction.extra.size() >= CryptoNote::parameters::MAX_EXTRA_SIZE_V2)
+	  {
+		  m_logger(ERROR, BRIGHT_RED) << "Transaction extra is too large. Allowed: "
+			  << CryptoNote::parameters::MAX_EXTRA_SIZE_V2
+			  << ", actual: " << cryptoNoteTransaction.extra.size()
+			  << ".";
 
-      throw std::system_error(make_error_code(error::EXTRA_TOO_LARGE), "Transaction extra too large");
+		  throw std::system_error(make_error_code(error::EXTRA_TOO_LARGE), "Transaction extra too large");
+	  }
   }
 
   uint64_t fee = transaction.getInputTotalAmount() - transaction.getOutputTotalAmount();
@@ -2424,7 +2484,7 @@ uint64_t WalletGreen::selectTransfers(
   }
 
   if (dust && !dustOutputs.empty()) {
-    ShuffleGenerator<size_t> dustIndexGenerator(dustOutputs.size());
+	  ShuffleGenerator<size_t> dustIndexGenerator(dustOutputs.size());
     do {
       auto& out = dustOutputs[dustIndexGenerator()];
       foundMoney += out.second.amount;
@@ -2504,6 +2564,19 @@ CryptoNote::WalletGreen::ReceiverAmounts WalletGreen::splitAmount(
   receiverAmounts.receiver = destination;
   decomposeAmount(amount, dustThreshold, receiverAmounts.amounts);
   return receiverAmounts;
+}
+
+CryptoNote::WalletGreen::ReceiverAmounts WalletGreen::clearAndSplitAmount(
+	uint64_t amount,
+	const AccountPublicAddress& destination,
+	uint64_t dustThreshold) {
+
+	ReceiverAmounts receiverAmounts;
+
+	receiverAmounts.receiver = destination;
+	receiverAmounts.amounts.clear(); //clear the amounts before decomposing
+	decomposeAmount(amount, dustThreshold, receiverAmounts.amounts);
+	return receiverAmounts;
 }
 
 void WalletGreen::prepareInputs(

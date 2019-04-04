@@ -1,5 +1,6 @@
 // Copyright (c) 2012-2017, The CryptoNote developers, The Bytecoin developers
-// Copyright (c) 2018, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The Plenteum Developers
 //
 // Please see the included LICENSE file for more information.
 
@@ -61,11 +62,11 @@ public:
                               std::vector<BlockDetails>& entries, uint32_t blockCount) const = 0;
 
   virtual bool getWalletSyncData(
-    const std::vector<Crypto::Hash> &knownBlockHashes,
-    const uint64_t startHeight,
-    const uint64_t startTimestamp,
-    const uint64_t blockCount,
-    std::vector<WalletTypes::WalletBlockInfo> &blocks) const = 0;
+	  const std::vector<Crypto::Hash> &knownBlockHashes,
+	  const uint64_t startHeight,
+	  const uint64_t startTimestamp,
+	  const uint64_t blockCount,
+	  std::vector<WalletTypes::WalletBlockInfo> &blocks) const = 0;
 
   virtual bool getTransactionsStatus(
     std::unordered_set<Crypto::Hash> transactionHashes,

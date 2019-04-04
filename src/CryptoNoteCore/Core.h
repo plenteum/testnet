@@ -1,5 +1,6 @@
 // Copyright (c) 2012-2017, The CryptoNote developers, The Bytecoin developers
-// Copyright (c) 2018, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The Plenteum Developers
 //
 // Please see the included LICENSE file for more information.
 
@@ -66,7 +67,7 @@ public:
     const std::vector<Crypto::Hash> &knownBlockHashes,
     const uint64_t startHeight,
     const uint64_t startTimestamp,
-    const uint64_t blockCount,
+	const uint64_t blockCount,
     std::vector<WalletTypes::WalletBlockInfo> &walletBlocks) const override;
 
   virtual bool getTransactionsStatus(
@@ -192,19 +193,8 @@ private:
 
   uint8_t getBlockMajorVersionForHeight(uint32_t height) const;
   size_t calculateCumulativeBlocksizeLimit(uint32_t height) const;
-
-  bool validateBlockTemplateTransaction(
-    const CachedTransaction &cachedTransaction,
-    const uint64_t blockHeight) const;
-
-  void fillBlockTemplate(
-    BlockTemplate& block,
-    const size_t medianSize,
-    const size_t maxCumulativeSize,
-    const uint64_t height,
-    size_t& transactionsSize,
-    uint64_t& fee) const;
-
+  bool validateBlockTemplateTransaction(const CachedTransaction &cachedTransaction, const uint64_t blockHeight) const;
+  void fillBlockTemplate( BlockTemplate& block, const size_t medianSize, const size_t maxCumulativeSize, const uint64_t height, size_t& transactionsSize, uint64_t& fee) const;
   void deleteAlternativeChains();
   void deleteLeaf(size_t leafIndex);
   void mergeMainChainSegments();

@@ -16,27 +16,27 @@ about: Create a report to help us improve
 **Hard Drive Size**: <!-- please indicate the size of your hard drive -->
 **Volume Type**: <!-- please indicate FAT32/NTFS/ext3/ext4 -->
 
-### TurtleCoin Build Information
+### Plenteum Build Information
 
-**Version:** <!-- please indicate the full build number ex. 0.8.0.1269 -->
+**Version:** <!-- please indicate the full build number ex. 0.3.0.1269 -->
 **Binary Source:** <!-- please indicate if you compiled the binaries yourself or if you are using pre-compiled binaries please link to the source of those binaries  -->
 **If self compiled, please provide all the build commands you used**
 ```
 Please insert your build commands here. Example:
 
 mkdir build && cd build
-cmake .. -DBOOST_ROOT=/home/turtlecoin/boost_1_59_0
+cmake .. -DBOOST_ROOT=/home/plenteum/boost_1_59_0
 make -j4
 ```
 
-**If self compiled, please provide of your TurtleCoin CMake output at the default verbosity**:
+**If self compiled, please provide of your Plenteum CMake output at the default verbosity**:
 ```
 Please insert your default verbosity CMake output here
 ```
 
 ### Issue Report
 
-**Binary Reported:** <!-- does this issue affect zedwallet, TurtleCoind, turtle-service, miner? -->
+**Binary Reported:** <!-- does this issue affect zedwallet, Plenteumd, wallet-service, miner? -->
 
 #### Expected Behavior
 

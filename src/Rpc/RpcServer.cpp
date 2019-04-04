@@ -1,5 +1,6 @@
 // Copyright (c) 2012-2017, The CryptoNote developers, The Bytecoin developers
-// Copyright (c) 2018, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The Plenteum Developers
 // Copyright (c) 2018, The Karai Developers
 //
 // Please see the included LICENSE file for more information.
@@ -348,7 +349,7 @@ bool RpcServer::on_query_blocks_detailed(const COMMAND_RPC_QUERY_BLOCKS_DETAILED
 
 bool RpcServer::on_get_wallet_sync_data(const COMMAND_RPC_GET_WALLET_SYNC_DATA::request &req, COMMAND_RPC_GET_WALLET_SYNC_DATA::response &res)
 {
-    if (!m_core.getWalletSyncData(req.blockIds, req.startHeight, req.startTimestamp, req.blockCount, res.items))
+	if (!m_core.getWalletSyncData(req.blockIds, req.startHeight, req.startTimestamp, req.blockCount, res.items))
     {
         res.status = "Failed to perform query";
         return false;

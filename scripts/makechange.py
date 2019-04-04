@@ -12,10 +12,10 @@ $ sudo apt install python3.6
 $ python3.6 makechange.py
 
 Make two wallets and fill one or both with some funds, or start mining to it.
-Open the wallets with turtle-serivce like so:
+Open the wallets with wallet-service like so:
 
-./turtle-service -w walletA.wallet -p yourpass --rpc-password test --bind-port 8070
-./turtle-service -w walletB.wallet -p yourpass --rpc-password test --bind-port 8071
+./wallet-service -w walletA.wallet -p yourpass --rpc-password test --bind-port 8070
+./wallet-service -w walletB.wallet -p yourpass --rpc-password test --bind-port 8071
 
 Feel free to change these parameters if needed of course.
 
@@ -33,11 +33,11 @@ import sys
 from threading import Thread
 
 # Forks adjust as needed
-moveDecimal = 100  # TRTL has 2 decimals so 100 is the divide/multiply factor
+moveDecimal = 100000000  # PLE has 8 decimals so 100000000 is the divide/multiply factor
 minAmount = 100 * moveDecimal  # min number for amount to xfer
 maxAmount = 5000 * moveDecimal  # max number for amount to xfer
 anonymity = 3
-fee = 10 # atomic units, TRTL would be 0.10 as the tx network fee
+fee = 0 # atomic units, PLE would be 0 as the tx network fee, or, for example 10000000 would be 0.1 as the network fee
 
 def getAddress(host, port, rpcPassword):
     payload = {

@@ -17,25 +17,19 @@
 
 #pragma once
 
-#include "INode.h"
+#include <future>
 
-#include <string>
+namespace System {
 
-#include "Logging/LoggerRef.h"
+namespace Detail {
 
-namespace PaymentService {
+template<class T> using Future = std::future<T>;
 
-class NodeFactory {
-public:
-  static CryptoNote::INode* createNode(const std::string& daemonAddress, uint16_t daemonPort, std::shared_ptr<Logging::ILogger> logger);
-  static CryptoNote::INode* createNodeStub();
-private:
-  NodeFactory();
-  ~NodeFactory();
+template<class T> Future<T> async(std::function<T()>&& operation) {
+  return std::async(std::launch::async, std::move(operation));
+}
 
-  CryptoNote::INode* getNode(const std::string& daemonAddress, uint16_t daemonPort);
+}
 
-  static NodeFactory factory;
-};
+}
 
-} //namespace PaymentService
