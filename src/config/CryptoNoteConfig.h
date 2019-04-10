@@ -147,8 +147,9 @@ namespace CryptoNote {
 		const uint32_t UPGRADE_HEIGHT_V5 = 200; // Upgrade height for DustFund V1.
 		const uint32_t UPGRADE_HEIGHT_V6 = 250;  //fix tx sizes issues
 		const uint32_t UPGRADE_HEIGHT_V7 = 1150;  //CN Turtle
+		const uint32_t UPGRADE_HEIGHT_V8 = 1300;  //CN Soft Shell
 
-		const uint32_t UPGRADE_HEIGHT_CURRENT = UPGRADE_HEIGHT_V7;
+		const uint32_t UPGRADE_HEIGHT_CURRENT = UPGRADE_HEIGHT_V8;
 		const unsigned UPGRADE_VOTING_THRESHOLD = 90;               // percent
 		const uint32_t UPGRADE_VOTING_WINDOW = EXPECTED_NUMBER_OF_BLOCKS_PER_DAY;  // blocks
 		const uint32_t UPGRADE_WINDOW = EXPECTED_NUMBER_OF_BLOCKS_PER_DAY;  // blocks
@@ -165,6 +166,7 @@ namespace CryptoNote {
 			200, //first fork to introduce DUST fund
 			250, //fix tx sizes issue
 			1150, // CN Turtle
+			1300, // CN SoftShell
 			1400, //invalid signature count height
 			5000 //difficulty update and web wallet direct connect
 		};
@@ -204,6 +206,7 @@ namespace CryptoNote {
 	const uint8_t  BLOCK_MAJOR_VERSION_3 = 3;
 	const uint8_t  BLOCK_MAJOR_VERSION_4 = 4; //block version to fix tx sizes issue
 	const uint8_t  BLOCK_MAJOR_VERSION_5 = 5; //algo change to CN Turtle
+	const uint8_t  BLOCK_MAJOR_VERSION_6 = 6; //algo change to CN Soft Shell
 	const uint8_t  BLOCK_MINOR_VERSION_0 = 0;
 	const uint8_t  BLOCK_MINOR_VERSION_1 = 1;
 
@@ -220,8 +223,8 @@ namespace CryptoNote {
 
     // P2P Network Configuration Section - This defines our current P2P network version
 	// and the minimum version for communication between nodes
-	const uint8_t  P2P_CURRENT_VERSION = 4; //bump p2p version 
-	const uint8_t  P2P_MINIMUM_VERSION = 3; //bump min supported version
+	const uint8_t  P2P_CURRENT_VERSION = 5; //bump p2p version 
+	const uint8_t  P2P_MINIMUM_VERSION = 4; //bump min supported version
 	
 
 	// This defines the minimum P2P version required for lite blocks propogation
@@ -230,7 +233,7 @@ namespace CryptoNote {
 	// This defines the number of versions ahead we must see peers before we start displaying
 	// warning messages that we need to upgrade our software.
 
-	const uint8_t  P2P_UPGRADE_WINDOW = 2;
+	const uint8_t  P2P_UPGRADE_WINDOW = 1;
 
 	const size_t   P2P_CONNECTION_MAX_WRITE_BUFFER_SIZE = 32 * 1024 * 1024; // 32 MB
 	const uint32_t P2P_DEFAULT_CONNECTIONS_COUNT = 8;
