@@ -125,9 +125,9 @@ elseif (UNIX)
 endif()
 
 if(MSVC)
-	target_link_libraries(Plenteumd System CryptoNoteCore rocksdb sqllite3 ${Boost_LIBRARIES})
+	target_link_libraries(Plenteumd System CryptoNoteCore rocksdb sqlite3 ${Boost_LIBRARIES})
 else()
-	target_link_libraries(Plenteumd System CryptoNoteCore rocksdblib sqllite3 ${Boost_LIBRARIES})
+	target_link_libraries(Plenteumd System CryptoNoteCore rocksdblib sqlite3 ${Boost_LIBRARIES})
 endif()
 
 # Add the dependencies we need
