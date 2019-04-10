@@ -218,10 +218,11 @@ namespace CryptoNote {
 	const size_t   P2P_LOCAL_WHITE_PEERLIST_LIMIT = 1000;
 	const size_t   P2P_LOCAL_GRAY_PEERLIST_LIMIT = 5000;
 
-	// P2P Network Configuration Section - This defines our current P2P network version
+    // P2P Network Configuration Section - This defines our current P2P network version
 	// and the minimum version for communication between nodes
 	const uint8_t  P2P_CURRENT_VERSION = 4; //bump p2p version 
 	const uint8_t  P2P_MINIMUM_VERSION = 3; //bump min supported version
+	
 
 	// This defines the minimum P2P version required for lite blocks propogation
 	const uint8_t  P2P_LITE_BLOCKS_PROPOGATION_VERSION = 4;
