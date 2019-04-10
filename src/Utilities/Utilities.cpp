@@ -17,6 +17,8 @@
 
 #include <thread>
 
+#include <Utilities/String.h>
+
 namespace Utilities
 {
 
@@ -188,8 +190,7 @@ uint64_t getCurrentTimestampAdjusted()
     std::initializer_list<uint64_t> limits =
     {
         CryptoNote::parameters::CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT,
-        CryptoNote::parameters::CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT_V3,
-        CryptoNote::parameters::CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT_V4
+		CryptoNote::parameters::CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT_V2
     };
 
     /* Get the largest adjustment possible */
@@ -197,6 +198,38 @@ uint64_t getCurrentTimestampAdjusted()
 
     /* Take the earliest timestamp that will include all possible blocks */
     return time - adjust;
+}
+
+bool parseDaemonAddressFromString(std::string &host, uint16_t &port, std::string address)
+{
+    /* Lets users enter url's instead of host:port */
+    address = Utilities::removePrefix(address, "https://");
+    address = Utilities::removePrefix(address, "http://");
+
+    std::vector<std::string> parts = Utilities::split(address, ':');
+
+    if (parts.empty())
+    {
+        return false;
+    }
+    else if (parts.size() >= 2)
+    {
+        try
+        {
+            host = parts.at(0);
+            port = std::stoi(parts.at(1));
+            return true;
+        }
+        catch (const std::invalid_argument &)
+        {
+            return false;
+        }
+    }
+
+    host = parts.at(0);
+    port = CryptoNote::RPC_DEFAULT_PORT;
+
+    return true;
 }
 
 } // namespace Utilities

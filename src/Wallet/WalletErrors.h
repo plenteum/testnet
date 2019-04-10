@@ -108,7 +108,7 @@ public:
     case MIXIN_BELOW_THRESHOLD:         return "Mixin below minimum allowed threshold";
     case MIXIN_ABOVE_THRESHOLD:         return "Mixin above maximum allowed threshold";
     case CONFLICTING_PAYMENT_IDS:       return "Multiple conflicting payment ID's were specified via the use of integrated addresses";
-    case EXTRA_TOO_LARGE:               return "Transaction extra too large";
+	case EXTRA_TOO_LARGE:               return "Transaction extra too large";
     default:                            return "Unknown error";
     }
   }

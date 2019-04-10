@@ -1,5 +1,6 @@
 // Copyright (c) 2012-2017, The CryptoNote developers, The Bytecoin developers
-// Copyright (c) 2018, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The Plenteum Developers
 //
 // Please see the included LICENSE file for more information.
 
@@ -129,8 +130,8 @@ NodeFactory::NodeFactory() {
 NodeFactory::~NodeFactory() {
 }
 
-CryptoNote::INode* NodeFactory::createNode(const std::string& daemonAddress, uint16_t daemonPort, uint16_t initTimeout, std::shared_ptr<Logging::ILogger> logger) {
-  std::unique_ptr<CryptoNote::INode> node(new CryptoNote::NodeRpcProxy(daemonAddress, daemonPort, initTimeout, logger));
+CryptoNote::INode* NodeFactory::createNode(const std::string& daemonAddress, uint16_t daemonPort, std::shared_ptr<Logging::ILogger> logger) {
+  std::unique_ptr<CryptoNote::INode> node(new CryptoNote::NodeRpcProxy(daemonAddress, daemonPort, logger));
 
   NodeInitObserver initObserver;
   node->init(std::bind(&NodeInitObserver::initCompleted, &initObserver, std::placeholders::_1));

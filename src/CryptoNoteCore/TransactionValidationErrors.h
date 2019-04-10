@@ -1,6 +1,7 @@
 // Copyright (c) 2012-2017, The CryptoNote developers, The Bytecoin developers
-// Copyright (c) 2018, The Galaxia Project Developers
-// Copyright (c) 2018, The TurtleCoin Developers
+// Copyright (c) 2019, The Galaxia Project Developers
+// Copyright (c) 2019, The TurtleCoin Developers
+// Copyright (c) 2019, The Plenteum Developers
 //
 // Please see the included LICENSE file for more information.
 
@@ -83,9 +84,9 @@ public:
       case TransactionValidationError::WRONG_AMOUNT: return "Transaction wrong amount";
       case TransactionValidationError::WRONG_TRANSACTION_UNLOCK_TIME: return "Transaction has wrong unlock time";
       case TransactionValidationError::INVALID_MIXIN: return "Mixin too large or too small";
-      case TransactionValidationError::EXTRA_TOO_LARGE: return "Transaction extra too large";
-      case TransactionValidationError::BASE_INVALID_SIGNATURES_COUNT: return "Coinbase transactions must not have input signatures";
-      case TransactionValidationError::INPUT_INVALID_SIGNATURES_COUNT: return "The number of input signatures is not correct";
+	  case TransactionValidationError::EXTRA_TOO_LARGE: return "Transaction extra too large";
+	  case TransactionValidationError::BASE_INVALID_SIGNATURES_COUNT: return "Coinbase transactions must not have input signatures";
+	  case TransactionValidationError::INPUT_INVALID_SIGNATURES_COUNT: return "The number of input signatures is not correct";
       default: return "Unknown error";
     }
   }

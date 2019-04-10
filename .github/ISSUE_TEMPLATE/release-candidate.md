@@ -5,7 +5,7 @@ about: The purpose of this template is to provide a reproducible testing process
 
 ---
 
-# TurtleCoin <!-- Insert semver # including build number here --> Release Candidate Test Log
+# Plenteum <!-- Insert semver # including build number here --> Release Candidate Test Log
 
 Build from: <!-- link to release candidate branch -->
 
@@ -20,7 +20,7 @@ Binaries for Testing:
 - [ ] `Version.h.in` updated to correct semver value
 - [ ] Release Notes Prepared (<!-- link to proposed copy of release notes -->)
 
-### TurtleCoind Tests
+### Plenteumd Tests
 - Daemon connects to local DB
   - [ ] Windows
   - [ ] Linux
@@ -100,7 +100,7 @@ Binaries for Testing:
   - [ ] Linux
   - [ ] MacOS
 
-### Turtle-Service Tests
+### Wallet-Service Tests
 - Connect to local daemon
   - [ ] Windows
   - [ ] Linux
@@ -138,48 +138,6 @@ Binaries for Testing:
   - [ ] Linux
   - [ ] MacOS
 - All RPC endpoints and methods are operational
-  - [ ] Windows
-  - [ ] Linux
-  - [ ] MacOS
-- Scan From Height Works Correctly
-  - [ ] Windows
-  - [ ] Linux
-  - [ ] MacOS
-
-### GUI Wallet Testing
-- Connect to local daemon
-  - [ ] Windows
-  - [ ] Linux
-  - [ ] MacOS
-- Connect to a remote daemon
-  - [ ] Windows
-  - [ ] Linux
-  - [ ] MacOS
-- Send a transaction
-  - [ ] Windows
-  - [ ] Linux
-  - [ ] MacOS
-- Receive a transaction
-  - [ ] Windows
-  - [ ] Linux
-  - [ ] MacOS
-- Perform a fusion transaction
-  - [ ] Windows
-  - [ ] Linux
-  - [ ] MacOS
-- Export keys and seeds
-  - [ ] Windows
-  - [ ] Linux
-  - [ ] MacOS
-- Import from keys and seeds correctly
-  - [ ] Windows
-  - [ ] Linux
-  - [ ] MacOS
-- Perform a full reset
-  - [ ] Windows
-  - [ ] Linux
-  - [ ] MacOS
-- Integrated Addresses work
   - [ ] Windows
   - [ ] Linux
   - [ ] MacOS

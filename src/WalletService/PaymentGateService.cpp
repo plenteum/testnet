@@ -1,5 +1,6 @@
 // Copyright (c) 2012-2017, The CryptoNote developers, The Bytecoin developers
-// Copyright (c) 2018, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The Plenteum Developers
 //
 // Please see the included LICENSE file for more information.
 
@@ -128,14 +129,13 @@ void PaymentGateService::stop() {
 }
 
 void PaymentGateService::runRpcProxy(Logging::LoggerRef& log) {
-  log(Logging::INFO) << "Starting Payment Gate with remote node, timeout: " << config.serviceConfig.initTimeout;
+  log(Logging::INFO) << "Starting Payment Gate with remote node";
   CryptoNote::Currency currency = currencyBuilder->currency();
 
   std::unique_ptr<CryptoNote::INode> node(
     PaymentService::NodeFactory::createNode(
       config.serviceConfig.daemonAddress,
       config.serviceConfig.daemonPort,
-      config.serviceConfig.initTimeout,
       log.getLogger()));
 
   runWalletService(currency, *node);

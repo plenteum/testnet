@@ -1,6 +1,7 @@
 // Copyright (c) 2012-2017, The CryptoNote developers, The Bytecoin developers
 // Copyright (c) 2014-2018, The Monero Project
-// Copyright (c) 2018, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The Plenteum Developers
 //
 // Please see the included LICENSE file for more information.
 
@@ -35,7 +36,7 @@ const Crypto::Hash& CachedBlock::getTransactionTreeHash() const {
 const Crypto::Hash& CachedBlock::getBlockHash() const {
   if (!blockHash.is_initialized()) {
     BinaryArray blockBinaryArray = getBlockHashingBinaryArray();
-    if (BLOCK_MAJOR_VERSION_2 <= block.majorVersion) {
+    if (BLOCK_MAJOR_VERSION_1 <= block.majorVersion) {
       const auto& parentBlock = getParentBlockHashingBinaryArray(false);
       blockBinaryArray.insert(blockBinaryArray.end(), parentBlock.begin(), parentBlock.end());
     }
@@ -47,27 +48,31 @@ const Crypto::Hash& CachedBlock::getBlockHash() const {
 }
 
 const Crypto::Hash& CachedBlock::getBlockLongHash() const {
-  if (!blockLongHash.is_initialized()) {
-    if (block.majorVersion == BLOCK_MAJOR_VERSION_1) {
-      const auto& rawHashingBlock = getBlockHashingBinaryArray();
-      blockLongHash = Hash();
-      cn_slow_hash_v0(rawHashingBlock.data(), rawHashingBlock.size(), blockLongHash.get());
-    } else if ((block.majorVersion == BLOCK_MAJOR_VERSION_2) || (block.majorVersion == BLOCK_MAJOR_VERSION_3)) {
-      const auto& rawHashingBlock = getParentBlockHashingBinaryArray(true);
-      blockLongHash = Hash();
-      cn_slow_hash_v0(rawHashingBlock.data(), rawHashingBlock.size(), blockLongHash.get());
-    } else if (block.majorVersion == BLOCK_MAJOR_VERSION_4) {
-      const auto& rawHashingBlock = getParentBlockHashingBinaryArray(true);
-      blockLongHash = Hash();
-      cn_lite_slow_hash_v1(rawHashingBlock.data(), rawHashingBlock.size(), blockLongHash.get());
-    } else if (block.majorVersion >= BLOCK_MAJOR_VERSION_5) {
-      const auto& rawHashingBlock = getParentBlockHashingBinaryArray(true);
-      blockLongHash = Hash();
-      cn_turtle_lite_slow_hash_v2(rawHashingBlock.data(), rawHashingBlock.size(), blockLongHash.get());
-    } else {
-      throw std::runtime_error("Unknown block major version.");
-    }
-  }
+	if (!blockLongHash.is_initialized()) {
+		if (block.majorVersion == BLOCK_MAJOR_VERSION_0) {
+			const auto& rawHashingBlock = getBlockHashingBinaryArray();
+			blockLongHash = Hash();
+			cn_slow_hash_v0(rawHashingBlock.data(), rawHashingBlock.size(), blockLongHash.get());
+		}
+		else if ((block.majorVersion == BLOCK_MAJOR_VERSION_1) || (block.majorVersion == BLOCK_MAJOR_VERSION_2)) {
+			const auto& rawHashingBlock = getParentBlockHashingBinaryArray(true);
+			blockLongHash = Hash();
+			cn_slow_hash_v0(rawHashingBlock.data(), rawHashingBlock.size(), blockLongHash.get());
+		}
+		else if (block.majorVersion == BLOCK_MAJOR_VERSION_3 || block.majorVersion == BLOCK_MAJOR_VERSION_4) {
+			const auto& rawHashingBlock = getParentBlockHashingBinaryArray(true);
+			blockLongHash = Hash();
+			cn_lite_slow_hash_v1(rawHashingBlock.data(), rawHashingBlock.size(), blockLongHash.get());
+		}
+		else if (block.majorVersion >= BLOCK_MAJOR_VERSION_5) {  //BMV 6 is a Diff Algo Update Only, so we don't change the Hashing Algo here
+			const auto& rawHashingBlock = getParentBlockHashingBinaryArray(true);
+			blockLongHash = Hash();
+			cn_turtle_lite_slow_hash_v2(rawHashingBlock.data(), rawHashingBlock.size(), blockLongHash.get());
+		}
+		else {
+			throw std::runtime_error("Unknown block major version.");
+		}
+	}
 
   return blockLongHash.get();
 }

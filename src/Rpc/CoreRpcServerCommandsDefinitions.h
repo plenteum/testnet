@@ -1,5 +1,6 @@
 // Copyright (c) 2012-2017, The CryptoNote developers, The Bytecoin developers
-// Copyright (c) 2018, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The Plenteum Developers
 // Copyright (c) 2018, The Karai Developers
 //
 // Please see the included LICENSE file for more information.
@@ -815,13 +816,13 @@ struct COMMAND_RPC_GET_WALLET_SYNC_DATA {
 
     uint64_t startHeight;
     uint64_t startTimestamp;
-    uint64_t blockCount;
+	uint64_t blockCount;
 
     void serialize(ISerializer &s) {
       s(blockIds, "blockHashCheckpoints");
       KV_MEMBER(startHeight);
       KV_MEMBER(startTimestamp);
-      KV_MEMBER(blockCount);
+	  KV_MEMBER(blockCount);
     }
   };
 

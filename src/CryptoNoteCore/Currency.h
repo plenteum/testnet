@@ -1,6 +1,7 @@
 // Copyright (c) 2012-2017, The CryptoNote developers, The Bytecoin developers
 // Copyright (c) 2014-2018, The Monero Project
-// Copyright (c) 2018, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The Plenteum Developers
 //
 // Please see the included LICENSE file for more information.
 
@@ -30,30 +31,19 @@ public:
 
   size_t timestampCheckWindow(uint32_t blockHeight) const
   {
-      if (blockHeight >= CryptoNote::parameters::LWMA_2_DIFFICULTY_BLOCK_INDEX_V3)
-      {
-          return CryptoNote::parameters::BLOCKCHAIN_TIMESTAMP_CHECK_WINDOW_V3;
-      }
-      else
-      {
-          return m_timestampCheckWindow;
-      }
+     return m_timestampCheckWindow;
   }
 
   uint64_t blockFutureTimeLimit(uint32_t blockHeight) const
   {
-      if (blockHeight >= CryptoNote::parameters::LWMA_2_DIFFICULTY_BLOCK_INDEX_V2)
-      {
-          return CryptoNote::parameters::CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT_V4;
-      }
-      else if (blockHeight >= CryptoNote::parameters::LWMA_2_DIFFICULTY_BLOCK_INDEX)
-      {
-          return CryptoNote::parameters::CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT_V3;
-      }
-      else
-      {
-          return m_blockFutureTimeLimit;
-      }
+	  if (blockHeight >= CryptoNote::parameters::LWMA_2_DIFFICULTY_BLOCK_INDEX_V3)
+	  {
+		  return CryptoNote::parameters::CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT_V2;
+	  }
+	  else
+	  {
+		  return m_blockFutureTimeLimit;
+	  }
   }
 
   uint64_t moneySupply() const { return m_moneySupply; }
@@ -97,7 +87,7 @@ size_t difficultyLagByBlockVersion(uint8_t blockMajorVersion) const;
   size_t difficultyCut() const { return m_difficultyCut; }
 size_t difficultyCutByBlockVersion(uint8_t blockMajorVersion) const;
   size_t difficultyBlocksCount() const { return m_difficultyWindow + m_difficultyLag; }
-size_t difficultyBlocksCountByBlockVersion(uint8_t blockMajorVersion, uint32_t height) const;
+size_t difficultyBlocksCountByBlockVersion(uint8_t blockMajorVersion) const;
 
   size_t maxBlockSizeInitial() const { return m_maxBlockSizeInitial; }
   uint64_t maxBlockSizeGrowthSpeedNumerator() const { return m_maxBlockSizeGrowthSpeedNumerator; }
@@ -197,7 +187,9 @@ private:
   size_t m_minerTxBlobReservedSize;
 
   size_t m_numberOfDecimalPlaces;
+  size_t m_numberOfDisplayDecimalPlaces;
   uint64_t m_coin;
+  uint64_t m_coinDisplay;
 
   uint64_t m_mininumFee;
   uint64_t m_defaultDustThreshold;
@@ -226,6 +218,10 @@ private:
   uint32_t m_upgradeHeightV3;
   uint32_t m_upgradeHeightV4;
   uint32_t m_upgradeHeightV5;
+  uint32_t m_upgradeHeightV6;
+  uint32_t m_upgradeHeightV7;
+  uint32_t m_upgradeHeightV8;
+
   unsigned int m_upgradeVotingThreshold;
   uint32_t m_upgradeVotingWindow;
   uint32_t m_upgradeWindow;
@@ -282,6 +278,7 @@ public:
   CurrencyBuilder& minerTxBlobReservedSize(size_t val) { m_currency.m_minerTxBlobReservedSize = val; return *this; }
 
   CurrencyBuilder& numberOfDecimalPlaces(size_t val);
+  CurrencyBuilder& numberOfDisplayDecimalPlaces(size_t val);
 
   CurrencyBuilder& mininumFee(uint64_t val) { m_currency.m_mininumFee = val; return *this; }
   CurrencyBuilder& defaultDustThreshold(uint64_t val) { m_currency.m_defaultDustThreshold = val; return *this; }
@@ -310,6 +307,10 @@ public:
   CurrencyBuilder& upgradeHeightV3(uint32_t val) { m_currency.m_upgradeHeightV3 = val; return *this; }
   CurrencyBuilder& upgradeHeightV4(uint32_t val) { m_currency.m_upgradeHeightV4 = val; return *this; }
   CurrencyBuilder& upgradeHeightV5(uint32_t val) { m_currency.m_upgradeHeightV5 = val; return *this; }
+  CurrencyBuilder& upgradeHeightV6(uint32_t val) { m_currency.m_upgradeHeightV6 = val; return *this; }
+  CurrencyBuilder& upgradeHeightV7(uint32_t val) { m_currency.m_upgradeHeightV7 = val; return *this; }
+  CurrencyBuilder& upgradeHeightV8(uint32_t val) { m_currency.m_upgradeHeightV8 = val; return *this; }
+
   CurrencyBuilder& upgradeVotingThreshold(unsigned int val);
   CurrencyBuilder& upgradeVotingWindow(uint32_t val) { m_currency.m_upgradeVotingWindow = val; return *this; }
   CurrencyBuilder& upgradeWindow(uint32_t val);

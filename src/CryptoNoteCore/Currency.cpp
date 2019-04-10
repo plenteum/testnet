@@ -1,6 +1,7 @@
 // Copyright (c) 2012-2017, The CryptoNote developers, The Bytecoin developers
 // Copyright (c) 2014-2018, The Monero Project
-// Copyright (c) 2018, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The Plenteum Developers
 //
 // Please see the included LICENSE file for more information.
 
@@ -90,7 +91,7 @@ bool Currency::generateGenesisBlock() {
     return false;
   }
 
-  genesisBlockTemplate.majorVersion = BLOCK_MAJOR_VERSION_1;
+  genesisBlockTemplate.majorVersion = BLOCK_MAJOR_VERSION_0;
   genesisBlockTemplate.minorVersion = BLOCK_MINOR_VERSION_0;
   genesisBlockTemplate.timestamp = 0;
   genesisBlockTemplate.nonce = 70;
@@ -103,64 +104,59 @@ bool Currency::generateGenesisBlock() {
 }
 
 size_t Currency::difficultyWindowByBlockVersion(uint8_t blockMajorVersion) const {
-  if (blockMajorVersion >= BLOCK_MAJOR_VERSION_3) {
-    return m_difficultyWindow;
-  } else if (blockMajorVersion == BLOCK_MAJOR_VERSION_2) {
-    return CryptoNote::parameters::DIFFICULTY_WINDOW_V2;
-  } else {
-    return CryptoNote::parameters::DIFFICULTY_WINDOW_V1;
-  }
+	if (blockMajorVersion >= BLOCK_MAJOR_VERSION_6) {
+		return m_difficultyWindow; //TODO: check setting of this param
+	}
+	else {
+		return CryptoNote::parameters::DIFFICULTY_WINDOW_V1;
+	}
 }
 
 size_t Currency::difficultyLagByBlockVersion(uint8_t blockMajorVersion) const {
-  if (blockMajorVersion >= BLOCK_MAJOR_VERSION_3) {
-    return m_difficultyLag;
-  } else if (blockMajorVersion == BLOCK_MAJOR_VERSION_2) {
-    return CryptoNote::parameters::DIFFICULTY_LAG_V2;
-  } else {
-    return CryptoNote::parameters::DIFFICULTY_LAG_V1;
-  }
+	if (blockMajorVersion >= BLOCK_MAJOR_VERSION_6) {
+		return m_difficultyLag; //TODO: check setting of this var
+	}
+	else {
+		return CryptoNote::parameters::DIFFICULTY_LAG_V1;
+	}
 }
 
 size_t Currency::difficultyCutByBlockVersion(uint8_t blockMajorVersion) const {
-  if (blockMajorVersion >= BLOCK_MAJOR_VERSION_3) {
-    return m_difficultyCut;
-  } else if (blockMajorVersion == BLOCK_MAJOR_VERSION_2) {
-    return CryptoNote::parameters::DIFFICULTY_CUT_V2;
-  } else {
-    return CryptoNote::parameters::DIFFICULTY_CUT_V1;
-  }
+	if (blockMajorVersion >= BLOCK_MAJOR_VERSION_6) {
+		return m_difficultyCut; //TODO: check setting of this var
+	}
+	else {
+		return CryptoNote::parameters::DIFFICULTY_CUT_V1;
+	}
 }
 
-size_t Currency::difficultyBlocksCountByBlockVersion(uint8_t blockMajorVersion, uint32_t height) const
+size_t Currency::difficultyBlocksCountByBlockVersion(uint8_t blockMajorVersion) const
 {
-    if (height >= CryptoNote::parameters::LWMA_2_DIFFICULTY_BLOCK_INDEX)
-    {
-        return CryptoNote::parameters::DIFFICULTY_BLOCKS_COUNT_V3;
-    }
-
     return difficultyWindowByBlockVersion(blockMajorVersion) + difficultyLagByBlockVersion(blockMajorVersion);
 }
 
 size_t Currency::blockGrantedFullRewardZoneByBlockVersion(uint8_t blockMajorVersion) const {
-  if (blockMajorVersion >= BLOCK_MAJOR_VERSION_3) {
-    return m_blockGrantedFullRewardZone;
-  } else if (blockMajorVersion == BLOCK_MAJOR_VERSION_2) {
-    return CryptoNote::parameters::CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V2;
-  } else {
-    return CryptoNote::parameters::CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1;
-  }
+	if (blockMajorVersion < BLOCK_MAJOR_VERSION_4) {
+		return m_blockGrantedFullRewardZone;
+	}
+	else {
+		return CryptoNote::parameters::CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1; //fix tx sizes issue
+	}
 }
 
 uint32_t Currency::upgradeHeight(uint8_t majorVersion) const {
-  if (majorVersion == BLOCK_MAJOR_VERSION_2) {
+  if (majorVersion == BLOCK_MAJOR_VERSION_1) {
     return m_upgradeHeightV2;
-  } else if (majorVersion == BLOCK_MAJOR_VERSION_3) {
+  } else if (majorVersion == BLOCK_MAJOR_VERSION_2) {
     return m_upgradeHeightV3;
-  } else if (majorVersion == BLOCK_MAJOR_VERSION_4) {
+  } else if (majorVersion == BLOCK_MAJOR_VERSION_3) {
     return m_upgradeHeightV4;
+  } else if (majorVersion == BLOCK_MAJOR_VERSION_4) {
+	return m_upgradeHeightV6; //height of fix for tx sizes
   } else if (majorVersion == BLOCK_MAJOR_VERSION_5) {
-    return m_upgradeHeightV5;
+	return m_upgradeHeightV7;
+  } else if (majorVersion == BLOCK_MAJOR_VERSION_6) {
+	return m_upgradeHeightV8; //Diff update
   } else {
     return static_cast<uint32_t>(-1);
   }
@@ -184,7 +180,7 @@ bool Currency::getBlockReward(uint8_t blockMajorVersion, size_t medianSize, size
   }
 
   uint64_t penalizedBaseReward = getPenalizedAmount(baseReward, medianSize, currentBlockSize);
-  uint64_t penalizedFee = blockMajorVersion >= BLOCK_MAJOR_VERSION_2 ? getPenalizedAmount(fee, medianSize, currentBlockSize) : fee;
+  uint64_t penalizedFee = blockMajorVersion >= BLOCK_MAJOR_VERSION_1 ? getPenalizedAmount(fee, medianSize, currentBlockSize) : fee;
 
   emissionChange = penalizedBaseReward - (fee - penalizedFee);
   reward = penalizedBaseReward + penalizedFee;
@@ -373,12 +369,12 @@ bool Currency::parseAccountAddressString(const std::string& str, AccountPublicAd
 }
 
 std::string Currency::formatAmount(uint64_t amount) const {
-  std::string s = std::to_string(amount);
-  if (s.size() < m_numberOfDecimalPlaces + 1) {
-    s.insert(0, m_numberOfDecimalPlaces + 1 - s.size(), '0');
-  }
-  s.insert(s.size() - m_numberOfDecimalPlaces, ".");
-  return s;
+	std::string s = std::to_string(amount);
+	if (s.size() < m_numberOfDecimalPlaces + 1) {
+		s.insert(0, m_numberOfDecimalPlaces + 1 - s.size(), '0');
+	}
+	s.insert(s.size() - m_numberOfDecimalPlaces, ".");
+	return s.substr(0, s.size() - (m_numberOfDecimalPlaces - m_numberOfDisplayDecimalPlaces)); //remove the dust
 }
 
 std::string Currency::formatAmount(int64_t amount) const {
@@ -428,22 +424,25 @@ bool Currency::parseAmount(const std::string& str, uint64_t& amount) const {
 
 uint64_t Currency::getNextDifficulty(uint8_t version, uint32_t blockIndex, std::vector<uint64_t> timestamps, std::vector<uint64_t> cumulativeDifficulties) const
 {
-    if (blockIndex >= CryptoNote::parameters::LWMA_2_DIFFICULTY_BLOCK_INDEX_V3)
-    {
-        return nextDifficultyV5(timestamps, cumulativeDifficulties);
-    }
-    else if (blockIndex >= CryptoNote::parameters::LWMA_2_DIFFICULTY_BLOCK_INDEX_V2)
-    {
-        return nextDifficultyV4(timestamps, cumulativeDifficulties);
-    }
-    else if (blockIndex >= CryptoNote::parameters::LWMA_2_DIFFICULTY_BLOCK_INDEX)
-    {
-        return nextDifficultyV3(timestamps, cumulativeDifficulties);
-    }
-    else
-    {
-        return nextDifficulty(version, blockIndex, timestamps, cumulativeDifficulties);
-    }
+	/* nextDifficultyV3 and above are defined in src/CryptoNoteCore/Difficulty.cpp */
+	if (blockIndex < CryptoNote::parameters::LWMA_2_DIFFICULTY_BLOCK_INDEX)
+	{
+		return nextDifficulty(version, blockIndex, timestamps, cumulativeDifficulties);
+	}
+	else if (blockIndex < CryptoNote::parameters::LWMA_2_DIFFICULTY_BLOCK_INDEX_V2)
+	{
+		return nextDifficultyV3(timestamps, cumulativeDifficulties);
+	}
+	//Activate LWMA-3 and reduce diff window to 60 blocks for more rapid adjustment... 
+	else if (blockIndex >= CryptoNote::parameters::LWMA_3_DIFFICULTY_BLOCK_INDEX)
+	{
+		return nextDifficultyV6(timestamps, cumulativeDifficulties);
+	}
+	else if (blockIndex < CryptoNote::parameters::LWMA_2_DIFFICULTY_BLOCK_INDEX_V3)
+	{
+		return nextDifficultyV4(timestamps, cumulativeDifficulties);
+	}
+	return nextDifficultyV5(timestamps, cumulativeDifficulties);
 }
 
 uint64_t Currency::nextDifficulty(uint8_t version, uint32_t blockIndex, std::vector<uint64_t> timestamps,
@@ -518,7 +517,7 @@ std::vector<uint64_t> cumulativeDifficulties_o(cumulativeDifficulties);
   DIFFICULTY_LAG=0
   DIFFICULTY_WINDOW=17
 */
-    c_difficultyWindow = 17;
+    c_difficultyWindow = 30;
     c_difficultyCut = 0;
 
     assert(c_difficultyWindow >= 2);
@@ -571,7 +570,7 @@ std::vector<uint64_t> cumulativeDifficulties_o(cumulativeDifficulties);
 }
 
 bool Currency::checkProofOfWorkV1(const CachedBlock& block, uint64_t currentDifficulty) const {
-  if (BLOCK_MAJOR_VERSION_1 != block.getBlock().majorVersion) {
+  if (BLOCK_MAJOR_VERSION_0 != block.getBlock().majorVersion) {
     return false;
   }
 
@@ -580,7 +579,7 @@ bool Currency::checkProofOfWorkV1(const CachedBlock& block, uint64_t currentDiff
 
 bool Currency::checkProofOfWorkV2(const CachedBlock& cachedBlock, uint64_t currentDifficulty) const {
   const auto& block = cachedBlock.getBlock();
-  if (block.majorVersion < BLOCK_MAJOR_VERSION_2) {
+  if (block.majorVersion < BLOCK_MAJOR_VERSION_1) {
     return false;
   }
 
@@ -612,13 +611,15 @@ bool Currency::checkProofOfWorkV2(const CachedBlock& cachedBlock, uint64_t curre
 
 bool Currency::checkProofOfWork(const CachedBlock& block, uint64_t currentDiffic) const {
   switch (block.getBlock().majorVersion) {
-  case BLOCK_MAJOR_VERSION_1:
+  case BLOCK_MAJOR_VERSION_0:
     return checkProofOfWorkV1(block, currentDiffic);
 
+  case BLOCK_MAJOR_VERSION_1:
   case BLOCK_MAJOR_VERSION_2:
   case BLOCK_MAJOR_VERSION_3:
   case BLOCK_MAJOR_VERSION_4:
   case BLOCK_MAJOR_VERSION_5:
+  case BLOCK_MAJOR_VERSION_6:
     return checkProofOfWorkV2(block, currentDiffic);
   }
 
@@ -664,7 +665,9 @@ m_blockGrantedFullRewardZone(currency.m_blockGrantedFullRewardZone),
 m_isBlockexplorer(currency.m_isBlockexplorer),
 m_minerTxBlobReservedSize(currency.m_minerTxBlobReservedSize),
 m_numberOfDecimalPlaces(currency.m_numberOfDecimalPlaces),
+m_numberOfDisplayDecimalPlaces(currency.m_numberOfDisplayDecimalPlaces),
 m_coin(currency.m_coin),
+m_coinDisplay(currency.m_coinDisplay),
 m_mininumFee(currency.m_mininumFee),
 m_defaultDustThreshold(currency.m_defaultDustThreshold),
 m_difficultyTarget(currency.m_difficultyTarget),
@@ -685,6 +688,9 @@ m_upgradeHeightV2(currency.m_upgradeHeightV2),
 m_upgradeHeightV3(currency.m_upgradeHeightV3),
 m_upgradeHeightV4(currency.m_upgradeHeightV4),
 m_upgradeHeightV5(currency.m_upgradeHeightV5),
+m_upgradeHeightV6(currency.m_upgradeHeightV6),
+m_upgradeHeightV7(currency.m_upgradeHeightV7),
+m_upgradeHeightV8(currency.m_upgradeHeightV8),
 m_upgradeVotingThreshold(currency.m_upgradeVotingThreshold),
 m_upgradeVotingWindow(currency.m_upgradeVotingWindow),
 m_upgradeWindow(currency.m_upgradeWindow),
@@ -722,7 +728,8 @@ zawyDifficultyBlockVersion(parameters::ZAWY_DIFFICULTY_DIFFICULTY_BLOCK_VERSION)
   blockGrantedFullRewardZone(parameters::CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE);
   minerTxBlobReservedSize(parameters::CRYPTONOTE_COINBASE_BLOB_RESERVED_SIZE);
 
-  numberOfDecimalPlaces(parameters::CRYPTONOTE_DISPLAY_DECIMAL_POINT);
+  numberOfDisplayDecimalPlaces(parameters::CRYPTONOTE_DISPLAY_DECIMAL_POINT);
+  numberOfDecimalPlaces(parameters::CRYPTONOTE_DUST_DECIMAL_POINT);
 
   mininumFee(parameters::MINIMUM_FEE);
   defaultDustThreshold(parameters::DEFAULT_DUST_THRESHOLD);
@@ -751,6 +758,9 @@ zawyDifficultyBlockVersion(parameters::ZAWY_DIFFICULTY_DIFFICULTY_BLOCK_VERSION)
   upgradeHeightV3(parameters::UPGRADE_HEIGHT_V3);
   upgradeHeightV4(parameters::UPGRADE_HEIGHT_V4);
   upgradeHeightV5(parameters::UPGRADE_HEIGHT_V5);
+  upgradeHeightV6(parameters::UPGRADE_HEIGHT_V6);
+  upgradeHeightV7(parameters::UPGRADE_HEIGHT_V7);
+  upgradeHeightV8(parameters::UPGRADE_HEIGHT_V8);
   upgradeVotingThreshold(parameters::UPGRADE_VOTING_THRESHOLD);
   upgradeVotingWindow(parameters::UPGRADE_VOTING_WINDOW);
   upgradeWindow(parameters::UPGRADE_WINDOW);
@@ -822,6 +832,16 @@ CurrencyBuilder& CurrencyBuilder::numberOfDecimalPlaces(size_t val) {
   }
 
   return *this;
+}
+
+CurrencyBuilder& CurrencyBuilder::numberOfDisplayDecimalPlaces(size_t val) {
+	m_currency.m_numberOfDisplayDecimalPlaces = val;
+	m_currency.m_coinDisplay = 1;
+	for (size_t i = 0; i < m_currency.m_numberOfDisplayDecimalPlaces; ++i) {
+		m_currency.m_coinDisplay *= 10;
+	}
+
+	return *this;
 }
 
 CurrencyBuilder& CurrencyBuilder::difficultyWindow(size_t val) {
