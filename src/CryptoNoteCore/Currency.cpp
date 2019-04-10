@@ -104,18 +104,33 @@ bool Currency::generateGenesisBlock() {
 }
 
 size_t Currency::difficultyWindowByBlockVersion(uint8_t blockMajorVersion) const {
-    return m_difficultyWindow;
+	if (blockMajorVersion >= BLOCK_MAJOR_VERSION_6) {
+		return m_difficultyWindow; //TODO: check setting of this param
+	}
+	else {
+		return CryptoNote::parameters::DIFFICULTY_WINDOW_V1;
+	}
 }
 
 size_t Currency::difficultyLagByBlockVersion(uint8_t blockMajorVersion) const {
-    return m_difficultyLag;
+	if (blockMajorVersion >= BLOCK_MAJOR_VERSION_6) {
+		return m_difficultyLag; //TODO: check setting of this var
+	}
+	else {
+		return CryptoNote::parameters::DIFFICULTY_LAG_V1;
+	}
 }
 
 size_t Currency::difficultyCutByBlockVersion(uint8_t blockMajorVersion) const {
-    return m_difficultyCut;
+	if (blockMajorVersion >= BLOCK_MAJOR_VERSION_6) {
+		return m_difficultyCut; //TODO: check setting of this var
+	}
+	else {
+		return CryptoNote::parameters::DIFFICULTY_CUT_V1;
+	}
 }
 
-size_t Currency::difficultyBlocksCountByBlockVersion(uint8_t blockMajorVersion, uint32_t height) const
+size_t Currency::difficultyBlocksCountByBlockVersion(uint8_t blockMajorVersion) const
 {
     return difficultyWindowByBlockVersion(blockMajorVersion) + difficultyLagByBlockVersion(blockMajorVersion);
 }
@@ -137,10 +152,11 @@ uint32_t Currency::upgradeHeight(uint8_t majorVersion) const {
   } else if (majorVersion == BLOCK_MAJOR_VERSION_3) {
     return m_upgradeHeightV4;
   } else if (majorVersion == BLOCK_MAJOR_VERSION_4) {
-	  return m_upgradeHeightV6; //height of fix for tx sizes
-  }
-  else if (majorVersion == BLOCK_MAJOR_VERSION_5) {
-	  return m_upgradeHeightV7;
+	return m_upgradeHeightV6; //height of fix for tx sizes
+  } else if (majorVersion == BLOCK_MAJOR_VERSION_5) {
+	return m_upgradeHeightV7;
+  } else if (majorVersion == BLOCK_MAJOR_VERSION_6) {
+	return m_upgradeHeightV8; //Diff update
   } else {
     return static_cast<uint32_t>(-1);
   }
@@ -422,8 +438,11 @@ uint64_t Currency::getNextDifficulty(uint8_t version, uint32_t blockIndex, std::
 	{
 		return nextDifficultyV6(timestamps, cumulativeDifficulties);
 	}
-	
-	return nextDifficultyV4(timestamps, cumulativeDifficulties);
+	else if (blockIndex < CryptoNote::parameters::LWMA_2_DIFFICULTY_BLOCK_INDEX_V3)
+	{
+		return nextDifficultyV4(timestamps, cumulativeDifficulties);
+	}
+	return nextDifficultyV5(timestamps, cumulativeDifficulties);
 }
 
 uint64_t Currency::nextDifficulty(uint8_t version, uint32_t blockIndex, std::vector<uint64_t> timestamps,
@@ -498,7 +517,7 @@ std::vector<uint64_t> cumulativeDifficulties_o(cumulativeDifficulties);
   DIFFICULTY_LAG=0
   DIFFICULTY_WINDOW=17
 */
-    c_difficultyWindow = 17;
+    c_difficultyWindow = 30;
     c_difficultyCut = 0;
 
     assert(c_difficultyWindow >= 2);
@@ -600,6 +619,7 @@ bool Currency::checkProofOfWork(const CachedBlock& block, uint64_t currentDiffic
   case BLOCK_MAJOR_VERSION_3:
   case BLOCK_MAJOR_VERSION_4:
   case BLOCK_MAJOR_VERSION_5:
+  case BLOCK_MAJOR_VERSION_6:
     return checkProofOfWorkV2(block, currentDiffic);
   }
 
@@ -670,6 +690,7 @@ m_upgradeHeightV4(currency.m_upgradeHeightV4),
 m_upgradeHeightV5(currency.m_upgradeHeightV5),
 m_upgradeHeightV6(currency.m_upgradeHeightV6),
 m_upgradeHeightV7(currency.m_upgradeHeightV7),
+m_upgradeHeightV8(currency.m_upgradeHeightV8),
 m_upgradeVotingThreshold(currency.m_upgradeVotingThreshold),
 m_upgradeVotingWindow(currency.m_upgradeVotingWindow),
 m_upgradeWindow(currency.m_upgradeWindow),
@@ -739,6 +760,7 @@ zawyDifficultyBlockVersion(parameters::ZAWY_DIFFICULTY_DIFFICULTY_BLOCK_VERSION)
   upgradeHeightV5(parameters::UPGRADE_HEIGHT_V5);
   upgradeHeightV6(parameters::UPGRADE_HEIGHT_V6);
   upgradeHeightV7(parameters::UPGRADE_HEIGHT_V7);
+  upgradeHeightV8(parameters::UPGRADE_HEIGHT_V8);
   upgradeVotingThreshold(parameters::UPGRADE_VOTING_THRESHOLD);
   upgradeVotingWindow(parameters::UPGRADE_VOTING_WINDOW);
   upgradeWindow(parameters::UPGRADE_WINDOW);

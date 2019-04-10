@@ -25,8 +25,7 @@ namespace CryptoNote {
 		const uint64_t CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX = 18181; // PLe
 		const uint32_t CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW = 20;
 		const uint64_t CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT = 3 * DIFFICULTY_TARGET;
-		const uint64_t CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT_V3 = 3 * DIFFICULTY_TARGET;
-		const uint64_t CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT_V4 = 3 * DIFFICULTY_TARGET;
+		const uint64_t CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT_V2 = 6 * DIFFICULTY_TARGET;
 
 		const size_t   BLOCKCHAIN_TIMESTAMP_CHECK_WINDOW = 11;
 
@@ -38,6 +37,7 @@ namespace CryptoNote {
 
 		const uint64_t LWMA_2_DIFFICULTY_BLOCK_INDEX = 2;
 		const uint64_t LWMA_2_DIFFICULTY_BLOCK_INDEX_V2 = 3;
+		const uint64_t LWMA_2_DIFFICULTY_BLOCK_INDEX_V3 = 1300; //testnet Height (200k mainnet)
 
 		const uint64_t LWMA_3_DIFFICULTY_BLOCK_INDEX = 600000; //Diff algo change to LWMA 3
 
@@ -106,9 +106,12 @@ namespace CryptoNote {
 		const uint32_t FUSION_DUST_THRESHOLD_HEIGHT_V2 = 200;
 
 		const uint64_t EXPECTED_NUMBER_OF_BLOCKS_PER_DAY = 24 * 60 * 60 / DIFFICULTY_TARGET;
-		const size_t   DIFFICULTY_WINDOW = 720;
-		const size_t   DIFFICULTY_CUT = 60;  // timestamps to cut after sorting
-		const size_t   DIFFICULTY_LAG = 15;  // !!!
+		const size_t   DIFFICULTY_WINDOW = 30;
+		const size_t   DIFFICULTY_WINDOW_V1 = 720;
+		const size_t   DIFFICULTY_CUT = 0;  // timestamps to cut after sorting
+		const size_t   DIFFICULTY_CUT_V1 = 60;  // timestamps to cut after sorting
+		const size_t   DIFFICULTY_LAG = 0;  // !!!
+		const size_t   DIFFICULTY_LAG_V1 = 15;  // !!!
 		const uint64_t DIFFICULTY_BLOCKS_COUNT = DIFFICULTY_WINDOW + 1;
 
 
@@ -147,8 +150,9 @@ namespace CryptoNote {
 		const uint32_t UPGRADE_HEIGHT_V5 = 200; // Upgrade height for DustFund V1.
 		const uint32_t UPGRADE_HEIGHT_V6 = 250;  //fix tx sizes issues
 		const uint32_t UPGRADE_HEIGHT_V7 = 1150;  //CN Turtle
+		const uint32_t UPGRADE_HEIGHT_V8 = 1300;  //Difficulty Adjustment
 
-		const uint32_t UPGRADE_HEIGHT_CURRENT = UPGRADE_HEIGHT_V7;
+		const uint32_t UPGRADE_HEIGHT_CURRENT = UPGRADE_HEIGHT_V8;
 		const unsigned UPGRADE_VOTING_THRESHOLD = 90;               // percent
 		const uint32_t UPGRADE_VOTING_WINDOW = EXPECTED_NUMBER_OF_BLOCKS_PER_DAY;  // blocks
 		const uint32_t UPGRADE_WINDOW = EXPECTED_NUMBER_OF_BLOCKS_PER_DAY;  // blocks
@@ -165,12 +169,13 @@ namespace CryptoNote {
 			200, //first fork to introduce DUST fund
 			250, //fix tx sizes issue
 			1150, // CN Turtle
+			1300, //Difficulty Update
 			1400, //invalid signature count height
 			5000 //difficulty update and web wallet direct connect
 		};
 
 		/* MAKE SURE TO UPDATE THIS VALUE WITH EVERY MAJOR RELEASE BEFORE A FORK */
-		const uint64_t SOFTWARE_SUPPORTED_FORK_INDEX = 7;
+		const uint64_t SOFTWARE_SUPPORTED_FORK_INDEX = 8;
 
 		const uint64_t FORK_HEIGHTS_SIZE = sizeof(FORK_HEIGHTS) / sizeof(*FORK_HEIGHTS);
 
@@ -204,6 +209,7 @@ namespace CryptoNote {
 	const uint8_t  BLOCK_MAJOR_VERSION_3 = 3;
 	const uint8_t  BLOCK_MAJOR_VERSION_4 = 4; //block version to fix tx sizes issue
 	const uint8_t  BLOCK_MAJOR_VERSION_5 = 5; //algo change to CN Turtle
+	const uint8_t  BLOCK_MAJOR_VERSION_6 = 6; //difficulty update
 	const uint8_t  BLOCK_MINOR_VERSION_0 = 0;
 	const uint8_t  BLOCK_MINOR_VERSION_1 = 1;
 
@@ -220,8 +226,8 @@ namespace CryptoNote {
 
 	// P2P Network Configuration Section - This defines our current P2P network version
 	// and the minimum version for communication between nodes
-	const uint8_t  P2P_CURRENT_VERSION = 4; //bump p2p version 
-	const uint8_t  P2P_MINIMUM_VERSION = 3; //bump min supported version
+	const uint8_t  P2P_CURRENT_VERSION = 5; //bump p2p version 
+	const uint8_t  P2P_MINIMUM_VERSION = 4; //bump min supported version
 
 	// This defines the minimum P2P version required for lite blocks propogation
 	const uint8_t  P2P_LITE_BLOCKS_PROPOGATION_VERSION = 4;
@@ -229,7 +235,7 @@ namespace CryptoNote {
 	// This defines the number of versions ahead we must see peers before we start displaying
 	// warning messages that we need to upgrade our software.
 
-	const uint8_t  P2P_UPGRADE_WINDOW = 2;
+	const uint8_t  P2P_UPGRADE_WINDOW = 1;
 
 	const size_t   P2P_CONNECTION_MAX_WRITE_BUFFER_SIZE = 32 * 1024 * 1024; // 32 MB
 	const uint32_t P2P_DEFAULT_CONNECTIONS_COUNT = 8;
