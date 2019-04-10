@@ -77,15 +77,21 @@ uint64_t nextDifficultyV6(std::vector<uint64_t> timestamps, std::vector<uint64_t
 uint64_t nextDifficultyV5(std::vector<uint64_t> timestamps, std::vector<uint64_t> cumulativeDifficulties)
 {
 	int64_t T = CryptoNote::parameters::DIFFICULTY_TARGET;
-	int64_t N = CryptoNote::parameters::DIFFICULTY_WINDOW_V2;
+	int64_t N = CryptoNote::parameters::DIFFICULTY_WINDOW;
 	int64_t L(0), ST, sum_3_ST(0), next_D, prev_D;
 
 	/* If we are starting up, returning a difficulty guess. If you are a
 	   new coin, you might want to set this to a decent estimate of your
 	   hashrate */
-	if (timestamps.size() < static_cast<uint64_t>(N + 1))
+	if (timestamps.size() <= 10)
 	{
 		return 10000;
+	}
+
+	/* Don't have the full amount of blocks yet */
+	if (timestamps.size() < static_cast<uint64_t>(N + 1))
+	{
+		N = timestamps.size() - 1;
 	}
 
 	for (int64_t i = 1; i <= N; i++)
@@ -122,7 +128,7 @@ uint64_t nextDifficultyV5(std::vector<uint64_t> timestamps, std::vector<uint64_t
 uint64_t nextDifficultyV4(std::vector<uint64_t> timestamps, std::vector<uint64_t> cumulativeDifficulties)
 {
 	int64_t T = CryptoNote::parameters::DIFFICULTY_TARGET;
-	int64_t N = CryptoNote::parameters::DIFFICULTY_WINDOW;
+	int64_t N = CryptoNote::parameters::DIFFICULTY_WINDOW_V1;
 	int64_t FTL = CryptoNote::parameters::CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT;
 	int64_t L(0), ST, sum_3_ST(0), next_D, prev_D;
 
@@ -163,7 +169,7 @@ uint64_t nextDifficultyV4(std::vector<uint64_t> timestamps, std::vector<uint64_t
 uint64_t nextDifficultyV3(std::vector<uint64_t> timestamps, std::vector<uint64_t> cumulativeDifficulties)
 {
     int64_t T = CryptoNote::parameters::DIFFICULTY_TARGET;
-    int64_t N = CryptoNote::parameters::DIFFICULTY_WINDOW;
+    int64_t N = CryptoNote::parameters::DIFFICULTY_WINDOW_V1;
     int64_t FTL = CryptoNote::parameters::CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT;
     int64_t L(0), ST, sum_3_ST(0), next_D, prev_D;
 
