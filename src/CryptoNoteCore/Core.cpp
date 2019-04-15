@@ -2492,7 +2492,7 @@ void Core::fillBlockTemplate(
     TransactionSpentInputsChecker spentInputsChecker;
 
     /* Go get our regular and fusion transactions from the transaction pool */
-    auto [regularTransactions, fusionTransactions] = transactionPool->getPoolTransactionsForBlockTemplate();
+    auto [paidTransactions, freeTransactions] = transactionPool->getPoolTransactionsForBlockTemplate();
 
     /* Define our lambda function for checking and adding transactions to a block template */
     const auto addTransactionToBlockTemplate = [this, &spentInputsChecker, maxTotalSize, height, &transactionsSize, &fee, &block](const CachedTransaction &transaction)
@@ -2531,26 +2531,26 @@ void Core::fillBlockTemplate(
     };
 
     /* First we're going to loop through transactions that have a fee:
-       ie. the transactions that are paying to use the network */
-    for (const auto &transaction : regularTransactions)
+       ie. the transactions that are paying to use the network as these should get higher priority */
+    for (const auto &transaction : paidTransactions)
     {
         if (addTransactionToBlockTemplate(transaction))
         {
-            logger(Logging::TRACE) << "Transaction " << transaction.getTransactionHash() << " included in block template";
+            logger(Logging::TRACE) << "Paid Transaction " << transaction.getTransactionHash() << " included in block template";
         }
         else
         {
-            logger(Logging::TRACE) << "Transaction " << transaction.getTransactionHash() << " not included in block template";
+            logger(Logging::TRACE) << "Paid Transaction " << transaction.getTransactionHash() << " not included in block template";
         }
     }
 
-    /* Then we'll loop through the fusion transactions as they don't
+    /* Then we'll loop through the free transactions as they don't
        pay anything to use the network */
-    for (const auto &transaction : fusionTransactions)
+    for (const auto &transaction : freeTransactions)
     {
         if (addTransactionToBlockTemplate(transaction))
         {
-            logger(Logging::TRACE) << "Fusion transaction " << transaction.getTransactionHash() << " included in block template";
+            logger(Logging::TRACE) << "Free (or fusion) transaction " << transaction.getTransactionHash() << " included in block template";
         }
     }
 }
