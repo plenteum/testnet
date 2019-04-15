@@ -75,6 +75,8 @@ namespace CryptoNote {
 		const uint64_t GENESIS_BLOCK_TIMESTAMP = 0;
 
 		const size_t   CRYPTONOTE_REWARD_BLOCKS_WINDOW = 100;
+		
+		/* If you Fork PLE Please set the below value to 100000 NOT 10000 as this will fix a mistake we made at mainnetlaunch with transaction sizes */
 		const size_t   CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE = 10000; //size of block (bytes) after which reward for block calculated using block size
 		const size_t   CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1 = 100000; //size of block (bytes) after which reward for block calculated using block size (fix tx sizes issue)
 		const size_t   CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_CURRENT = CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE;
