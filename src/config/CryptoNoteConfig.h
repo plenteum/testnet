@@ -106,11 +106,11 @@ namespace CryptoNote {
 		const uint32_t FUSION_DUST_THRESHOLD_HEIGHT_V2 = 200;
 
 		const uint64_t EXPECTED_NUMBER_OF_BLOCKS_PER_DAY = 24 * 60 * 60 / DIFFICULTY_TARGET;
-		const size_t   DIFFICULTY_WINDOW = 60;
+		const size_t   DIFFICULTY_WINDOW = 20;
 		const size_t   DIFFICULTY_WINDOW_V1 = 720;
 		const size_t   DIFFICULTY_CUT = 0;  // timestamps to cut after sorting
 		const size_t   DIFFICULTY_CUT_V1 = 60;  // timestamps to cut after sorting
-		const size_t   DIFFICULTY_LAG = 0;  // !!!
+		const size_t   DIFFICULTY_LAG = 5;  // !!!
 		const size_t   DIFFICULTY_LAG_V1 = 15;  // !!!
 		const uint64_t DIFFICULTY_BLOCKS_COUNT = DIFFICULTY_WINDOW + 1;
 
