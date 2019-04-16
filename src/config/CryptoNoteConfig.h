@@ -106,7 +106,7 @@ namespace CryptoNote {
 		const uint32_t FUSION_DUST_THRESHOLD_HEIGHT_V2 = 200;
 
 		const uint64_t EXPECTED_NUMBER_OF_BLOCKS_PER_DAY = 24 * 60 * 60 / DIFFICULTY_TARGET;
-		const size_t   DIFFICULTY_WINDOW = 30;
+		const size_t   DIFFICULTY_WINDOW = 60;
 		const size_t   DIFFICULTY_WINDOW_V1 = 720;
 		const size_t   DIFFICULTY_CUT = 0;  // timestamps to cut after sorting
 		const size_t   DIFFICULTY_CUT_V1 = 60;  // timestamps to cut after sorting
@@ -121,14 +121,14 @@ namespace CryptoNote {
 		const uint64_t MAX_BLOCK_SIZE_GROWTH_SPEED_DENOMINATOR = 365 * 24 * 60 * 60 / DIFFICULTY_TARGET;
 		const uint64_t MAX_EXTRA_SIZE = 140000;
 		const uint64_t MAX_EXTRA_SIZE_V2 = 10240;
-		const uint64_t MAX_EXTRA_SIZE_V2_HEIGHT = 1400; //height at which tx extra is limited to 10240 (testnet height of 1400)
+		const uint64_t MAX_EXTRA_SIZE_V2_HEIGHT = 1300; //height at which tx extra is limited to 10240 (testnet height of 1400)
 
 		/* For new projects forked from this code base, the values immediately below
    should be changed to 0 to prevent issues with transaction processing
    and other possible unexpected behavior */
-		const uint64_t TRANSACTION_SIGNATURE_COUNT_VALIDATION_HEIGHT = 1400; //TESTNET HEIGHT
-		const uint64_t BLOCK_BLOB_SHUFFLE_CHECK_HEIGHT = 1450; //TESTNET HEIGHT
-        const uint64_t TRANSACTION_INPUT_BLOCKTIME_VALIDATION_HEIGHT = 1450; //testnet height
+		const uint64_t TRANSACTION_SIGNATURE_COUNT_VALIDATION_HEIGHT = 1300; //TESTNET HEIGHT
+		const uint64_t BLOCK_BLOB_SHUFFLE_CHECK_HEIGHT = 1300; //TESTNET HEIGHT
+        const uint64_t TRANSACTION_INPUT_BLOCKTIME_VALIDATION_HEIGHT = 1300; //testnet height
 
 		const uint64_t CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_BLOCKS = 1;
 		const uint64_t CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_SECONDS = DIFFICULTY_TARGET * CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_BLOCKS;
@@ -167,12 +167,11 @@ namespace CryptoNote {
 			250, //fix tx sizes issue
 			1150, // CN Turtle
 			1300, //Difficulty Update
-			1400, //invalid signature count height
-			5000 //difficulty update and web wallet direct connect
+			5000 // next fork height (dust v2 & net protect)
 		};
 
 		/* MAKE SURE TO UPDATE THIS VALUE WITH EVERY MAJOR RELEASE BEFORE A FORK */
-		const uint64_t SOFTWARE_SUPPORTED_FORK_INDEX = 8;
+		const uint64_t SOFTWARE_SUPPORTED_FORK_INDEX = 7;
 
 		const uint64_t FORK_HEIGHTS_SIZE = sizeof(FORK_HEIGHTS) / sizeof(*FORK_HEIGHTS);
 
