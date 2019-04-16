@@ -120,8 +120,8 @@ namespace CryptoNote {
 		const uint64_t MAX_BLOCK_SIZE_GROWTH_SPEED_NUMERATOR = 100 * 1024;
 		const uint64_t MAX_BLOCK_SIZE_GROWTH_SPEED_DENOMINATOR = 365 * 24 * 60 * 60 / DIFFICULTY_TARGET;
 		const uint64_t MAX_EXTRA_SIZE = 140000;
-		const uint64_t MAX_EXTRA_SIZE_V2 = 1024;
-		const uint64_t MAX_EXTRA_SIZE_V2_HEIGHT = 1400; //height at which tx extra is limited to 1024 (testnet height of 1400)
+		const uint64_t MAX_EXTRA_SIZE_V2 = 10240;
+		const uint64_t MAX_EXTRA_SIZE_V2_HEIGHT = 1400; //height at which tx extra is limited to 10240 (testnet height of 1400)
 
 		/* For new projects forked from this code base, the values immediately below
    should be changed to 0 to prevent issues with transaction processing
