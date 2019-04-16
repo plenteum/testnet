@@ -39,8 +39,6 @@ namespace CryptoNote {
 		const uint64_t LWMA_2_DIFFICULTY_BLOCK_INDEX_V2 = 3;
 		const uint64_t LWMA_2_DIFFICULTY_BLOCK_INDEX_V3 = 1300; //testnet Height (200k mainnet)
 
-		const uint64_t LWMA_3_DIFFICULTY_BLOCK_INDEX = 600000; //Diff algo change to LWMA 3
-
 		const unsigned EMISSION_SPEED_FACTOR = 22;
 		static_assert(EMISSION_SPEED_FACTOR <= 8 * sizeof(uint64_t), "Bad EMISSION_SPEED_FACTOR");
 
@@ -116,10 +114,6 @@ namespace CryptoNote {
 		const size_t   DIFFICULTY_LAG_V1 = 15;  // !!!
 		const uint64_t DIFFICULTY_BLOCKS_COUNT = DIFFICULTY_WINDOW + 1;
 
-
-		const uint64_t DIFFICULTY_WINDOW_V2 = 60;
-		const uint64_t DIFFICULTY_BLOCKS_COUNT_V2 = DIFFICULTY_WINDOW_V2 + 1;
-		
 		static_assert(2 * DIFFICULTY_CUT <= DIFFICULTY_WINDOW - 2, "Bad DIFFICULTY_WINDOW or DIFFICULTY_CUT");
 
 		const size_t   MAX_BLOCK_SIZE_INITIAL = 100000;

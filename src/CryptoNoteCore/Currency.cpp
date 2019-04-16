@@ -433,11 +433,6 @@ uint64_t Currency::getNextDifficulty(uint8_t version, uint32_t blockIndex, std::
 	{
 		return nextDifficultyV3(timestamps, cumulativeDifficulties);
 	}
-	//Activate LWMA-3 and reduce diff window to 60 blocks for more rapid adjustment... 
-	else if (blockIndex >= CryptoNote::parameters::LWMA_3_DIFFICULTY_BLOCK_INDEX)
-	{
-		return nextDifficultyV6(timestamps, cumulativeDifficulties);
-	}
 	else if (blockIndex < CryptoNote::parameters::LWMA_2_DIFFICULTY_BLOCK_INDEX_V3)
 	{
 		return nextDifficultyV4(timestamps, cumulativeDifficulties);
