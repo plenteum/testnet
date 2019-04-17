@@ -64,7 +64,7 @@ const Crypto::Hash& CachedBlock::getBlockLongHash() const {
 			blockLongHash = Hash();
 			cn_lite_slow_hash_v1(rawHashingBlock.data(), rawHashingBlock.size(), blockLongHash.get());
 		}
-		else if (block.majorVersion >= BLOCK_MAJOR_VERSION_5) {  //BMV 6 is a Diff Algo Update Only, so we don't change the Hashing Algo here
+		else if (block.majorVersion >= BLOCK_MAJOR_VERSION_5) {
 			const auto& rawHashingBlock = getParentBlockHashingBinaryArray(true);
 			blockLongHash = Hash();
 			cn_turtle_lite_slow_hash_v2(rawHashingBlock.data(), rawHashingBlock.size(), blockLongHash.get());

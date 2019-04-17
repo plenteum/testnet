@@ -53,7 +53,7 @@ public:
   size_t rewardBlocksWindow() const { return m_rewardBlocksWindow; }
   uint32_t zawyDifficultyBlockIndex() const { return m_zawyDifficultyBlockIndex; }
   size_t zawyDifficultyV2() const { return m_zawyDifficultyV2; }
-  uint8_t zawyDifficultyBlockVersion() const { return m_zawyDifficultyBlockVersion; }
+  uint8_t zawyDifficultyBlockHeight() const { return m_zawyDifficultyBlockHeight; }
   size_t blockGrantedFullRewardZone() const { return m_blockGrantedFullRewardZone; }
   size_t blockGrantedFullRewardZoneByBlockVersion(uint8_t blockMajorVersion) const;
   size_t minerTxBlobReservedSize() const { return m_minerTxBlobReservedSize; }
@@ -81,13 +81,13 @@ public:
 
   uint64_t difficultyTarget() const { return m_difficultyTarget; }
   size_t difficultyWindow() const { return m_difficultyWindow; }
-size_t difficultyWindowByBlockVersion(uint8_t blockMajorVersion) const;
+  size_t difficultyWindowByHeight(uint8_t height) const;
   size_t difficultyLag() const { return m_difficultyLag; }
-size_t difficultyLagByBlockVersion(uint8_t blockMajorVersion) const;
+  size_t difficultyLagByHeight(uint8_t height) const;
   size_t difficultyCut() const { return m_difficultyCut; }
-size_t difficultyCutByBlockVersion(uint8_t blockMajorVersion) const;
+  size_t difficultyCutByHeight(uint8_t height) const;
   size_t difficultyBlocksCount() const { return m_difficultyWindow + m_difficultyLag; }
-size_t difficultyBlocksCountByBlockVersion(uint8_t blockMajorVersion) const;
+  size_t difficultyBlocksCountByHeight(uint8_t Height) const;
 
   size_t maxBlockSizeInitial() const { return m_maxBlockSizeInitial; }
   uint64_t maxBlockSizeGrowthSpeedNumerator() const { return m_maxBlockSizeGrowthSpeedNumerator; }
@@ -143,8 +143,8 @@ size_t difficultyBlocksCountByBlockVersion(uint8_t blockMajorVersion) const;
   std::string formatAmount(int64_t amount) const;
   bool parseAmount(const std::string& str, uint64_t& amount) const;
 
-  uint64_t getNextDifficulty(uint8_t version, uint32_t blockIndex, std::vector<uint64_t> timestamps, std::vector<uint64_t> cumulativeDifficulties) const;
-  uint64_t nextDifficulty(uint8_t version, uint32_t blockIndex, std::vector<uint64_t> timestamps, std::vector<uint64_t> cumulativeDifficulties) const;
+  uint64_t getNextDifficulty(uint32_t blockIndex, std::vector<uint64_t> timestamps, std::vector<uint64_t> cumulativeDifficulties) const;
+  uint64_t nextDifficulty(uint32_t blockIndex, std::vector<uint64_t> timestamps, std::vector<uint64_t> cumulativeDifficulties) const;
 
 
   bool checkProofOfWorkV1(const CachedBlock& block, uint64_t currentDifficulty) const;
@@ -182,7 +182,7 @@ private:
   size_t m_rewardBlocksWindow;
   uint32_t m_zawyDifficultyBlockIndex;
   size_t m_zawyDifficultyV2;
-  uint8_t m_zawyDifficultyBlockVersion;
+  uint8_t m_zawyDifficultyBlockHeight;
   size_t m_blockGrantedFullRewardZone;
   size_t m_minerTxBlobReservedSize;
 
@@ -220,8 +220,7 @@ private:
   uint32_t m_upgradeHeightV5;
   uint32_t m_upgradeHeightV6;
   uint32_t m_upgradeHeightV7;
-  uint32_t m_upgradeHeightV8;
-
+  
   unsigned int m_upgradeVotingThreshold;
   uint32_t m_upgradeVotingWindow;
   uint32_t m_upgradeWindow;
@@ -273,7 +272,7 @@ public:
   CurrencyBuilder& rewardBlocksWindow(size_t val) { m_currency.m_rewardBlocksWindow = val; return *this; }
   CurrencyBuilder& zawyDifficultyBlockIndex(uint32_t val) { m_currency.m_zawyDifficultyBlockIndex = val; return *this; }
   CurrencyBuilder& zawyDifficultyV2(size_t val) { m_currency.m_zawyDifficultyV2 = val; return *this; }
-  CurrencyBuilder& zawyDifficultyBlockVersion(uint8_t val) { m_currency.m_zawyDifficultyBlockVersion = val; return *this; }
+  CurrencyBuilder& zawyDifficultyBlockHeight(uint8_t val) { m_currency.m_zawyDifficultyBlockHeight = val; return *this; }
   CurrencyBuilder& blockGrantedFullRewardZone(size_t val) { m_currency.m_blockGrantedFullRewardZone = val; return *this; }
   CurrencyBuilder& minerTxBlobReservedSize(size_t val) { m_currency.m_minerTxBlobReservedSize = val; return *this; }
 
@@ -309,8 +308,7 @@ public:
   CurrencyBuilder& upgradeHeightV5(uint32_t val) { m_currency.m_upgradeHeightV5 = val; return *this; }
   CurrencyBuilder& upgradeHeightV6(uint32_t val) { m_currency.m_upgradeHeightV6 = val; return *this; }
   CurrencyBuilder& upgradeHeightV7(uint32_t val) { m_currency.m_upgradeHeightV7 = val; return *this; }
-  CurrencyBuilder& upgradeHeightV8(uint32_t val) { m_currency.m_upgradeHeightV8 = val; return *this; }
-
+  
   CurrencyBuilder& upgradeVotingThreshold(unsigned int val);
   CurrencyBuilder& upgradeVotingWindow(uint32_t val) { m_currency.m_upgradeVotingWindow = val; return *this; }
   CurrencyBuilder& upgradeWindow(uint32_t val);
