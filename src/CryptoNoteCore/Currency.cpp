@@ -103,7 +103,7 @@ bool Currency::generateGenesisBlock() {
   return true;
 }
 
-size_t Currency::difficultyWindowByHeight(uint8_t height) const {
+size_t Currency::difficultyWindowByHeight(uint32_t height) const {
 	if (height >= CryptoNote::parameters::LWMA_2_DIFFICULTY_BLOCK_INDEX_V3) {
 		return m_difficultyWindow; 
 	}
@@ -112,7 +112,7 @@ size_t Currency::difficultyWindowByHeight(uint8_t height) const {
 	}
 }
 
-size_t Currency::difficultyLagByHeight(uint8_t height) const {
+size_t Currency::difficultyLagByHeight(uint32_t height) const {
 	if (height >= CryptoNote::parameters::LWMA_2_DIFFICULTY_BLOCK_INDEX_V3) {
 		return m_difficultyLag;
 	}
@@ -121,7 +121,7 @@ size_t Currency::difficultyLagByHeight(uint8_t height) const {
 	}
 }
 
-size_t Currency::difficultyCutByHeight(uint8_t height) const {
+size_t Currency::difficultyCutByHeight(uint32_t height) const {
 	if (height >= CryptoNote::parameters::LWMA_2_DIFFICULTY_BLOCK_INDEX_V3) {
 		return m_difficultyCut;
 	}
@@ -130,7 +130,7 @@ size_t Currency::difficultyCutByHeight(uint8_t height) const {
 	}
 }
 
-size_t Currency::difficultyBlocksCountByHeight(uint8_t height) const
+size_t Currency::difficultyBlocksCountByHeight(uint32_t height) const
 {
 	return difficultyWindowByHeight(height) + difficultyLagByHeight(height);
 }
@@ -442,8 +442,8 @@ uint64_t Currency::nextDifficulty(uint32_t blockIndex, std::vector<uint64_t> tim
 
 std::vector<uint64_t> timestamps_o(timestamps);
 std::vector<uint64_t> cumulativeDifficulties_o(cumulativeDifficulties);
-  size_t c_difficultyWindow = difficultyWindowByHeight(blockIndex);
-  size_t c_difficultyCut = difficultyCutByHeight(blockIndex);
+  uint64_t c_difficultyWindow = difficultyWindowByHeight(blockIndex);
+  uint64_t c_difficultyCut = difficultyCutByHeight(blockIndex);
 
   assert(c_difficultyWindow >= 2);
 

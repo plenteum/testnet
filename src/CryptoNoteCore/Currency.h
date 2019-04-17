@@ -81,13 +81,13 @@ public:
 
   uint64_t difficultyTarget() const { return m_difficultyTarget; }
   size_t difficultyWindow() const { return m_difficultyWindow; }
-  size_t difficultyWindowByHeight(uint8_t height) const;
+  size_t difficultyWindowByHeight(uint32_t height) const;
   size_t difficultyLag() const { return m_difficultyLag; }
-  size_t difficultyLagByHeight(uint8_t height) const;
+  size_t difficultyLagByHeight(uint32_t height) const;
   size_t difficultyCut() const { return m_difficultyCut; }
-  size_t difficultyCutByHeight(uint8_t height) const;
+  size_t difficultyCutByHeight(uint32_t height) const;
   size_t difficultyBlocksCount() const { return m_difficultyWindow + m_difficultyLag; }
-  size_t difficultyBlocksCountByHeight(uint8_t Height) const;
+  size_t difficultyBlocksCountByHeight(uint32_t Height) const;
 
   size_t maxBlockSizeInitial() const { return m_maxBlockSizeInitial; }
   uint64_t maxBlockSizeGrowthSpeedNumerator() const { return m_maxBlockSizeGrowthSpeedNumerator; }
