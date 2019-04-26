@@ -7,8 +7,9 @@ environment:
 build_script:
   - md build
   - cd build
-  - cmake -G "Visual Studio 15 2017 Win64" ..
-  - MSBuild Plenteum.sln /p:Configuration=Release /m
+  - cmake -G "Visual Studio 15 2017 Win64" .. -DOPENSSL_ROOT_DIR=C:\OpenSSL-v111-Win64
+  - MSBuild Plenteum.sln /p:CLToolExe=clcache.exe /p:CLToolPath=c:\Python37\Scripts\ /p:Configuration=Release /m
+  - src\Release\cryptotest.exe
 
 after_build:
   - if not defined APPVEYOR_REPO_TAG_NAME (set APPVEYOR_REPO_TAG_NAME=%APPVEYOR_REPO_COMMIT%)

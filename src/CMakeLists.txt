@@ -10,6 +10,7 @@ include_directories(${CMAKE_SOURCE_DIR}/external/rapidjson)
 include_directories(${CMAKE_SOURCE_DIR}/external/cxxopts)
 include_directories(${CMAKE_SOURCE_DIR}/external/cryptopp)
 include_directories(${CMAKE_SOURCE_DIR}/external/sqlite3)
+include_directories(${CMAKE_SOURCE_DIR}/external/lz4)
 
 # Show cmake where the source files are
 # Note, if you add remove a source file, you will need to re-run cmake so it
@@ -111,6 +112,9 @@ if(MSVC)
     target_link_libraries(System ws2_32)
     target_link_libraries(Plenteumd Rpcrt4)
     target_link_libraries(service Rpcrt4)
+    target_link_libraries(zedwallet++ ws2_32 advapi32 crypt32 gdi32 user32)
+    target_link_libraries(WalletApi ws2_32 advapi32 crypt32 gdi32 user32)
+    target_link_libraries(miner ws2_32 advapi32 crypt32 gdi32 user32)
 endif ()
 
 # A bit of hackery so we don't have to do the if/else/ for every target that
@@ -125,9 +129,9 @@ elseif (UNIX)
 endif()
 
 if(MSVC)
-	target_link_libraries(Plenteumd System CryptoNoteCore rocksdb sqlite3 ${Boost_LIBRARIES})
+    target_link_libraries(Plenteumd System CryptoNoteCore rocksdb lz4 sqlite3 ${Boost_LIBRARIES})
 else()
-	target_link_libraries(Plenteumd System CryptoNoteCore rocksdblib sqlite3 ${Boost_LIBRARIES})
+    target_link_libraries(Plenteumd System CryptoNoteCore rocksdblib lz4 sqlite3 ${Boost_LIBRARIES})
 endif()
 
 # Add the dependencies we need

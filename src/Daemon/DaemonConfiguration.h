@@ -5,13 +5,13 @@
 
 #pragma once
 
-#include <json.hpp>
+#include <rapidjson/document.h>
 #include <config/CryptoNoteConfig.h>
 #include <Logging/ILogger.h>
 #include "Common/PathTools.h"
 #include "Common/Util.h"
 
-using nlohmann::json;
+using namespace rapidjson;
 
 namespace DaemonConfig {
   struct DaemonConfiguration
@@ -45,6 +45,8 @@ namespace DaemonConfig {
       printGenesisTx = false;
       dumpConfig = false;
       useSqliteForLocalCaches = false;
+      useRocksdbForLocalCaches = false;
+      enableDbCompression = false;
       resync = false;
     }
 
@@ -70,7 +72,7 @@ namespace DaemonConfig {
     int dbMaxOpenFiles;
     int dbWriteBufferSizeMB;
     int dbReadCacheSizeMB;
-    
+
     uint32_t rewindToHeight;
 
     bool noConsole;
@@ -88,6 +90,8 @@ namespace DaemonConfig {
     bool printGenesisTx;
     bool dumpConfig;
     bool useSqliteForLocalCaches;
+    bool useRocksdbForLocalCaches;
+    bool enableDbCompression;
   };
 
   DaemonConfiguration initConfiguration(const char* path);
@@ -97,5 +101,5 @@ namespace DaemonConfig {
   void handleSettings(const std::string configFile, DaemonConfiguration& config);
   void asFile(const DaemonConfiguration& config, const std::string& filename);
   std::string asString(const DaemonConfiguration& config);
-  json asJSON(const DaemonConfiguration& config);
+  Document asJSON(const DaemonConfiguration& config);
 }
