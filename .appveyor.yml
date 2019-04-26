@@ -1,8 +1,17 @@
 os: Visual Studio 2017
 
+cache: c:\users\appveyor\clcache
+
 environment:
   BOOST_ROOT: C:\Libraries\boost_1_67_0
   BOOST_LIBRARYDIR: C:\Libraries\boost_1_67_0\lib64-msvc-14
+
+init:
+  - set PATH=c:\Python37;c:\Python37\Scripts;%PATH%
+  - pip install clcache
+
+before_build:
+  - clcache -s
 
 build_script:
   - md build
@@ -12,6 +21,7 @@ build_script:
   - src\Release\cryptotest.exe
 
 after_build:
+  - clcache -s
   - if not defined APPVEYOR_REPO_TAG_NAME (set APPVEYOR_REPO_TAG_NAME=%APPVEYOR_REPO_COMMIT%)
   - cd src\Release
   - mkdir plenteum-testnet-%APPVEYOR_REPO_TAG_NAME%
@@ -21,7 +31,16 @@ after_build:
   - copy plenteum-testnet-%APPVEYOR_REPO_TAG_NAME%-windows.zip ..\..\..\
 
 artifacts:
-  - path: plenteum-$(APPVEYOR_REPO_TAG_NAME)-windows.zip
+  - path: plenteum-testnet-$(APPVEYOR_REPO_TAG_NAME)-windows.zip
     name: PlenteumTestnetRelease
 
-
+deploy:
+  - provider: GitHub
+    auth_token:
+      secure: vkBszDizR3ZGsxh6sLHByzIXeBq4G9QGTVcfW88m0B2Vfj/GrSLhPgQNt7vXGC7/
+    artifact: PlenteumTestnetRelease
+    draft: true
+    prerelease: false
+    on:
+      appveyor_repo_name: plenteum/testnet
+      appveyor_repo_tag: true
