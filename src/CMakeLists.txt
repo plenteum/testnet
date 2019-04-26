@@ -53,7 +53,7 @@ else()
 endif()
 
 # Group the files together in IDEs
-source_group("" FILES $${Common} ${Crypto} ${CryptoNoteCore} ${CryptoNoteProtocol} ${TurtleCoind} ${JsonRpcServer} ${Http} ${Logging} ${Logger} ${miner} ${Mnemonics} ${Nigel} ${NodeRpcProxy} ${P2p} ${Rpc} ${Serialization} ${System} ${Transfers} ${Wallet} ${WalletApi} ${WalletBackend} ${zedwallet} ${zedwallet++} ${CryptoTest} ${Errors} ${Utilities} ${SubWallets})
+source_group("" FILES $${Common} ${Crypto} ${CryptoNoteCore} ${CryptoNoteProtocol} ${Plenteumd} ${JsonRpcServer} ${Http} ${Logging} ${Logger} ${miner} ${Mnemonics} ${Nigel} ${NodeRpcProxy} ${P2p} ${Rpc} ${Serialization} ${System} ${Transfers} ${Wallet} ${WalletApi} ${WalletBackend} ${zedwallet} ${zedwallet++} ${CryptoTest} ${Errors} ${Utilities} ${SubWallets})
 
 # Define a group of files as a library to link against
 add_library(BlockchainExplorer STATIC ${BlockchainExplorer})
@@ -152,6 +152,13 @@ target_link_libraries(WalletBackend Mnemonics CryptoNoteCore Nigel cryptopp-stat
 target_link_libraries(WalletService Mnemonics)
 target_link_libraries(zedwallet Mnemonics Wallet Errors Utilities)
 target_link_libraries(zedwallet++ WalletBackend)
+
+if(OPENSSL_FOUND)
+  target_link_libraries(miner ${OPENSSL_LIBRARIES})
+  target_link_libraries(Nigel ${OPENSSL_LIBRARIES})
+  target_link_libraries(WalletApi ${OPENSSL_LIBRARIES})
+  target_link_libraries(zedwallet++ ${OPENSSL_LIBRARIES})
+endif()
 
 # Add dependencies means we have to build the latter before we build the former
 # In this case it's because we need to have the current version name rather
