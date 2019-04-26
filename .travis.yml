@@ -113,12 +113,12 @@ install:
 - if [[ "${LABEL:0:3}" == "osx" ]]; then ln -s /usr/local/opt/openssl/include/openssl /usr/local/include ; fi
 
 # Neeed to install ccache
-- if [[ "${LABEL:0:3}" == "osx" ]]; then brew install ccache ; fi
+- if [[ "${LABEL:0:3}" == "osx" ]]; then travis_retry brew install ccache ; fi
 - if [[ "${LABEL:0:3}" == "osx" ]]; then export PATH="/usr/local/opt/ccache/libexec:$PATH" ; fi
 
 # Install the correct gcc version
-- if [[ "$LABEL" == "osx-g++-8" ]]; then brew install gcc@8 ; fi
-- if [[ "$LABEL" == "osx-g++-7" ]]; then brew install gcc@7 ; fi
+- if [[ "$LABEL" == "osx-g++-8" ]]; then travis_retry brew install gcc@8 ; fi
+- if [[ "$LABEL" == "osx-g++-7" ]]; then travis_retry brew install gcc@7 ; fi
 
 script:
 - eval $MATRIX_EVAL
@@ -135,14 +135,14 @@ before_deploy:
 - cd src
 - TARGETS="Plenteumd miner zedwallet wallet-service zedwallet-beta cryptotest wallet-api"
 - ${STRIP} ${TARGETS}
-- rm -rf plenteum-${TRAVIS_TAG}
-- mkdir plenteum-${TRAVIS_TAG}
-- cp ${TARGETS} plenteum-${TRAVIS_TAG}/
-- cp ../../LICENSE plenteum-${TRAVIS_TAG}/
-- tar cvfz plenteum-${TRAVIS_TAG}-${LABEL}.tar.gz plenteum-${TRAVIS_TAG}/
+- rm -rf plenteum-testnet-${TRAVIS_TAG}
+- mkdir plenteum-testnet-${TRAVIS_TAG}
+- cp ${TARGETS} plenteum-testnet-${TRAVIS_TAG}/
+- cp ../../LICENSE plenteum-testnet-${TRAVIS_TAG}/
+- tar cvfz plenteum-testnet-${TRAVIS_TAG}-${LABEL}.tar.gz plenteum-testnet-${TRAVIS_TAG}/
 - rm -rf builds
 - mkdir builds
-- cp plenteum-${TRAVIS_TAG}-${LABEL}.tar.gz builds
+- cp plenteum-testnet-${TRAVIS_TAG}-${LABEL}.tar.gz builds
 - cd ..
 
 deploy:
@@ -153,7 +153,7 @@ deploy:
       - plenteum-${TRAVIS_TAG}-${LABEL}.tar.gz
     skip_cleanup: true
     on:
-      repo: plenteum/plenteum
+      repo: plenteum/testnet
       tags: true
       draft: true
       condition: "$_DEPLOYABLE = true"
