@@ -32,7 +32,7 @@ If you are using Clang, you will need Clang 6.0 or higher. You will also need li
 - `sudo pip install cmake`
 - `export CC=gcc-8`
 - `export CXX=g++-8`
-- `git clone -b master --single-branch https://github.com/plenteum/plenteum`
+- `git clone -b master --single-branch https://github.com/plenteum/testnet`
 - `cd plenteum`
 - `mkdir build`
 - `cd build`
@@ -66,7 +66,7 @@ You need to modify the below command for your version of ubuntu - see https://ap
 - `sudo pip install cmake`
 - `export CC=clang-6.0`
 - `export CXX=clang++-6.0`
-- `git clone -b master --single-branch https://github.com/plenteum/plenteum`
+- `git clone -b master --single-branch https://github.com/plenteum/testnet`
 - `cd plenteum`
 - `mkdir build`
 - `cd build`
@@ -85,7 +85,7 @@ Ensure you have the dependencies listed above.
 If you want to use clang, ensure you set the environment variables `CC` and `CXX`.
 See the ubuntu instructions for an example.
 
-- `git clone -b master --single-branch https://github.com/plenteum/plenteum`
+- `git clone -b master --single-branch https://github.com/plenteum/testnet`
 - `cd plenteum`
 - `mkdir build`
 - `cd build`
@@ -109,7 +109,7 @@ The binaries will be in the `src` folder when you are complete.
 - `brew install --force cmake boost llvm gcc@8 openssl`
 - `export CC=gcc-8`
 - `export CXX=g++-8`
-- `git clone -b master --single-branch https://github.com/plenteum/plenteum`
+- `git clone -b master --single-branch https://github.com/plenteum/testnet`
 - `cd plenteum`
 - `mkdir build`
 - `cd build`
@@ -133,7 +133,7 @@ The binaries will be in the `src` folder when you are complete.
 - `brew install --force cmake boost llvm openssl`
 - `export CC=/usr/local/opt/llvm/bin/clang`
 - `export CXX=/usr/local/opt/llvm/bin/clang++`
-- `git clone -b master --single-branch https://github.com/plenteum/plenteum`
+- `git clone -b master --single-branch https://github.com/plenteum/testnet`
 - `cd plenteum`
 - `mkdir build`
 - `cd build`
@@ -184,7 +184,7 @@ Once you have a 64 bit image installed, setup proceeds the same as any Linux dis
 
 ##### Building
 
-- `git clone -b master --single-branch https://github.com/plenteum/plenteum`
+- `git clone -b master --single-branch https://github.com/plenteum/testnet`
 - `cd plenteum`
 - `mkdir build`
 - `cd build`
@@ -201,7 +201,7 @@ Cryptonote Developers, Bytecoin Developers, Monero Developers, Forknote Project,
 
 ### Copypasta for license when editing files
 
-Hi Plenteum contributor, thanks for forking and sending back Pull Requests. Extensive docs about contributing are in the works or elsewhere. For now this is the bit we need to get into all the files we touch. Please add it to the top of the files, see [src/CryptoNoteConfig.h](https://github.com/plenteum/plenteum/commit/28cfef2575f2d767f6e512f2a4017adbf44e610e) for an example.
+Hi Plenteum contributor, thanks for forking and sending back Pull Requests. Extensive docs about contributing are in the works or elsewhere. For now this is the bit we need to get into all the files we touch. Please add it to the top of the files, see [src/CryptoNoteConfig.h](https://github.com/plenteum/testnet/commit/28cfef2575f2d767f6e512f2a4017adbf44e610e) for an example.
 
 Should you choose to contribute to Plenteum, please ensure your Pull Requests are submitted against our [testnet repo](https://github.com/plenteum/testnet)
 
