@@ -88,16 +88,19 @@ namespace CryptoNote {
 
 		const uint64_t MINIMUM_FEE = UINT64_C(0); //0
 
-		const uint64_t MINIMUM_MIXIN = 0;
-		const uint64_t MAXIMUM_MIXIN = 7;
+		const uint64_t MINIMUM_MIXIN = 3;
+		const uint64_t MAXIMUM_MIXIN = 12;
+
+		const uint64_t MINIMUM_MIXIN_V1 = 0;
+		const uint64_t MAXIMUM_MIXIN_V1 = 7;
 
 		/* The heights to activate the mixin limits at */
-		const uint32_t MIXIN_LIMITS_V1_HEIGHT = 0;
-		const uint32_t MIXIN_LIMITS_V2_HEIGHT = 1;
+		const uint32_t MIXIN_LIMITS_V1_HEIGHT = 1450; //height at which new Mixin Limits Kick in
 
 		/* The mixin to use by default with zedwallet and wallet-service */
-		/* DEFAULT_MIXIN_V0 is the mixin used before MIXIN_LIMITS_V1_HEIGHT is started */
+		/* DEFAULT_MIXIN_V1 is the mixin used before MIXIN_LIMITS_V1_HEIGHT is started */
 		const uint64_t DEFAULT_MIXIN = MINIMUM_MIXIN;
+		const uint64_t DEFAULT_MIXIN_V1 = MINIMUM_MIXIN_V1;
 
 		const uint64_t DEFAULT_DUST_THRESHOLD = UINT64_C(0);
 		const uint64_t DEFAULT_DUST_THRESHOLD_V2 = UINT64_C(0);
@@ -147,6 +150,7 @@ namespace CryptoNote {
 		const uint32_t UPGRADE_HEIGHT_V5 = 200; // Upgrade height for DustFund V1.
 		const uint32_t UPGRADE_HEIGHT_V6 = 250;  //fix tx sizes issues
 		const uint32_t UPGRADE_HEIGHT_V7 = 1150;  //CN Turtle
+		const uint32_t UPGRADE_HEIGHT_V8 = 1450;  //TX Updates
 
 		const uint32_t UPGRADE_HEIGHT_CURRENT = UPGRADE_HEIGHT_V7;
 		const unsigned UPGRADE_VOTING_THRESHOLD = 90;               // percent
