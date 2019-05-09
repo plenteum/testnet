@@ -1,4 +1,5 @@
 // Copyright (c) 2018-2019, The TurtleCoin Developers
+// Copyright (c) 2019, The CyprusCoin Developers
 // Copyright (c) 2018-2019, The Plenteum Developers
 //
 // Please see the included LICENSE file for more information.
@@ -72,6 +73,7 @@ namespace DaemonConfig{
       ("p2p-bind-ip", "Interface IP address for the P2P service", cxxopts::value<std::string>()->default_value(config.p2pInterface), "<ip>")
       ("p2p-bind-port", "TCP port for the P2P service", cxxopts::value<int>()->default_value(std::to_string(config.p2pPort)), "#")
       ("p2p-external-port", "External TCP port for the P2P service (NAT port forward)", cxxopts::value<int>()->default_value("0"), "#")
+      ("p2p-reset-peerstate", "Generate a new peer ID and remove known peers saved previously", cxxopts::value<bool>()->default_value("false")->implicit_value("true"))
       ("rpc-bind-ip", "Interface IP address for the RPC service", cxxopts::value<std::string>()->default_value(config.rpcInterface), "<ip>")
       ("rpc-bind-port", "TCP port for the RPC service", cxxopts::value<int>()->default_value(std::to_string(config.rpcPort)), "#");
 
@@ -128,7 +130,7 @@ namespace DaemonConfig{
         if (rewindHeight == 0)
         {
           std::cout << CryptoNote::getProjectCLIHeader()
-            << "Please use the `--resync` option instead of `--rewind 0` to completely reset the synchronization state." << std::endl;
+            << "Please use the `--resync` option instead of `--rewind-to-height 0` to completely reset the synchronization state." << std::endl;
           exit(1);
         }
         else
@@ -230,6 +232,11 @@ namespace DaemonConfig{
       if (cli.count("p2p-external-port") > 0)
       {
         config.p2pExternalPort = cli["p2p-external-port"].as<int>();
+      }
+
+      if (cli.count("p2p-reset-peerstate") > 0)
+      {
+        config.p2pResetPeerstate = cli["p2p-reset-peerstate"].as<bool>();
       }
 
       if (cli.count("rpc-bind-ip") > 0)
@@ -495,6 +502,11 @@ namespace DaemonConfig{
             throw std::runtime_error(std::string(e.what()) + " - Invalid value for " + cfgKey );
           }
         }
+        else if (cfgKey.compare("p2p-reset-peerstate") == 0)
+        {
+          config.p2pResetPeerstate =  cfgValue.at(0) == '1' ? true : false;
+          updated = true;
+        }
         else if (cfgKey.compare("add-exclusive-node") == 0)
         {
 
@@ -679,6 +691,11 @@ namespace DaemonConfig{
       config.p2pExternalPort = j["p2p-external-port"].GetInt();
     }
 
+    if (j.HasMember("p2p-reset-peerstate"))
+    {
+      config.p2pResetPeerstate = j["p2p-reset-peerstate"].GetBool();
+    }
+    
     if (j.HasMember("rpc-bind-ip"))
     {
       config.rpcInterface = j["rpc-bind-ip"].GetString();
@@ -773,6 +790,7 @@ namespace DaemonConfig{
     j.AddMember("p2p-bind-ip", config.p2pInterface, alloc);
     j.AddMember("p2p-bind-port", config.p2pPort, alloc);
     j.AddMember("p2p-external-port", config.p2pExternalPort, alloc);
+    j.AddMember("p2p-reset-peerstate", config.p2pResetPeerstate, alloc);
     j.AddMember("rpc-bind-ip", config.rpcInterface, alloc);
     j.AddMember("rpc-bind-port", config.rpcPort, alloc);
 
