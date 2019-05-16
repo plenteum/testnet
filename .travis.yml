@@ -150,7 +150,7 @@ deploy:
     api_key:
         secure: EQ9ITil3FnjQBQ/3FKUINvsQ0QeoqjPuRHXt/TGzsP7P8Ywx7ETgJgt88LekijjerA19hubapWlKoDFLCy88vdQSckblmjMhhYjOJlzdJt1RejrjmlZhY6k+k1DVPodKrwJCnNk6LDgrY4QG0m6QtVDlvtvP0K9UlunIWR+UN/jLLZVniYlyfCXEyNhYS1GzGe17MOhRcv0UZENik2HBAIj1uSSP6oqiENdQfSlYmGLHlbN0F4rVDcLIFp+pbKQkX8oQNJgwY3LGexNnRgGQogzeFFQDzeqQcHZ1D3Icqksc3/8MZpDKVeKke/vMNPtstsS/Y+I6971D8SpZVFqb410ge0a+lChLlCjjiw1tGRagmA2WDJoBsW1kJBPAQGFJrbgtWJI/KxyvwdUpS0t73I/HrWkE+GgQRkno9OcpXZP0cbbc6Owhhi1/vH8XxgvNTZgS82NsKzspf1nWL73ukuQH+fGbsio5z9jkl+3PCQcq6U/zNJIDVW94u8rBiCUR6wOXFwecUsTXdw3AQ743Jdd0E5LDyqJGdJ1khWJSWIBPO1bmqIoYSRBTiVINYZlJq4Q/dBnPDi32JQYXzCaxPZLEpJRsFErkKLuFVEy3BZo0YgHY8sU1wxrLiF39HM5i4vcMf+pkCME+/uLPCh7kARdDDeONegN35wjWUoOZKRw=
     file:
-      - plenteum-${TRAVIS_TAG}-${LABEL}.tar.gz
+      - plenteum-testnet-${TRAVIS_TAG}-${LABEL}.tar.gz
     skip_cleanup: true
     on:
       repo: plenteum/testnet
