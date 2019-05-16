@@ -37,7 +37,7 @@ namespace CryptoNote {
 
 		const uint64_t LWMA_2_DIFFICULTY_BLOCK_INDEX = 2;
 		const uint64_t LWMA_2_DIFFICULTY_BLOCK_INDEX_V2 = 3;
-		const uint64_t LWMA_2_DIFFICULTY_BLOCK_INDEX_V3 = 1300; //testnet Height (200k mainnet)
+		const uint64_t LWMA_2_DIFFICULTY_BLOCK_INDEX_V3 = 1400; //testnet Height (200k mainnet)
 
 		const unsigned EMISSION_SPEED_FACTOR = 22;
 		static_assert(EMISSION_SPEED_FACTOR <= 8 * sizeof(uint64_t), "Bad EMISSION_SPEED_FACTOR");
@@ -95,7 +95,7 @@ namespace CryptoNote {
 		const uint64_t MAXIMUM_MIXIN_V1 = 7;
 
 		/* The heights to activate the mixin limits at */
-		const uint32_t MIXIN_LIMITS_V1_HEIGHT = 1450; //height at which new Mixin Limits Kick in
+		const uint32_t MIXIN_LIMITS_V1_HEIGHT = 10000; //height at which new Mixin Limits Kick in - 10000 on testnet
 
 		/* The mixin to use by default with zedwallet and wallet-service */
 		/* DEFAULT_MIXIN_V1 is the mixin used before MIXIN_LIMITS_V1_HEIGHT is started */
@@ -109,13 +109,13 @@ namespace CryptoNote {
 		const uint32_t FUSION_DUST_THRESHOLD_HEIGHT_V2 = 200;
 
 		const uint64_t EXPECTED_NUMBER_OF_BLOCKS_PER_DAY = 24 * 60 * 60 / DIFFICULTY_TARGET;
-		const size_t   DIFFICULTY_WINDOW = 20;
+		const size_t   DIFFICULTY_WINDOW = 60;
 		const size_t   DIFFICULTY_WINDOW_V1 = 720;
-		const size_t   DIFFICULTY_CUT = 0;  // timestamps to cut after sorting
-		const size_t   DIFFICULTY_CUT_V1 = 60;  // timestamps to cut after sorting
+		const size_t   DIFFICULTY_CUT = 5;  // timestamps to cut after sorting
+		const size_t   DIFFICULTY_CUT_V1 = 15;  // timestamps to cut after sorting
 		const size_t   DIFFICULTY_LAG = 5;  // !!!
 		const size_t   DIFFICULTY_LAG_V1 = 15;  // !!!
-		const uint64_t DIFFICULTY_BLOCKS_COUNT = DIFFICULTY_WINDOW + 1;
+		const uint64_t DIFFICULTY_BLOCKS_COUNT = DIFFICULTY_WINDOW + DIFFICULTY_LAG;
 
 		static_assert(2 * DIFFICULTY_CUT <= DIFFICULTY_WINDOW - 2, "Bad DIFFICULTY_WINDOW or DIFFICULTY_CUT");
 
@@ -124,14 +124,14 @@ namespace CryptoNote {
 		const uint64_t MAX_BLOCK_SIZE_GROWTH_SPEED_DENOMINATOR = 365 * 24 * 60 * 60 / DIFFICULTY_TARGET;
 		const uint64_t MAX_EXTRA_SIZE = 140000;
 		const uint64_t MAX_EXTRA_SIZE_V2 = 10240;
-		const uint64_t MAX_EXTRA_SIZE_V2_HEIGHT = 1300; //height at which tx extra is limited to 10240 (testnet height of 1400)
+		const uint64_t MAX_EXTRA_SIZE_V2_HEIGHT = 1400; //height at which tx extra is limited to 10240 (testnet height of 1400)
 
 		/* For new projects forked from this code base, the values immediately below
    should be changed to 0 to prevent issues with transaction processing
    and other possible unexpected behavior */
-		const uint64_t TRANSACTION_SIGNATURE_COUNT_VALIDATION_HEIGHT = 1300; //TESTNET HEIGHT
-		const uint64_t BLOCK_BLOB_SHUFFLE_CHECK_HEIGHT = 1300; //TESTNET HEIGHT
-        const uint64_t TRANSACTION_INPUT_BLOCKTIME_VALIDATION_HEIGHT = 1300; //testnet height
+		const uint64_t TRANSACTION_SIGNATURE_COUNT_VALIDATION_HEIGHT = 1400; //TESTNET HEIGHT
+		const uint64_t BLOCK_BLOB_SHUFFLE_CHECK_HEIGHT = 1400; //TESTNET HEIGHT
+        const uint64_t TRANSACTION_INPUT_BLOCKTIME_VALIDATION_HEIGHT = 1400; //testnet height
 
 		const uint64_t CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_BLOCKS = 1;
 		const uint64_t CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_SECONDS = DIFFICULTY_TARGET * CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_BLOCKS;
@@ -169,12 +169,13 @@ namespace CryptoNote {
 			200, //first fork to introduce DUST fund
 			250, //fix tx sizes issue
 			1150, // CN Turtle
-			1300, //Difficulty Update
-			5000 // next fork height (dust v2 & net protect)
+			1400, //Difficulty Update
+			10000, // mixin limits reset
+			20000 // next fork height (dust v2 & net protect)
 		};
 
 		/* MAKE SURE TO UPDATE THIS VALUE WITH EVERY MAJOR RELEASE BEFORE A FORK */
-		const uint64_t SOFTWARE_SUPPORTED_FORK_INDEX = 7;
+		const uint64_t SOFTWARE_SUPPORTED_FORK_INDEX = 7; //supports up to diff update
 
 		const uint64_t FORK_HEIGHTS_SIZE = sizeof(FORK_HEIGHTS) / sizeof(*FORK_HEIGHTS);
 
