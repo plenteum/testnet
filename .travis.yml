@@ -143,7 +143,7 @@ before_deploy:
 - rm -rf builds
 - mkdir builds
 - cp plenteum-testnet-${TRAVIS_TAG}-${LABEL}.tar.gz builds
-- cd ..
+
 
 deploy:
   - provider: releases
