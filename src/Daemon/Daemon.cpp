@@ -365,6 +365,25 @@ int main(int argc, char* argv[])
     logger(INFO) << "Core initialized OK";
 
     CryptoNote::CryptoNoteProtocolHandler cprotocol(currency, dispatcher, ccore, nullptr, logManager);
+	cprotocol.setTxThreshold(config.txThresholdCount);
+	cprotocol.setTxThresholdInterval(config.txThresholdInterval);
+	if (!config.banImportFile.empty()) {
+		if (!boost::filesystem::exists(config.banImportFile)) {
+			logger(WARNING) << "Unable to import banned ips, file not found: " << config.banImportFile;
+		}
+		std::ifstream in{ config.banImportFile };
+		std::string line;
+		while (std::getline(in, line)) {
+			uint32_t ip = 0;
+			if (Common::parseIpAddress(ip, line)) {
+				cprotocol.ban(ip);
+				logger(INFO) << line << " ban imported.";
+			}
+			else {
+				logger(WARNING) << "Invalid ip in p2p ban import: " << line;
+			}
+		}
+	}
     CryptoNote::NodeServer p2psrv(dispatcher, cprotocol, logManager);
     CryptoNote::RpcServer rpcServer(dispatcher, logManager, ccore, p2psrv, cprotocol);
 

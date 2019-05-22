@@ -74,6 +74,12 @@ namespace DaemonConfig{
       ("p2p-bind-port", "TCP port for the P2P service", cxxopts::value<int>()->default_value(std::to_string(config.p2pPort)), "#")
       ("p2p-external-port", "External TCP port for the P2P service (NAT port forward)", cxxopts::value<int>()->default_value("0"), "#")
       ("p2p-reset-peerstate", "Generate a new peer ID and remove known peers saved previously", cxxopts::value<bool>()->default_value("false")->implicit_value("true"))
+	  // Tx Threshold
+	  ("p2p-tx-threshold-count", "Maximum number of transactions a node can push in given interval",cxxopts::value<uint64_t>(config.txThresholdCount)->default_value(std::to_string(config.txThresholdCount)), "#")
+	  ("p2p-tx-threshold-interval", "Interval pushed transactions are taken into account for the threshold (in seconds)",cxxopts::value<uint64_t>(config.txThresholdInterval)->default_value(std::to_string(config.txThresholdInterval)), "#")
+
+	  // Banning
+	  ("p2p-ban-import", "File to import p2p bans from.", cxxopts::value<std::string>()->default_value(config.banImportFile), "<filepath>")
       ("rpc-bind-ip", "Interface IP address for the RPC service", cxxopts::value<std::string>()->default_value(config.rpcInterface), "<ip>")
       ("rpc-bind-port", "TCP port for the RPC service", cxxopts::value<int>()->default_value(std::to_string(config.rpcPort)), "#");
 
@@ -234,11 +240,26 @@ namespace DaemonConfig{
         config.p2pExternalPort = cli["p2p-external-port"].as<int>();
       }
 
-      if (cli.count("p2p-reset-peerstate") > 0)
-      {
-        config.p2pResetPeerstate = cli["p2p-reset-peerstate"].as<bool>();
-      }
+	  if (cli.count("p2p-reset-peerstate") > 0)
+	  {
+		  config.p2pResetPeerstate = cli["p2p-reset-peerstate"].as<bool>();
+	  }
 
+	  if (cli.count("p2p-tx-threshold-count") > 0)
+	  {
+		  config.txThresholdCount = cli["p2p-tx-threshold-count"].as<int>();
+	  }
+
+	  if (cli.count("p2p-tx-threshold-interval") > 0)
+	  {
+		  config.txThresholdInterval = cli["p2p-tx-threshold-interval"].as<int>();
+	  }
+
+	  if (cli.count("p2p-ban-import") > 0)
+	  {
+		  config.banImportFile = cli["p2p-ban-import"].as<std::string>();
+	  }
+	  	  
       if (cli.count("rpc-bind-ip") > 0)
       {
         config.rpcInterface = cli["rpc-bind-ip"].as<std::string>();
@@ -696,6 +717,21 @@ namespace DaemonConfig{
       config.p2pResetPeerstate = j["p2p-reset-peerstate"].GetBool();
     }
     
+	if (j.HasMember("p2p-tx-threshold-count"))
+	{
+	  config.txThresholdCount = j["p2p-tx-threshold-count"].GetInt();
+	}
+
+	if (j.HasMember("p2p-tx-threshold-interval"))
+	{
+	  config.txThresholdInterval = j["p2p-tx-threshold-interval"].GetInt();
+	}
+
+	if (j.HasMember("p2p-ban-import"))
+	{
+	  config.banImportFile = j["p2p-ban-import"].GetString();
+	}
+
     if (j.HasMember("rpc-bind-ip"))
     {
       config.rpcInterface = j["rpc-bind-ip"].GetString();
@@ -790,7 +826,10 @@ namespace DaemonConfig{
     j.AddMember("p2p-bind-ip", config.p2pInterface, alloc);
     j.AddMember("p2p-bind-port", config.p2pPort, alloc);
     j.AddMember("p2p-external-port", config.p2pExternalPort, alloc);
-    j.AddMember("p2p-reset-peerstate", config.p2pResetPeerstate, alloc);
+	j.AddMember("p2p-reset-peerstate", config.p2pResetPeerstate, alloc);
+	j.AddMember("p2p-tx-threshold-count", config.txThresholdCount, alloc);
+	j.AddMember("p2p-tx-threshold-interval", config.txThresholdInterval, alloc);
+	j.AddMember("p2p-ban-import", config.banImportFile, alloc);
     j.AddMember("rpc-bind-ip", config.rpcInterface, alloc);
     j.AddMember("rpc-bind-port", config.rpcPort, alloc);
 

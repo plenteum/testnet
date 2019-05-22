@@ -95,6 +95,13 @@ namespace DaemonConfig {
     bool useSqliteForLocalCaches;
     bool useRocksdbForLocalCaches;
     bool enableDbCompression;
+
+	// tx threshold
+	uint64_t txThresholdCount = 10;
+	uint64_t txThresholdInterval = 5 * 60;
+
+	// banning
+	std::string banImportFile{ "" };
   };
 
   DaemonConfiguration initConfiguration(const char* path);
