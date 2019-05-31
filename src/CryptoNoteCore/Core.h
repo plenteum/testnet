@@ -67,8 +67,10 @@ public:
     const std::vector<Crypto::Hash> &knownBlockHashes,
     const uint64_t startHeight,
     const uint64_t startTimestamp,
-	const uint64_t blockCount,
-    std::vector<WalletTypes::WalletBlockInfo> &walletBlocks) const override;
+    const uint64_t blockCount,
+    const bool skipCoinbaseTransactions,
+    std::vector<WalletTypes::WalletBlockInfo> &walletBlocks,
+    std::optional<WalletTypes::TopBlock> &topBlockInfo) const override;
 
   virtual bool getTransactionsStatus(
     std::unordered_set<Crypto::Hash> transactionHashes,

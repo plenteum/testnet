@@ -15,7 +15,7 @@
 
 The CMake build system will, by default, create optimized *native* builds for your particular system type when you build the software. Using this method, the binaries created provide a better experience and all together faster performance.
 
-However, if you wish to create *portable* binaries that can be shared between systems, specify `-DARCH=default` in your CMake arguments during the build process. Note that *portable* binaries will have a noticable difference in performance than *native* binaries. For this reason, it is always best to build for your particuar system if possible.
+However, if you wish to create *portable* binaries that can be shared between systems, specify `-DARCH=default` in your CMake arguments during the build process. Note that *portable* binaries will have a noticable difference in performance than *native* binaries. For this reason, it is always best to build for your particular system if possible.
 
 #### Linux
 
@@ -103,30 +103,6 @@ The binaries will be in the `src` folder when you are complete.
 - `cd src`
 - `./Plenteumd --version`
 
-#### OSX/Apple, using GCC
-
-##### Prerequisites
-
-- Install XCode and Developer Tools.
-
-##### Building
-
-- `which brew || /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
-- `brew install --force cmake boost llvm gcc@8 openssl`
-- `export CC=gcc-8`
-- `export CXX=g++-8`
-- `git clone -b master --single-branch https://github.com/plenteum/testnet`
-- `cd plenteum`
-- `mkdir build`
-- `cd build`
-- `cmake ..`
-- `make`
-
-The binaries will be in the `src` folder when you are complete.
-
-- `cd src`
-- `./Plenteumd --version`
-
 #### OSX/Apple, using Clang
 
 ##### Prerequisites
@@ -150,7 +126,6 @@ The binaries will be in the `src` folder when you are complete.
 
 - `cd src`
 - `./Plenteumd --version`
-
 
 #### Windows
 
