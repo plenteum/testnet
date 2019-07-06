@@ -135,11 +135,11 @@ You can build for 64-bit Windows.
 
 - Install [Visual Studio 2017 Community Edition](https://www.visualstudio.com/thank-you-downloading-visual-studio/?sku=Community&rel=15&page=inlineinstall)
 - When installing Visual Studio, it is **required** that you install **Desktop development with C++**
-- Install the latest version of Boost (currently Boost 1.68). Select the appropriate version for your system:
-  - [Boost 64-bit](https://bintray.com/boostorg/release/download_file?file_path=1.68.0%2Fbinaries%2Fboost_1_68_0-msvc-14.1-64.exe)
-- Install the latest full version of OpenSSL (currently OpenSSL 1.1.1b). Select the appropriate version for your system:
+- Install the latest version of Boost (currently Boost 1.70). Select the appropriate version for your system:
+  - [Boost 64-bit](https://bintray.com/boostorg/release/download_file?file_path=1.70.0%2Fbinaries%2Fboost_1_70_0-msvc-14.1-64.exe)
+- Install the latest full version of OpenSSL (currently OpenSSL 1.1.1c). Select the appropriate version for your system:
   - [OpenSSL 64-bit](https://slproweb.com/download/Win64OpenSSL-1_1_1c.exe)
-  - [OpenSSL 32-bit](https://slproweb.com/download/Win32OpenSSL-1_1_1c.exe)
+  
 
 ##### Building
 
@@ -148,7 +148,7 @@ You can build for 64-bit Windows.
 - `mkdir build`
 - `cd build`
 - `set PATH="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin";%PATH%`
-- `cmake -G "Visual Studio 15 2017 Win64" .. -DBOOST_ROOT=D:/local/boost_1_68_0`
+- `cmake -G "Visual Studio 15 2017 Win64" .. -DBOOST_ROOT=D:/local/boost_1_70_0`
 - `MSBuild Plenteum.sln /p:Configuration=Release /m`
 
 The binaries will be in the `src/Release` folder when you are complete.
