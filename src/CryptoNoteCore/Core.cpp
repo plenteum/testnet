@@ -1434,6 +1434,15 @@ bool Core::isTransactionValidForPool(const CachedTransaction& cachedTransaction,
       return false;
   }
 
+  if (cachedTransaction.getTransaction().extra.size() >= CryptoNote::parameters::MAX_EXTRA_SIZE_V2)
+  {
+      logger(Logging::TRACE) << "Not adding transaction "
+                             << cachedTransaction.getTransactionHash()
+                             << " to pool, extra too large.";
+
+      return false;
+  }
+
   uint64_t fee;
 
   if (auto validationResult = validateTransaction(cachedTransaction, validatorState, chainsLeaves[0], fee, getTopBlockIndex())) {
@@ -2373,43 +2382,42 @@ size_t Core::calculateCumulativeBlocksizeLimit(uint32_t height) const {
   return median * 2;
 }
 
+/* A transaction that is valid at the time it was added to the pool, is not
+   neccessarily valid now, if the network rules changed. */
 bool Core::validateBlockTemplateTransaction(
-	const CachedTransaction &cachedTransaction,
-	const uint64_t blockHeight) const
+    const CachedTransaction &cachedTransaction,
+    const uint64_t blockHeight) const
 {
-	const auto &transaction = cachedTransaction.getTransaction();
+    const auto &transaction = cachedTransaction.getTransaction();
 
-	if (blockHeight >= CryptoNote::parameters::MAX_EXTRA_SIZE_V2_HEIGHT)
-	{
-		if (transaction.extra.size() >= CryptoNote::parameters::MAX_EXTRA_SIZE_V2)
-		{
-			logger(Logging::TRACE) << "Not adding transaction "
-				<< cachedTransaction.getTransactionHash()
-				<< " to block template, extra too large.";
-			return false;
-		}
-	}
+    if (transaction.extra.size() >= CryptoNote::parameters::MAX_EXTRA_SIZE_V2)
+    {
+        logger(Logging::TRACE) << "Not adding transaction "
+                               << cachedTransaction.getTransactionHash()
+                               << " to block template, extra too large.";
+        return false;
+    }
 
-	auto[success, error] = Mixins::validate({ cachedTransaction }, blockHeight);
+    auto [success, error] = Mixins::validate({cachedTransaction}, blockHeight);
 
-	if (!success)
-	{
-		logger(Logging::TRACE) << "Not adding transaction "
-			<< cachedTransaction.getTransactionHash()
-			<< " to block template, " << error;
-		return false;
-	}
+    if (!success)
+    {
+        logger(Logging::TRACE) << "Not adding transaction "
+                               << cachedTransaction.getTransactionHash()
+                               << " to block template, " << error;
+        return false;
+    }
 
-	return true;
+    return true;
 }
 
 void Core::fillBlockTemplate(
-	BlockTemplate& block,
-	const size_t medianSize,
-	const size_t maxCumulativeSize,
-	const uint64_t height,
-	size_t& transactionsSize,
-	uint64_t& fee) const {
+    BlockTemplate& block,
+    const size_t medianSize,
+    const size_t maxCumulativeSize,
+    const uint64_t height,
+    size_t& transactionsSize,
+    uint64_t& fee) const {
 
     transactionsSize = 0;
     fee = 0;
