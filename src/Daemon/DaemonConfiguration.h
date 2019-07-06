@@ -1,6 +1,5 @@
 // Copyright (c) 2018-2019, The TurtleCoin Developers
 // Copyright (c) 2019, The CyprusCoin Developers
-// Copyright (c) 2018-2019, The Plenteum Developers
 //
 // Please see the included LICENSE file for more information.
 
@@ -95,13 +94,6 @@ namespace DaemonConfig {
     bool useSqliteForLocalCaches;
     bool useRocksdbForLocalCaches;
     bool enableDbCompression;
-
-	// tx threshold
-	uint64_t txThresholdCount = 10;
-	uint64_t txThresholdInterval = 5 * 60;
-
-	// banning
-	std::string banImportFile{ "" };
   };
 
   DaemonConfiguration initConfiguration(const char* path);
