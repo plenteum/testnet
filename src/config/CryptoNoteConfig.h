@@ -13,6 +13,7 @@
 #include <limits>
 #include <initializer_list>
 #include <boost/uuid/uuid.hpp>
+#include <crypto/hash.h>
 
 namespace CryptoNote {
 	namespace parameters {
@@ -175,7 +176,7 @@ namespace CryptoNote {
 		};
 
 		/* MAKE SURE TO UPDATE THIS VALUE WITH EVERY MAJOR RELEASE BEFORE A FORK */
-		const uint64_t SOFTWARE_SUPPORTED_FORK_INDEX = 7; //supports up to diff update
+		const uint64_t SOFTWARE_SUPPORTED_FORK_INDEX = 9; //supports up to diff update
 
 		const uint64_t FORK_HEIGHTS_SIZE = sizeof(FORK_HEIGHTS) / sizeof(*FORK_HEIGHTS);
 
@@ -209,6 +210,7 @@ namespace CryptoNote {
 	const uint8_t  BLOCK_MAJOR_VERSION_3 = 3;
 	const uint8_t  BLOCK_MAJOR_VERSION_4 = 4; //block version to fix tx sizes issue
 	const uint8_t  BLOCK_MAJOR_VERSION_5 = 5; //algo change to CN Turtle
+	
 	const uint8_t  BLOCK_MINOR_VERSION_0 = 0;
 	const uint8_t  BLOCK_MINOR_VERSION_1 = 1;
 
@@ -227,6 +229,17 @@ namespace CryptoNote {
 	// and the minimum version for communication between nodes
 	const uint8_t  P2P_CURRENT_VERSION = 5; //bump p2p version 
 	const uint8_t  P2P_MINIMUM_VERSION = 4; //bump min supported version
+const std::unordered_map<
+    uint8_t,
+    std::function<void(const void *data, size_t length, Crypto::Hash &hash)>
+> HASHING_ALGORITHMS_BY_BLOCK_VERSION =
+{
+    { BLOCK_MAJOR_VERSION_1, Crypto::cn_slow_hash_v0 },             /* From zero */
+    { BLOCK_MAJOR_VERSION_2, Crypto::cn_slow_hash_v0 },             /* UPGRADE_HEIGHT_V2 */
+    { BLOCK_MAJOR_VERSION_3, Crypto::cn_slow_hash_v0 },             /* UPGRADE_HEIGHT_V3 */
+    { BLOCK_MAJOR_VERSION_4, Crypto::cn_lite_slow_hash_v1 },        /* UPGRADE_HEIGHT_V4 */
+    { BLOCK_MAJOR_VERSION_5, Crypto::cn_turtle_lite_slow_hash_v2 }  /* UPGRADE_HEIGHT_V5 */
+};
 
 	// This defines the minimum P2P version required for lite blocks propogation
 	const uint8_t  P2P_LITE_BLOCKS_PROPOGATION_VERSION = 4;
@@ -248,10 +261,10 @@ namespace CryptoNote {
 	const size_t   P2P_DEFAULT_HANDSHAKE_INVOKE_TIMEOUT = 5000;          // 5 seconds
 	const char     P2P_STAT_TRUSTED_PUB_KEY[] = "";
 
-	const uint64_t DATABASE_WRITE_BUFFER_MB_DEFAULT_SIZE = 256;
-	const uint64_t DATABASE_READ_BUFFER_MB_DEFAULT_SIZE = 10;
-	const uint32_t DATABASE_DEFAULT_MAX_OPEN_FILES = 100;
-	const uint16_t DATABASE_DEFAULT_BACKGROUND_THREADS_COUNT = 2;
+	const uint64_t DATABASE_WRITE_BUFFER_MB_DEFAULT_SIZE = 1024;
+	const uint64_t DATABASE_READ_BUFFER_MB_DEFAULT_SIZE = 1024;
+	const uint32_t DATABASE_DEFAULT_MAX_OPEN_FILES = 500;
+	const uint16_t DATABASE_DEFAULT_BACKGROUND_THREADS_COUNT = 10;
 
 	const char     LATEST_VERSION_URL[] = "http://latest.plenteum.com";
 	const std::string LICENSE_URL = "https://github.com/plenteum/plenteum/blob/master/LICENSE";
