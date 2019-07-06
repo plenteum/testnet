@@ -197,6 +197,8 @@ namespace CryptoNote {
 		const char     CRYPTONOTE_POOLDATA_FILENAME[] = "poolstate.bin";
 		const char     P2P_NET_DATA_FILENAME[] = "p2pstate.bin";
 		const char     MINER_CONFIG_FILE_NAME[] = "miner_conf.json";
+
+		const uint8_t BULLETPROOF_MAX_OUTPUTS = 16;
 	} // parameters
 
 	const char     CRYPTONOTE_NAME[] = "Plenteum";
