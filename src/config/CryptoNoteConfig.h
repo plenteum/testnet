@@ -234,9 +234,10 @@ const std::unordered_map<
     std::function<void(const void *data, size_t length, Crypto::Hash &hash)>
 > HASHING_ALGORITHMS_BY_BLOCK_VERSION =
 {
-    { BLOCK_MAJOR_VERSION_1, Crypto::cn_slow_hash_v0 },             /* From zero */
+    { BLOCK_MAJOR_VERSION_0, Crypto::cn_slow_hash_v0 },             /* From zero */
+	{ BLOCK_MAJOR_VERSION_1, Crypto::cn_slow_hash_v0 },             /* UPGRADE_HEIGHT_V1 */
     { BLOCK_MAJOR_VERSION_2, Crypto::cn_slow_hash_v0 },             /* UPGRADE_HEIGHT_V2 */
-    { BLOCK_MAJOR_VERSION_3, Crypto::cn_slow_hash_v0 },             /* UPGRADE_HEIGHT_V3 */
+    { BLOCK_MAJOR_VERSION_3, Crypto::cn_lite_slow_hash_v1 },        /* UPGRADE_HEIGHT_V3 */
     { BLOCK_MAJOR_VERSION_4, Crypto::cn_lite_slow_hash_v1 },        /* UPGRADE_HEIGHT_V4 */
     { BLOCK_MAJOR_VERSION_5, Crypto::cn_turtle_lite_slow_hash_v2 }  /* UPGRADE_HEIGHT_V5 */
 };

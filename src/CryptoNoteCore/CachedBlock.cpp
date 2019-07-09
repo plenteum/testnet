@@ -54,7 +54,7 @@ const Crypto::Hash& CachedBlock::getBlockLongHash() const
         return blockLongHash.get();
     }
 
-    const std::vector<uint8_t> &rawHashingBlock = block.majorVersion == CryptoNote::BLOCK_MAJOR_VERSION_1
+    const std::vector<uint8_t> &rawHashingBlock = block.majorVersion == CryptoNote::BLOCK_MAJOR_VERSION_0
         ? getBlockHashingBinaryArray()
         : getParentBlockHashingBinaryArray(true);
 
