@@ -117,7 +117,6 @@ public:
   const std::string& txPoolFileName() const { return m_txPoolFileName; }
 
   bool isBlockexplorer() const { return m_isBlockexplorer; }
-  bool isTestnet() const { return m_testnet; }
 
   const BlockTemplate& genesisBlock() const { return cachedGenesisBlock->getBlock(); }
   const Crypto::Hash& genesisBlockHash() const { return cachedGenesisBlock->getBlockHash(); }
@@ -225,9 +224,6 @@ private:
   std::string m_blockIndexesFileName;
   std::string m_txPoolFileName;
 
-
-
-  bool m_testnet;
   bool m_isBlockexplorer;
 
   BlockTemplate genesisBlockTemplate;
@@ -251,7 +247,7 @@ public:
   }
 
   Transaction generateGenesisTransaction();
-  Transaction generateGenesisTransaction(const std::vector<AccountPublicAddress>& targets);
+
   CurrencyBuilder& maxBlockNumber(uint32_t val) { m_currency.m_maxBlockHeight = val; return *this; }
   CurrencyBuilder& maxBlockBlobSize(size_t val) { m_currency.m_maxBlockBlobSize = val; return *this; }
   CurrencyBuilder& maxTxSize(size_t val) { m_currency.m_maxTxSize = val; return *this; }
@@ -314,7 +310,6 @@ public:
   CurrencyBuilder& txPoolFileName(const std::string& val) { m_currency.m_txPoolFileName = val; return *this; }
 
   CurrencyBuilder& isBlockexplorer(const bool val) { m_currency.m_isBlockexplorer = val; return *this; }
-  CurrencyBuilder& testnet(bool val) { m_currency.m_testnet = val; return *this; }
 
 private:
   Currency m_currency;

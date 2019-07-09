@@ -25,7 +25,6 @@ public:
   uint32_t getMaxOpenFiles() const;
   uint64_t getWriteBufferSize() const; //Bytes
   uint64_t getReadCacheSize() const; //Bytes
-  bool getTestnet() const;
   bool getCompressionEnabled() const;
 
 private:
@@ -35,7 +34,6 @@ private:
   uint32_t maxOpenFiles;
   uint64_t writeBufferSize;
   uint64_t readCacheSize;
-  bool testnet;
   bool compressionEnabled;
 };
 } //namespace CryptoNote

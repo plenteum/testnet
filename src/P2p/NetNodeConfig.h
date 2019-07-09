@@ -24,7 +24,6 @@ public:
               const std::vector<std::string> addSeedNodes, const bool p2pResetPeerState);
 
   std::string getP2pStateFilename() const;
-  bool getTestnet() const;
   bool getP2pStateReset() const;
   std::string getBindIp() const;
   uint16_t getBindPort() const;
@@ -49,7 +48,6 @@ private:
   bool hideMyPort;
   std::string configFolder;
   std::string p2pStateFilename;
-  bool testnet;
   bool p2pStateReset;
 };
 
