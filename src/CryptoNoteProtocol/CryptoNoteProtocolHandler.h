@@ -84,7 +84,7 @@ namespace CryptoNote
     void recalculateMaxObservedHeight(const CryptoNoteConnectionContext& context);
     int processObjects(CryptoNoteConnectionContext& context, std::vector<RawBlock>&& rawBlocks, const std::vector<CachedBlock>& cachedBlocks);
     Logging::LoggerRef logger;
-
+/*
 	//----------------- banning ----------------------------------
   public:
 	  void ban(uint32_t ip);
@@ -103,7 +103,7 @@ namespace CryptoNote
 
 	  size_t txThreshold() const;
 	  void setTxThreshold(size_t count);
-
+*/
   private:
 	  std::atomic_uint64_t m_transactionsPushedInterval{ 4 * 60 };
 	  std::atomic_size_t m_transactionsPushedMaxInInterval{ 15 };
