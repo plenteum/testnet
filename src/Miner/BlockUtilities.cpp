@@ -16,7 +16,7 @@ std::vector<uint8_t> getParentBlockBinaryArray(const CryptoNote::BlockTemplate &
 {
     std::vector<uint8_t> parentBlockBinaryArray;
 
-    auto serializer = makeParentBlockSerializer(block, false, headerOnly);
+    auto serializer = makeParentBlockSerializer(block, true, headerOnly);
 
     if (!toBinaryArray(serializer, parentBlockBinaryArray))
     {
@@ -57,7 +57,7 @@ Crypto::Hash getBlockHash(const CryptoNote::BlockTemplate &block)
 {
     auto blockHashingBinaryArray = getBlockHashingBinaryArray(block);
 
-    if (block.majorVersion >= CryptoNote::BLOCK_MAJOR_VERSION_2)
+    if (block.majorVersion >= CryptoNote::BLOCK_MAJOR_VERSION_1)
     {
         const auto& parentBlock = getParentBlockBinaryArray(block, false);
         blockHashingBinaryArray.insert(blockHashingBinaryArray.end(), parentBlock.begin(), parentBlock.end());
