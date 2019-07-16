@@ -113,7 +113,7 @@ namespace CryptoNote {
 		const size_t   DIFFICULTY_WINDOW = 60;
 		const size_t   DIFFICULTY_WINDOW_V1 = 720;
 		const size_t   DIFFICULTY_CUT = 5;  // timestamps to cut after sorting
-		const size_t   DIFFICULTY_CUT_V1 = 15;  // timestamps to cut after sorting
+		const size_t   DIFFICULTY_CUT_V1 = 60;  // timestamps to cut after sorting
 		const size_t   DIFFICULTY_LAG = 5;  // !!!
 		const size_t   DIFFICULTY_LAG_V1 = 15;  // !!!
 		const uint64_t DIFFICULTY_BLOCKS_COUNT = DIFFICULTY_WINDOW + DIFFICULTY_LAG;
