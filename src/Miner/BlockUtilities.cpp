@@ -12,84 +12,94 @@
 #include <Serialization/CryptoNoteSerialization.h>
 #include <Serialization/SerializationTools.h>
 
-std::vector<uint8_t> getParentBlockBinaryArray(const CryptoNote::BlockTemplate &block, const bool headerOnly)
+std::vector<uint8_t> getParentBlockHashingBinaryArray(const CryptoNote::BlockTemplate& block, const bool headerOnly)
 {
-    std::vector<uint8_t> parentBlockBinaryArray;
-
-    auto serializer = makeParentBlockSerializer(block, true, headerOnly);
-
-    if (!toBinaryArray(serializer, parentBlockBinaryArray))
-    {
-        throw std::runtime_error("Can't serialize parent block header.");
-    }
-
-    return parentBlockBinaryArray;
+	return getParentBinaryArray(block, true, headerOnly);
 }
 
-std::vector<uint8_t> getBlockHashingBinaryArray(const CryptoNote::BlockTemplate &block)
+std::vector<uint8_t> getParentBlockBinaryArray(const CryptoNote::BlockTemplate& block, const bool headerOnly)
 {
-    std::vector<uint8_t> blockHashingBinaryArray;
-
-    if (!toBinaryArray(static_cast<const CryptoNote::BlockHeader&>(block), blockHashingBinaryArray))
-    {
-        throw std::runtime_error("Can't serialize BlockHeader");
-    }
-
-    std::vector<Crypto::Hash> transactionHashes;
-    transactionHashes.reserve(block.transactionHashes.size() + 1);
-    transactionHashes.push_back(getObjectHash(block.baseTransaction));
-    transactionHashes.insert(transactionHashes.end(), block.transactionHashes.begin(), block.transactionHashes.end());
-
-    Crypto::Hash treeHash;
-
-    Crypto::tree_hash(transactionHashes.data(), transactionHashes.size(), treeHash);
-
-    blockHashingBinaryArray.insert(blockHashingBinaryArray.end(), treeHash.data, treeHash.data + 32);
-
-    auto transactionCount = Common::asBinaryArray(Tools::get_varint_data(block.transactionHashes.size() + 1));
-
-    blockHashingBinaryArray.insert(blockHashingBinaryArray.end(), transactionCount.begin(), transactionCount.end());
-
-    return blockHashingBinaryArray;
+	return getParentBinaryArray(block, false, headerOnly);
 }
 
-Crypto::Hash getBlockHash(const CryptoNote::BlockTemplate &block)
+std::vector<uint8_t> getParentBinaryArray(const CryptoNote::BlockTemplate& block, const bool hashTransaction, const bool headerOnly)
 {
-    auto blockHashingBinaryArray = getBlockHashingBinaryArray(block);
+	std::vector<uint8_t> binaryArray;
 
-    if (block.majorVersion >= CryptoNote::BLOCK_MAJOR_VERSION_1)
-    {
-        const auto& parentBlock = getParentBlockBinaryArray(block, false);
-        blockHashingBinaryArray.insert(blockHashingBinaryArray.end(), parentBlock.begin(), parentBlock.end());
-    }
+	auto serializer = makeParentBlockSerializer(block, hashTransaction, headerOnly);
 
-    return CryptoNote::getObjectHash(blockHashingBinaryArray);
+	if (!toBinaryArray(serializer, binaryArray))
+	{
+		throw std::runtime_error("Can't serialize parent block");
+	}
+
+	return binaryArray;
 }
 
-Crypto::Hash getMerkleRoot(const CryptoNote::BlockTemplate &block)
+std::vector<uint8_t> getBlockHashingBinaryArray(const CryptoNote::BlockTemplate& block)
 {
-    return CryptoNote::getObjectHash(getBlockHashingBinaryArray(block));
+	std::vector<uint8_t> blockHashingBinaryArray;
+
+	if (!toBinaryArray(static_cast<const CryptoNote::BlockHeader&>(block), blockHashingBinaryArray))
+	{
+		throw std::runtime_error("Can't serialize BlockHeader");
+	}
+
+	std::vector<Crypto::Hash> transactionHashes;
+	transactionHashes.reserve(block.transactionHashes.size() + 1);
+	transactionHashes.push_back(getObjectHash(block.baseTransaction));
+	transactionHashes.insert(transactionHashes.end(), block.transactionHashes.begin(), block.transactionHashes.end());
+
+	Crypto::Hash treeHash;
+
+	Crypto::tree_hash(transactionHashes.data(), transactionHashes.size(), treeHash);
+
+	blockHashingBinaryArray.insert(blockHashingBinaryArray.end(), treeHash.data, treeHash.data + 32);
+
+	auto transactionCount = Common::asBinaryArray(Tools::get_varint_data(block.transactionHashes.size() + 1));
+
+	blockHashingBinaryArray.insert(blockHashingBinaryArray.end(), transactionCount.begin(), transactionCount.end());
+
+	return blockHashingBinaryArray;
 }
 
-Crypto::Hash getBlockLongHash(const CryptoNote::BlockTemplate &block)
+Crypto::Hash getBlockHash(const CryptoNote::BlockTemplate& block)
 {
-    const std::vector<uint8_t> rawHashingBlock = block.majorVersion == CryptoNote::BLOCK_MAJOR_VERSION_0
-        ? getBlockHashingBinaryArray(block)
-        : getParentBlockBinaryArray(block, true);
+	auto blockHashingBinaryArray = getBlockHashingBinaryArray(block);
 
-    Crypto::Hash hash;
+	if (block.majorVersion >= CryptoNote::BLOCK_MAJOR_VERSION_1)
+	{
+		const auto& parentBlock = getParentBlockHashingBinaryArray(block, false);
+		blockHashingBinaryArray.insert(blockHashingBinaryArray.end(), parentBlock.begin(), parentBlock.end());
+	}
 
-    try
-    {
-        const auto hashingAlgorithm
-            = CryptoNote::HASHING_ALGORITHMS_BY_BLOCK_VERSION.at(block.majorVersion);
+	return CryptoNote::getObjectHash(blockHashingBinaryArray);
+}
 
-        hashingAlgorithm(rawHashingBlock.data(), rawHashingBlock.size(), hash); 
+Crypto::Hash getMerkleRoot(const CryptoNote::BlockTemplate& block)
+{
+	return CryptoNote::getObjectHash(getBlockHashingBinaryArray(block));
+}
 
-        return hash;
-    }
-    catch (const std::out_of_range &)
-    {
-        throw std::runtime_error("Unknown block major version.");
-    }
+Crypto::Hash getBlockLongHash(const CryptoNote::BlockTemplate& block)
+{
+	const std::vector<uint8_t> rawHashingBlock = block.majorVersion == CryptoNote::BLOCK_MAJOR_VERSION_0
+		? getBlockHashingBinaryArray(block)
+		: getParentBlockHashingBinaryArray(block, true);
+
+	Crypto::Hash hash;
+
+	try
+	{
+		const auto hashingAlgorithm
+			= CryptoNote::HASHING_ALGORITHMS_BY_BLOCK_VERSION.at(block.majorVersion);
+
+		hashingAlgorithm(rawHashingBlock.data(), rawHashingBlock.size(), hash);
+
+		return hash;
+	}
+	catch (const std::out_of_range&)
+	{
+		throw std::runtime_error("Unknown block major version.");
+	}
 }
