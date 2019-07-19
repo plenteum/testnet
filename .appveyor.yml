@@ -44,3 +44,16 @@ deploy:
     on:
       appveyor_repo_name: plenteum/testnet
       appveyor_repo_tag: true
+          
+  - provider: S3
+    access_key_id:
+      secure: ZApE3I60k12/Ro/I91l0gmAU1DnarzA2fj7m1Dz9xLc=
+    secret_access_key:
+      secure: LqF0lQYhorEYeYFYJ4eGOrs7iph+BAAuc1iqlxNmbSi/x6pgk2VklG1v1LhHtf8W
+    bucket: plenteum-artifacts
+    region: us-east-2
+    set_public: true
+    folder: plenteum-testnet
+    artifact: PlenteumTestnetRelease
+    on:
+      appveyor_repo_name: plenteum/testnet
