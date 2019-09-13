@@ -19,7 +19,7 @@
 
 #include <boost/filesystem.hpp>
 
-#include "Common/CryptoNoteTools.h"
+#include "common/CryptoNoteTools.h"
 
 namespace CryptoNote {
 

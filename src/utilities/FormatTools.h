@@ -7,7 +7,7 @@
 #pragma once 
 
 #include <string>
-#include "Rpc/CoreRpcServerCommandsDefinitions.h"
+#include "rpc/CoreRpcServerCommandsDefinitions.h"
 
 namespace Utilities
 {

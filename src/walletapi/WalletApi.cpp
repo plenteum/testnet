@@ -6,18 +6,18 @@
 
 #include <chrono>
 
-#include <Common/SignalHandler.h>
+#include <common/SignalHandler.h>
 
 #include <config/CliHeader.h>
 
 #include <iostream>
 
-#include <Logger/Logger.h>
+#include <logger/Logger.h>
 
 #include <thread>
 
-#include <WalletApi/ApiDispatcher.h>
-#include <WalletApi/ParseArguments.h>
+#include <walletapi/ApiDispatcher.h>
+#include <walletapi/ParseArguments.h>
 
 int main(int argc, char **argv)
 {

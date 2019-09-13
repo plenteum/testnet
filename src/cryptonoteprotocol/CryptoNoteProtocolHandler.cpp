@@ -10,17 +10,17 @@
 #include <future>
 #include <boost/scope_exit.hpp>
 #include <boost/uuid/uuid_io.hpp>
-#include <System/Dispatcher.h>
+#include <system/Dispatcher.h>
 
-#include "CryptoNoteCore/CryptoNoteBasicImpl.h"
-#include "CryptoNoteCore/CryptoNoteFormatUtils.h"
-#include "Common/CryptoNoteTools.h"
-#include "CryptoNoteCore/Currency.h"
-#include "P2p/LevinProtocol.h"
+#include "cryptonotecore/CryptoNoteBasicImpl.h"
+#include "cryptonotecore/CryptoNoteFormatUtils.h"
+#include "common/CryptoNoteTools.h"
+#include "cryptonotecore/Currency.h"
+#include "p2p/LevinProtocol.h"
 
-#include <Serialization/SerializationTools.h>
+#include <serialization/SerializationTools.h>
 
-#include <Utilities/FormatTools.h>
+#include <utilities/FormatTools.h>
 
 #include <config/Ascii.h>
 #include <config/CryptoNoteConfig.h>

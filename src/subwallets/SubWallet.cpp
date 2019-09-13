@@ -3,16 +3,16 @@
 // Please see the included LICENSE file for more information.
 
 /////////////////////////////////
-#include <SubWallets/SubWallet.h>
+#include <subwallets/SubWallet.h>
 /////////////////////////////////
 
 #include <config/Constants.h>
 
-#include <Logger/Logger.h>
+#include <logger/Logger.h>
 
-#include <Utilities/Utilities.h>
+#include <utilities/Utilities.h>
 
-#include <WalletBackend/Constants.h>
+#include <walletbackend/Constants.h>
 
 ///////////////////////////////////
 /* CONSTRUCTORS / DECONSTRUCTORS */

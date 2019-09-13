@@ -4,8 +4,8 @@
 
 #include "MainChainStorageSqlite.h"
 
-#include <Common/CryptoNoteTools.h>
-#include <Common/FileSystemShim.h>
+#include <common/CryptoNoteTools.h>
+#include <common/FileSystemShim.h>
 
 #include "rapidjson/writer.h"
 #include "rapidjson/stringbuffer.h"

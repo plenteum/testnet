@@ -3,7 +3,7 @@
 // Please see the included LICENSE file for more information.
 
 //////////////////////////
-#include <Logger/Logger.h>
+#include <logger/Logger.h>
 //////////////////////////
 
 #include <algorithm>

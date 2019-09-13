@@ -22,9 +22,9 @@
 #include <sys/epoll.h>
 #include <unistd.h>
 
-#include <System/ErrorMessage.h>
-#include <System/InterruptedException.h>
-#include <System/Ipv4Address.h>
+#include <system/ErrorMessage.h>
+#include <system/InterruptedException.h>
+#include <system/Ipv4Address.h>
 
 namespace System {
 

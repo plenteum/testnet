@@ -17,9 +17,9 @@
 
 #include <config/CliHeader.h>
 #include <config/CryptoNoteConfig.h>
-#include <Logging/ILogger.h>
-#include "Common/PathTools.h"
-#include "Common/Util.h"
+#include <logging/ILogger.h>
+#include "common/PathTools.h"
+#include "common/Util.h"
 
 using namespace rapidjson;
 

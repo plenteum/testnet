@@ -18,20 +18,20 @@
 #include <miniupnpc/miniupnpc.h>
 #include <miniupnpc/upnpcommands.h>
 
-#include <System/Context.h>
-#include <System/ContextGroupTimeout.h>
-#include <System/EventLock.h>
-#include <System/InterruptedException.h>
-#include <System/Ipv4Address.h>
-#include <System/Ipv4Resolver.h>
-#include <System/TcpListener.h>
-#include <System/TcpConnector.h>
+#include <system/Context.h>
+#include <system/ContextGroupTimeout.h>
+#include <system/EventLock.h>
+#include <system/InterruptedException.h>
+#include <system/Ipv4Address.h>
+#include <system/Ipv4Resolver.h>
+#include <system/TcpListener.h>
+#include <system/TcpConnector.h>
 
 #include "version.h"
 #include <config/CryptoNoteConfig.h>
-#include "Common/StdInputStream.h"
-#include "Common/StdOutputStream.h"
-#include "Common/Util.h"
+#include "common/StdInputStream.h"
+#include "common/StdOutputStream.h"
+#include "common/Util.h"
 #include "crypto/crypto.h"
 #include <crypto/random.h>
 
@@ -39,9 +39,9 @@
 #include "LevinProtocol.h"
 #include "P2pProtocolDefinitions.h"
 
-#include "Serialization/BinaryInputStreamSerializer.h"
-#include "Serialization/BinaryOutputStreamSerializer.h"
-#include "Serialization/SerializationOverloads.h"
+#include "serialization/BinaryInputStreamSerializer.h"
+#include "serialization/BinaryOutputStreamSerializer.h"
+#include "serialization/SerializationOverloads.h"
 
 using namespace Common;
 using namespace Logging;

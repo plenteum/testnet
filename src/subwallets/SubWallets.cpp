@@ -3,7 +3,7 @@
 // Please see the included LICENSE file for more information.
 
 //////////////////////////////////
-#include <SubWallets/SubWallets.h>
+#include <subwallets/SubWallets.h>
 //////////////////////////////////
 
 #include <config/CryptoNoteConfig.h>
@@ -14,8 +14,8 @@
 
 #include <random>
 
-#include <Utilities/Addresses.h>
-#include <Utilities/Utilities.h>
+#include <utilities/Addresses.h>
+#include <utilities/Utilities.h>
 
 ///////////////////////////////////
 /* CONSTRUCTORS / DECONSTRUCTORS */

@@ -3,7 +3,7 @@
 // Please see the included LICENSE file for more information.
 
 /////////////////////////////////////
-#include <WalletApi/ParseArguments.h>
+#include <walletapi/ParseArguments.h>
 /////////////////////////////////////
 
 #include <cxxopts.hpp>

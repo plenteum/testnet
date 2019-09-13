@@ -7,16 +7,16 @@
 
 #pragma once
 
-#include "CryptoNoteProtocol/CryptoNoteProtocolDefinitions.h"
-#include "CryptoNoteCore/CryptoNoteBasic.h"
-#include "CryptoNoteCore/Difficulty.h"
+#include "cryptonoteprotocol/CryptoNoteProtocolDefinitions.h"
+#include "cryptonotecore/CryptoNoteBasic.h"
+#include "cryptonotecore/Difficulty.h"
 #include "crypto/hash.h"
 
 #include "BlockchainExplorerData.h"
 
-#include "Serialization/SerializationOverloads.h"
-#include "Serialization/BlockchainExplorerDataSerialization.h"
-#include <CryptoNoteCore/ICoreDefinitions.h>
+#include "serialization/SerializationOverloads.h"
+#include "serialization/BlockchainExplorerDataSerialization.h"
+#include <cryptonotecore/ICoreDefinitions.h>
 
 #include <WalletTypes.h>
 

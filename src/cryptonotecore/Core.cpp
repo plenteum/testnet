@@ -10,38 +10,38 @@
 
 #include <numeric>
 
-#include <Common/CryptoNoteTools.h>
-#include <Common/ShuffleGenerator.h>
-#include <Common/Math.h>
-#include <Common/MemoryInputStream.h>
-#include <Common/TransactionExtra.h>
+#include <common/CryptoNoteTools.h>
+#include <common/ShuffleGenerator.h>
+#include <common/Math.h>
+#include <common/MemoryInputStream.h>
+#include <common/TransactionExtra.h>
 
 #include <config/Constants.h>
 
-#include <CryptoNoteCore/BlockchainCache.h>
-#include <CryptoNoteCore/BlockchainStorage.h>
-#include <CryptoNoteCore/BlockchainUtils.h>
-#include <CryptoNoteCore/Core.h>
-#include <CryptoNoteCore/CoreErrors.h>
-#include <CryptoNoteCore/CryptoNoteFormatUtils.h>
-#include <CryptoNoteCore/ITimeProvider.h>
-#include <CryptoNoteCore/MemoryBlockchainStorage.h>
-#include <CryptoNoteCore/Mixins.h>
-#include <CryptoNoteCore/TransactionApi.h>
-#include <CryptoNoteCore/TransactionPool.h>
-#include <CryptoNoteCore/TransactionPoolCleaner.h>
-#include <CryptoNoteCore/UpgradeManager.h>
+#include <cryptonotecore/BlockchainCache.h>
+#include <cryptonotecore/BlockchainStorage.h>
+#include <cryptonotecore/BlockchainUtils.h>
+#include <cryptonotecore/Core.h>
+#include <cryptonotecore/CoreErrors.h>
+#include <cryptonotecore/CryptoNoteFormatUtils.h>
+#include <cryptonotecore/ITimeProvider.h>
+#include <cryptonotecore/MemoryBlockchainStorage.h>
+#include <cryptonotecore/Mixins.h>
+#include <cryptonotecore/TransactionApi.h>
+#include <cryptonotecore/TransactionPool.h>
+#include <cryptonotecore/TransactionPoolCleaner.h>
+#include <cryptonotecore/UpgradeManager.h>
 
-#include <CryptoNoteProtocol/CryptoNoteProtocolHandlerCommon.h>
+#include <cryptonoteprotocol/CryptoNoteProtocolHandlerCommon.h>
 
 #include <set>
 
-#include <System/Timer.h>
+#include <system/Timer.h>
 
-#include <Utilities/Container.h>
-#include <Utilities/FormatTools.h>
-#include <Utilities/LicenseCanary.h>
-#include <Utilities/ParseExtra.h>
+#include <utilities/Container.h>
+#include <utilities/FormatTools.h>
+#include <utilities/LicenseCanary.h>
+#include <utilities/ParseExtra.h>
 
 #include <unordered_set>
 

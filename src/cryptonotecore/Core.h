@@ -22,11 +22,11 @@
 #include "ITransactionPool.h"
 #include "ITransactionPoolCleaner.h"
 #include "IUpgradeManager.h"
-#include <Logging/LoggerMessage.h>
+#include <logging/LoggerMessage.h>
 #include "MessageQueue.h"
 #include "TransactionValidatiorState.h"
 
-#include <System/ContextGroup.h>
+#include <system/ContextGroup.h>
 
 #include <WalletTypes.h>
 

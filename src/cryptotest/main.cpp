@@ -12,7 +12,7 @@
 
 #include "CryptoNote.h"
 #include "CryptoTypes.h"
-#include "Common/StringTools.h"
+#include "common/StringTools.h"
 #include "crypto/crypto.h"
 
 #define PERFORMANCE_ITERATIONS  1000

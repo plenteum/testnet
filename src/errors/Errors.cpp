@@ -3,7 +3,7 @@
 // Please see the included LICENSE file for more information.
 
 //////////////////////////
-#include <Errors/Errors.h>
+#include <errors/Errors.h>
 //////////////////////////
 
 #include <ostream>

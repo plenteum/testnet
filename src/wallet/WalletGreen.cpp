@@ -8,31 +8,31 @@
 // Please see the included LICENSE file for more information.
 
 ///////////////////////////////
-#include <Wallet/WalletGreen.h>
+#include <wallet/WalletGreen.h>
 ///////////////////////////////
 
 #include <algorithm>
 
 #include <cassert>
 
-#include <Common/CryptoNoteTools.h>
-#include <Common/ScopeExit.h>
-#include <Common/ShuffleGenerator.h>
-#include <Common/StdInputStream.h>
-#include <Common/StdOutputStream.h>
-#include <Common/StreamTools.h>
-#include <Common/StringOutputStream.h>
-#include <Common/StringTools.h>
+#include <common/CryptoNoteTools.h>
+#include <common/ScopeExit.h>
+#include <common/ShuffleGenerator.h>
+#include <common/StdInputStream.h>
+#include <common/StdOutputStream.h>
+#include <common/StreamTools.h>
+#include <common/StringOutputStream.h>
+#include <common/StringTools.h>
 
 #include <crypto/crypto.h>
 #include <crypto/random.h>
 
-#include <CryptoNoteCore/Account.h>
-#include <CryptoNoteCore/Core.h>
-#include <CryptoNoteCore/Currency.h>
-#include <CryptoNoteCore/CryptoNoteBasicImpl.h>
-#include <CryptoNoteCore/CryptoNoteFormatUtils.h>
-#include <CryptoNoteCore/TransactionApi.h>
+#include <cryptonotecore/Account.h>
+#include <cryptonotecore/Core.h>
+#include <cryptonotecore/Currency.h>
+#include <cryptonotecore/CryptoNoteBasicImpl.h>
+#include <cryptonotecore/CryptoNoteFormatUtils.h>
+#include <cryptonotecore/TransactionApi.h>
 
 #include <ctime>
 
@@ -44,29 +44,29 @@
 
 #include <random>
 
-#include <Serialization/CryptoNoteSerialization.h>
+#include <serialization/CryptoNoteSerialization.h>
 
 #include <set>
 
-#include <System/EventLock.h>
-#include <System/RemoteContext.h>
+#include <system/EventLock.h>
+#include <system/RemoteContext.h>
 
-#include <Transfers/TransfersContainer.h>
+#include <transfers/TransfersContainer.h>
 
 #include <tuple>
 
 #include <utility>
 
-#include <Utilities/Addresses.h>
-#include <Utilities/ParseExtra.h>
-#include <Utilities/Utilities.h>
+#include <utilities/Addresses.h>
+#include <utilities/ParseExtra.h>
+#include <utilities/Utilities.h>
 
-#include <Wallet/WalletSerializationV2.h>
-#include <Wallet/WalletErrors.h>
-#include <Wallet/WalletUtils.h>
+#include <wallet/WalletSerializationV2.h>
+#include <wallet/WalletErrors.h>
+#include <wallet/WalletUtils.h>
 
-#include <WalletBackend/Constants.h>
-#include <WalletBackend/WalletBackend.h>
+#include <walletbackend/Constants.h>
+#include <walletbackend/WalletBackend.h>
 
 #undef ERROR
 
@@ -3728,7 +3728,7 @@ void WalletGreen::deleteFromUncommitedTransactions(const std::vector<size_t>& de
    100,000 + ((height * 102,400) / 1,051,200)
    At a block height of 400k, this gives us a size of 138,964.
    The constants this calculation arise from can be seen below, or in
-   src/CryptoNoteCore/Currency.cpp::maxBlockCumulativeSize(). Call this value
+   src/cryptonotecore/Currency.cpp::maxBlockCumulativeSize(). Call this value
    x.
 
    Next, calculate the median size of the last 100 blocks. Take the max of

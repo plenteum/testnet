@@ -12,8 +12,8 @@
 #include <functional>
 #include <unordered_map>
 
-#include <Logging/LoggerRef.h>
-#include "Common/Math.h"
+#include <logging/LoggerRef.h>
+#include "common/Math.h"
 #include "CoreRpcServerCommandsDefinitions.h"
 #include "JsonRpc.h"
 

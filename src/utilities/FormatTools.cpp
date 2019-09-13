@@ -6,7 +6,7 @@
 
 
 //////////////////////////////////
-#include <Utilities/FormatTools.h>
+#include <utilities/FormatTools.h>
 //////////////////////////////////
 
 #include <cstdio>
@@ -18,7 +18,7 @@
 
 #include <iomanip>
 
-#include <Rpc/CoreRpcServerCommandsDefinitions.h>
+#include <rpc/CoreRpcServerCommandsDefinitions.h>
 
 namespace Utilities
 {

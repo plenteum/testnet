@@ -13,12 +13,12 @@
 
 #include "crypto/crypto.h"
 
-#include "CryptoNoteCore/ITimeProvider.h"
+#include "cryptonotecore/ITimeProvider.h"
 #include "ITransactionPool.h"
-#include "Logging/ILogger.h"
-#include "Logging/LoggerRef.h"
+#include "logging/ILogger.h"
+#include "logging/LoggerRef.h"
 
-#include <System/ContextGroup.h>
+#include <system/ContextGroup.h>
 
 namespace CryptoNote {
 

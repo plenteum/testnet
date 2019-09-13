@@ -17,7 +17,7 @@
 
 #include "Checkpoints.h"
 
-#include <Common/StringTools.h>
+#include <common/StringTools.h>
 
 #include <config/Constants.h>
 

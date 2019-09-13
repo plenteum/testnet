@@ -4,13 +4,13 @@
 
 #include <CryptoNote.h>
 
-#include <Errors/Errors.h>
+#include <errors/Errors.h>
 
-#include <Nigel/Nigel.h>
+#include <nigel/Nigel.h>
 
-#include <Serialization/SerializationTools.h>
+#include <serialization/SerializationTools.h>
 
-#include <SubWallets/SubWallets.h>
+#include <subwallets/SubWallets.h>
 
 #include <vector>
 

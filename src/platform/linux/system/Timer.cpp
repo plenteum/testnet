@@ -24,8 +24,8 @@
 #include <unistd.h>
 
 #include "Dispatcher.h"
-#include <System/ErrorMessage.h>
-#include <System/InterruptedException.h>
+#include <system/ErrorMessage.h>
+#include <system/InterruptedException.h>
 
 namespace System {
 

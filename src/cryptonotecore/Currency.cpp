@@ -14,22 +14,22 @@
 
 #include <cctype>
 
-#include <Common/Base58.h>
-#include <Common/CheckDifficulty.h>
-#include <Common/CryptoNoteTools.h>
-#include <Common/int-util.h>
-#include <Common/StringTools.h>
-#include <Common/TransactionExtra.h>
+#include <common/Base58.h>
+#include <common/CheckDifficulty.h>
+#include <common/CryptoNoteTools.h>
+#include <common/int-util.h>
+#include <common/StringTools.h>
+#include <common/TransactionExtra.h>
 
-#include <CryptoNoteCore/Account.h>
-#include <CryptoNoteCore/CryptoNoteBasicImpl.h>
-#include <CryptoNoteCore/CryptoNoteFormatUtils.h>
-#include <CryptoNoteCore/Difficulty.h>
-#include <CryptoNoteCore/UpgradeDetector.h>
+#include <cryptonotecore/Account.h>
+#include <cryptonotecore/CryptoNoteBasicImpl.h>
+#include <cryptonotecore/CryptoNoteFormatUtils.h>
+#include <cryptonotecore/Difficulty.h>
+#include <cryptonotecore/UpgradeDetector.h>
 
 #include <config/Constants.h>
 
-#include <Utilities/Addresses.h>
+#include <utilities/Addresses.h>
 
 #undef ERROR
 

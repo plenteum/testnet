@@ -8,10 +8,10 @@
 #include "Core.h"
 #include "Mixins.h"
 
-#include "Common/StringTools.h"
+#include "common/StringTools.h"
 
-#include <System/InterruptedException.h>
-#include <System/Timer.h>
+#include <system/InterruptedException.h>
+#include <system/Timer.h>
 
 namespace CryptoNote {
 

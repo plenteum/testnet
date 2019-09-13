@@ -3,20 +3,20 @@
 // Please see the included LICENSE file for more information.
 
 ///////////////////////////////////
-#include <WalletBackend/Transfer.h>
+#include <walletbackend/Transfer.h>
 ///////////////////////////////////
 
 #include <config/Constants.h>
 #include <config/WalletConfig.h>
 
-#include <Errors/ValidateParameters.h>
+#include <errors/ValidateParameters.h>
 
-#include <Utilities/Addresses.h>
-#include <Utilities/FormatTools.h>
-#include <Utilities/Mixins.h>
-#include <Utilities/Utilities.h>
+#include <utilities/Addresses.h>
+#include <utilities/FormatTools.h>
+#include <utilities/Mixins.h>
+#include <utilities/Utilities.h>
 
-#include <WalletBackend/WalletBackend.h>
+#include <walletbackend/WalletBackend.h>
 
 namespace SendTransaction
 {

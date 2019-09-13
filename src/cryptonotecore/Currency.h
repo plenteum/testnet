@@ -13,7 +13,7 @@
 #include <boost/utility.hpp>
 #include <config/CryptoNoteConfig.h>
 #include "crypto/hash.h"
-#include "Logging/LoggerRef.h"
+#include "logging/LoggerRef.h"
 #include "CachedBlock.h"
 #include "CryptoNoteBasic.h"
 

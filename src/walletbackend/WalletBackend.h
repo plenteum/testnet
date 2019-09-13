@@ -6,22 +6,22 @@
 
 #include "CryptoTypes.h"
 
-#include <Errors/Errors.h>
+#include <errors/Errors.h>
 
-#include <Nigel/Nigel.h>
+#include <nigel/Nigel.h>
 
 #include "rapidjson/document.h"
 
 #include <string>
 
-#include <SubWallets/SubWallets.h>
+#include <subwallets/SubWallets.h>
 
 #include <tuple>
 
 #include <vector>
 
-#include <WalletBackend/WalletSynchronizer.h>
-#include <WalletBackend/WalletSynchronizerRAIIWrapper.h>
+#include <walletbackend/WalletSynchronizer.h>
+#include <walletbackend/WalletSynchronizerRAIIWrapper.h>
 
 class WalletBackend
 {
