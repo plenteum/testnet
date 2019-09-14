@@ -738,7 +738,7 @@ std::tuple<Error, uint16_t> ApiDispatcher::sendAdvancedTransaction(
 
     res.set_content(j.dump(4) + "\n", "application/json");
 
-    return {SUCCESS, 200};
+    return {SUCCESS, 201};
 }
 
 std::tuple<Error, uint16_t> ApiDispatcher::sendBasicFusionTransaction(
@@ -909,7 +909,7 @@ std::tuple<Error, uint16_t> ApiDispatcher::setNodeInfo(
 
     m_walletBackend->swapNode(daemonHost, daemonPort, daemonSSL);
 
-    return {SUCCESS, 202};
+    return {SUCCESS, 200};
 }
 
 //////////////////
