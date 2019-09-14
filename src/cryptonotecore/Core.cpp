@@ -376,11 +376,14 @@ void Core::copyTransactionsToPool(IBlockchainCache* alt) {
   while (alt != nullptr) {
     if (mainChainSet.count(alt) != 0)
       break;
+  
     auto transactions = alt->getRawTransactions(alt->getTransactionHashes());
     for (auto& transaction : transactions) {
-      if (addTransactionToPool(std::move(transaction))) {
+       const auto [success, error] = addTransactionToPool(std::move(transaction));
+       if (success) 
+	   {
         // TODO: send notification
-      }
+       }
     }
     alt = alt->getParent();
   }
@@ -1178,7 +1181,9 @@ void Core::actualizePoolTransactions() {
     auto tx = pool.getTransaction(hash);
     pool.removeTransaction(hash);
 
-    if (!addTransactionToPool(std::move(tx))) {
+    const auto [success, error] = addTransactionToPool(std::move(tx));
+    if (!success)
+    {
       notifyObservers(makeDelTransactionMessage({hash}, Messages::DeleteTransaction::Reason::NotActual));
     }
   }
@@ -1195,9 +1200,8 @@ void Core::actualizePoolTransactionsLite(const TransactionValidatorState& valida
 
     auto txState = extractSpentOutputs(tx);
 
-    if (hasIntersections(validatorState, txState) ||
-        tx.getTransactionBinaryArray().size() > getMaximumTransactionAllowedSize(blockMedianSize, currency) ||
-        !isTransactionValidForPool(tx, validator))
+	const auto [transactionValidForPool, error] = isTransactionValidForPool(tx, validator);
+    if (hasIntersections(validatorState, txState) || tx.getTransactionBinaryArray().size() > getMaximumTransactionAllowedSize(blockMedianSize, currency) || !transactionValidForPool)
     {
       pool.removeTransaction(hash);
       notifyObservers(makeDelTransactionMessage({ hash }, Messages::DeleteTransaction::Reason::NotActual));
@@ -1389,50 +1393,57 @@ bool Core::getGlobalIndexesForRange(
     }
 }
 
-bool Core::addTransactionToPool(const BinaryArray& transactionBinaryArray) {
+std::tuple<bool, std::string> Core::addTransactionToPool(const BinaryArray &transactionBinaryArray)
+{
   throwIfNotInitialized();
 
   Transaction transaction;
   if (!fromBinaryArray<Transaction>(transaction, transactionBinaryArray)) {
     logger(Logging::WARNING) << "Couldn't add transaction to pool due to deserialization error";
-    return false;
+    return {false, "Could not deserialize transaction"};
   }
 
   CachedTransaction cachedTransaction(std::move(transaction));
   auto transactionHash = cachedTransaction.getTransactionHash();
 
-  if (!addTransactionToPool(std::move(cachedTransaction))) {
-    return false;
+  const auto [success, error] = addTransactionToPool(std::move(cachedTransaction));
+  if (!success)
+  {
+    return {false, error};
   }
 
   notifyObservers(makeAddTransactionMessage({transactionHash}));
-  return true;
+  return {true, ""};
 }
 
-bool Core::addTransactionToPool(CachedTransaction&& cachedTransaction) {
+std::tuple<bool, std::string> Core::addTransactionToPool(CachedTransaction &&cachedTransaction)
+{
   TransactionValidatorState validatorState;
 
-  if (!isTransactionValidForPool(cachedTransaction, validatorState)) {
-    return false;
+  const auto [success, error] = isTransactionValidForPool(cachedTransaction, validatorState);
+  if (!success)
+  {
+    return {false, error};
   }
 
   auto transactionHash = cachedTransaction.getTransactionHash();
 
   if (!transactionPool->pushTransaction(std::move(cachedTransaction), std::move(validatorState))) {
     logger(Logging::DEBUGGING) << "Failed to push transaction " << transactionHash << " to pool, already exists";
-    return false;
+    return {false, "Transaction already exists in pool"};
   }
 
   logger(Logging::DEBUGGING) << "Transaction " << transactionHash << " has been added to pool";
-  return true;
+  return {true, ""};
 }
 
-bool Core::isTransactionValidForPool(const CachedTransaction& cachedTransaction, TransactionValidatorState& validatorState) {
+std::tuple<bool, std::string> Core::isTransactionValidForPool(const CachedTransaction& cachedTransaction, TransactionValidatorState& validatorState) 
+{
   auto [success, err] = Mixins::validate({cachedTransaction}, getTopBlockIndex());
 
   if (!success)
   {
-      return false;
+      return {false, "Transaction does not contain the proper number of ring signatures"};
   }
 
   if (cachedTransaction.getTransaction().extra.size() >= CryptoNote::parameters::MAX_EXTRA_SIZE_V2)
@@ -1441,7 +1452,7 @@ bool Core::isTransactionValidForPool(const CachedTransaction& cachedTransaction,
                              << cachedTransaction.getTransactionHash()
                              << " to pool, extra too large.";
 
-      return false;
+      return {false, "Transaction extra data is too large"};
   }
 
   uint64_t fee;
@@ -1449,7 +1460,7 @@ bool Core::isTransactionValidForPool(const CachedTransaction& cachedTransaction,
   if (auto validationResult = validateTransaction(cachedTransaction, validatorState, chainsLeaves[0], fee, getTopBlockIndex())) {
     logger(Logging::DEBUGGING) << "Transaction " << cachedTransaction.getTransactionHash()
       << " is not valid. Reason: " << validationResult.message();
-    return false;
+    return {false, validationResult.message()};
   }
 
   auto maxTransactionSize = getMaximumTransactionAllowedSize(blockMedianSize, currency);
@@ -1457,7 +1468,7 @@ bool Core::isTransactionValidForPool(const CachedTransaction& cachedTransaction,
     logger(Logging::WARNING) << "Transaction " << cachedTransaction.getTransactionHash()
       << " is not valid. Reason: transaction is too big (" << cachedTransaction.getTransactionBinaryArray().size()
       << "). Maximum allowed size is " << maxTransactionSize;
-    return false;
+     return {false, "Transaction size (bytes) is too large"};
   }
 
   bool isFusion = fee == 0 && currency.isFusionTransaction(cachedTransaction.getTransaction(), cachedTransaction.getTransactionBinaryArray().size(), getTopBlockIndex());
@@ -1465,10 +1476,10 @@ bool Core::isTransactionValidForPool(const CachedTransaction& cachedTransaction,
   if (!isFusion && fee < currency.minimumFee()) {
     logger(Logging::WARNING) << "Transaction " << cachedTransaction.getTransactionHash()
       << " is not valid. Reason: fee is too small and it's not a fusion transaction";
-    return false;
+    return {false, "Transaction fee is too small"};
   }
 
-  return true;
+  return {true, ""};
 }
 
 std::vector<Crypto::Hash> Core::getPoolTransactionHashes() const {

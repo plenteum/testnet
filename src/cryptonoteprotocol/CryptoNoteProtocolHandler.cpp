@@ -451,14 +451,15 @@ int CryptoNoteProtocolHandler::handle_notify_new_transactions(int command, NOTIF
 
 	  const auto it = std::remove_if(arg.txs.begin(), arg.txs.end(), [this, &context](const auto &tx)
 	  {
-		  bool failed = !this->m_core.addTransactionToPool(tx);
+		  const auto [success, error] = this->m_core.addTransactionToPool(tx);
 
-		  if (failed)
+		  if (!success)
 		  {
 			  this->logger(Logging::DEBUGGING) << context << "Tx verification failed";
 		  }
 
-		  return failed;
+		  /* We return the opposite of success in this lambda */
+          return !success;
 	  });
 	  if (it != arg.txs.end())
 	  {
