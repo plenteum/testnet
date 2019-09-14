@@ -151,9 +151,9 @@ namespace CryptoNote {
 		const uint32_t UPGRADE_HEIGHT_V5 = 200; // Upgrade height for DustFund V1.
 		const uint32_t UPGRADE_HEIGHT_V6 = 250;  //fix tx sizes issues
 		const uint32_t UPGRADE_HEIGHT_V7 = 1150;  //CN Turtle
-		const uint32_t UPGRADE_HEIGHT_V8 = 1450;  //TX Updates
+		const uint32_t UPGRADE_HEIGHT_V8 = 1900;  //Argon2 POW
 
-		const uint32_t UPGRADE_HEIGHT_CURRENT = UPGRADE_HEIGHT_V7;
+		const uint32_t UPGRADE_HEIGHT_CURRENT = UPGRADE_HEIGHT_V8;
 		const unsigned UPGRADE_VOTING_THRESHOLD = 90;               // percent
 		const uint32_t UPGRADE_VOTING_WINDOW = EXPECTED_NUMBER_OF_BLOCKS_PER_DAY;  // blocks
 		const uint32_t UPGRADE_WINDOW = EXPECTED_NUMBER_OF_BLOCKS_PER_DAY;  // blocks
@@ -171,12 +171,12 @@ namespace CryptoNote {
 			250, //fix tx sizes issue
 			1150, // CN Turtle
 			1400, //Difficulty Update
-			10000, // mixin limits reset
-			20000 // next fork height (dust v2 & net protect)
+			1900, // mixin limits reset & argon2 POW
+			100000 // next fork height (dust v2 & net protect)
 		};
 
 		/* MAKE SURE TO UPDATE THIS VALUE WITH EVERY MAJOR RELEASE BEFORE A FORK */
-		const uint64_t SOFTWARE_SUPPORTED_FORK_INDEX = 8; //supports up to diff update
+		const uint64_t SOFTWARE_SUPPORTED_FORK_INDEX = 9; //supports up to argon2 and mixing limits
 
 		const uint64_t FORK_HEIGHTS_SIZE = sizeof(FORK_HEIGHTS) / sizeof(*FORK_HEIGHTS);
 
@@ -210,6 +210,7 @@ namespace CryptoNote {
 	const uint8_t  BLOCK_MAJOR_VERSION_3 = 3;
 	const uint8_t  BLOCK_MAJOR_VERSION_4 = 4; //block version to fix tx sizes issue
 	const uint8_t  BLOCK_MAJOR_VERSION_5 = 5; //algo change to CN Turtle
+	const uint8_t  BLOCK_MAJOR_VERSION_6 = 6; //algo change to Argon2id
 	
 	const uint8_t  BLOCK_MINOR_VERSION_0 = 0;
 	const uint8_t  BLOCK_MINOR_VERSION_1 = 1;
@@ -227,8 +228,9 @@ namespace CryptoNote {
 
 	// P2P Network Configuration Section - This defines our current P2P network version
 	// and the minimum version for communication between nodes
-	const uint8_t  P2P_CURRENT_VERSION = 5; //bump p2p version 
-	const uint8_t  P2P_MINIMUM_VERSION = 4; //bump min supported version
+	const uint8_t  P2P_CURRENT_VERSION = 6; //bump p2p version 
+	const uint8_t  P2P_MINIMUM_VERSION = 5; //bump min supported version
+	
 const std::unordered_map<
     uint8_t,
     std::function<void(const void *data, size_t length, Crypto::Hash &hash)>
@@ -239,7 +241,8 @@ const std::unordered_map<
     { BLOCK_MAJOR_VERSION_2, Crypto::cn_slow_hash_v0 },             /* UPGRADE_HEIGHT_V2 */
     { BLOCK_MAJOR_VERSION_3, Crypto::cn_lite_slow_hash_v1 },        /* UPGRADE_HEIGHT_V3 */
     { BLOCK_MAJOR_VERSION_4, Crypto::cn_lite_slow_hash_v1 },        /* UPGRADE_HEIGHT_V4 */
-    { BLOCK_MAJOR_VERSION_5, Crypto::cn_turtle_lite_slow_hash_v2 }  /* UPGRADE_HEIGHT_V5 */
+    { BLOCK_MAJOR_VERSION_5, Crypto::cn_turtle_lite_slow_hash_v2 },  /* UPGRADE_HEIGHT_V5 */
+	{ BLOCK_MAJOR_VERSION_5, Crypto::chukwa_slow_hash }  /* UPGRADE_HEIGHT_V6 */
 };
 
 	// This defines the minimum P2P version required for lite blocks propogation

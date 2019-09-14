@@ -207,6 +207,7 @@ Core::Core(const Currency& currency, std::shared_ptr<Logging::ILogger> logger, C
   upgradeManager->addMajorBlockVersion(BLOCK_MAJOR_VERSION_3, currency.upgradeHeight(BLOCK_MAJOR_VERSION_3));
   upgradeManager->addMajorBlockVersion(BLOCK_MAJOR_VERSION_4, currency.upgradeHeight(BLOCK_MAJOR_VERSION_4));
   upgradeManager->addMajorBlockVersion(BLOCK_MAJOR_VERSION_5, currency.upgradeHeight(BLOCK_MAJOR_VERSION_5));
+  upgradeManager->addMajorBlockVersion(BLOCK_MAJOR_VERSION_6, currency.upgradeHeight(BLOCK_MAJOR_VERSION_6));
 
   transactionPool = std::unique_ptr<ITransactionPoolCleanWrapper>(new TransactionPoolCleanWrapper(
     std::unique_ptr<ITransactionPool>(new TransactionPool(logger)),
@@ -2763,7 +2764,7 @@ TransactionDetails Core::getTransactionDetails(const Crypto::Hash& transactionHa
   }
   transactionDetails.extra.publicKey = transaction->getTransactionPublicKey();
   transaction->getExtraNonce(transactionDetails.extra.nonce);
-
+  transactionDetails.extra.raw = transaction->getExtra();
   transactionDetails.signatures = rawTransaction.signatures;
 
   transactionDetails.inputs.reserve(transaction->getInputCount());

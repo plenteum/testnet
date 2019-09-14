@@ -131,7 +131,9 @@ uint32_t Currency::upgradeHeight(uint8_t majorVersion) const {
 	return m_upgradeHeightV6; //height of fix for tx sizes
   } else if (majorVersion == BLOCK_MAJOR_VERSION_5) {
 	return m_upgradeHeightV7; //cn turtle
-  } else {
+  } else if (majorVersion == BLOCK_MAJOR_VERSION_6) {
+	return m_upgradeHeightV8; //argon2id
+  }  else {
     return static_cast<uint32_t>(-1);
   }
 }
@@ -578,12 +580,7 @@ bool Currency::checkProofOfWork(const CachedBlock& block, uint64_t currentDiffic
   switch (block.getBlock().majorVersion) {
   case BLOCK_MAJOR_VERSION_0:
     return checkProofOfWorkV1(block, currentDiffic);
-
-  case BLOCK_MAJOR_VERSION_1:
-  case BLOCK_MAJOR_VERSION_2:
-  case BLOCK_MAJOR_VERSION_3:
-  case BLOCK_MAJOR_VERSION_4:
-  case BLOCK_MAJOR_VERSION_5:
+  default:
     return checkProofOfWorkV2(block, currentDiffic);
   }
 
@@ -630,7 +627,8 @@ m_upgradeHeightV3(currency.m_upgradeHeightV3),
 m_upgradeHeightV4(currency.m_upgradeHeightV4),
 m_upgradeHeightV5(currency.m_upgradeHeightV5),
 m_upgradeHeightV6(currency.m_upgradeHeightV6),
-m_upgradeHeightV7(currency.m_upgradeHeightV7),
+m_upgradeHeightV7(currency.m_upgradeHeightV7), //cn turtle
+m_upgradeHeightV8(currency.m_upgradeHeightV8), //argon2id
 m_upgradeVotingThreshold(currency.m_upgradeVotingThreshold),
 m_upgradeVotingWindow(currency.m_upgradeVotingWindow),
 m_upgradeWindow(currency.m_upgradeWindow),
@@ -696,7 +694,8 @@ CurrencyBuilder::CurrencyBuilder(std::shared_ptr<Logging::ILogger> log) : m_curr
   upgradeHeightV4(parameters::UPGRADE_HEIGHT_V4);
   upgradeHeightV5(parameters::UPGRADE_HEIGHT_V5);
   upgradeHeightV6(parameters::UPGRADE_HEIGHT_V6);
-  upgradeHeightV7(parameters::UPGRADE_HEIGHT_V7);
+  upgradeHeightV7(parameters::UPGRADE_HEIGHT_V7); //cn turtle
+  upgradeHeightV8(parameters::UPGRADE_HEIGHT_V8); //argon2id
     upgradeVotingThreshold(parameters::UPGRADE_VOTING_THRESHOLD);
   upgradeVotingWindow(parameters::UPGRADE_VOTING_WINDOW);
   upgradeWindow(parameters::UPGRADE_WINDOW);
