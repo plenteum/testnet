@@ -226,8 +226,15 @@ void SubWallet::markInputAsSpent(
         return;
     }
     
-    /* Shouldn't happen */
-    throw std::runtime_error("Could not find key image to remove!");
+    std::stringstream stream;
+
+    stream << "Could not find key image " << keyImage << " to remove. Ignoring.";
+
+    Logger::logger.log(
+        stream.str(),
+        Logger::WARNING,
+        { Logger::SYNC }
+    );
 }
 
 void SubWallet::markInputAsLocked(const Crypto::KeyImage keyImage)
@@ -242,7 +249,17 @@ void SubWallet::markInputAsLocked(const Crypto::KeyImage keyImage)
     /* Shouldn't happen */
     if (it == m_unspentInputs.end())
     {
-        throw std::runtime_error("Could not find key image to lock!");
+        std::stringstream stream;
+
+        stream << "Could not find key image " << keyImage << " to lock. Ignoring.";
+
+        Logger::logger.log(
+            stream.str(),
+            Logger::WARNING,
+            { Logger::SYNC }
+        );
+
+        return;
     }
 
     /* Add to the spent inputs vector */
