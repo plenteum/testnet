@@ -1064,7 +1064,7 @@ std::error_code Core::addBlock(const CachedBlock& cachedBlock, RawBlock&& rawBlo
       return error::BlockValidationError::CHECKPOINT_BLOCK_HASH_MISMATCH;
     }
   } else if (!currency.checkProofOfWork(cachedBlock, currentDifficulty)) {
-    logger(Logging::WARNING) << "Proof of work too weak for block " << blockStr;
+    logger(Logging::DEBUGGING) << "Proof of work too weak for block " << blockStr;
     return error::BlockValidationError::PROOF_OF_WORK_TOO_WEAK;
   }
 
