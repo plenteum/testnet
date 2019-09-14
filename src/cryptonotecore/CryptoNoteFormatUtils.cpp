@@ -25,7 +25,6 @@
 #include "serialization/BinaryInputStreamSerializer.h"
 #include "serialization/CryptoNoteSerialization.h"
 
-#include "Account.h"
 #include "CryptoNoteBasicImpl.h"
 
 #include "common/CryptoNoteTools.h"

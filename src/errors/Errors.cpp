@@ -279,6 +279,7 @@ std::string Error::getErrorMessage() const
             return "The private key given is not a valid ed25519 public key.";
         }
         /* No default case so the compiler warns us if we missed one */
+		throw std::invalid_argument("Invalid error code given");
     }
 }
 

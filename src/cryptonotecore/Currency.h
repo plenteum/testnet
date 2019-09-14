@@ -19,8 +19,6 @@
 
 namespace CryptoNote {
 
-class AccountBase;
-
 class Currency {
 public:
   uint32_t maxBlockHeight() const { return m_maxBlockHeight; }
@@ -134,7 +132,6 @@ public:
   bool isAmountApplicableInFusionTransactionInput(uint64_t amount, uint64_t threshold, uint32_t height) const;
   bool isAmountApplicableInFusionTransactionInput(uint64_t amount, uint64_t threshold, uint8_t& amountPowerOfTen, uint32_t height) const;
 
-  std::string accountAddressAsString(const AccountBase& account) const;
   std::string accountAddressAsString(const AccountPublicAddress& accountPublicAddress) const;
   bool parseAccountAddressString(const std::string& str, AccountPublicAddress& addr) const;
 

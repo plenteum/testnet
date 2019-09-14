@@ -27,7 +27,6 @@
 #include <crypto/crypto.h>
 #include <crypto/random.h>
 
-#include <cryptonotecore/Account.h>
 #include <cryptonotecore/Core.h>
 #include <cryptonotecore/Currency.h>
 #include <cryptonotecore/CryptoNoteBasicImpl.h>

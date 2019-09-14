@@ -19,7 +19,6 @@
 #include "TransactionApiExtra.h"
 #include "TransactionUtils.h"
 
-#include "Account.h"
 #include "common/CryptoNoteTools.h"
 #include <config/CryptoNoteConfig.h>
 

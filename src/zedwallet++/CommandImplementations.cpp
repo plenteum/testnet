@@ -440,7 +440,7 @@ void printIncomingTransfer(const WalletTypes::Transaction tx)
                   << std::endl;
     }
     /* Here we treat Unlock as Unix time, and treat it that way in the future */
-    else if (tx.unlockTime > std::time(nullptr))
+    else if (tx.unlockTime > static_cast<uint64_t>(std::time(nullptr)))
     {
         std::cout << SuccessMsg(stream.str())
                   << InformationMsg("Unlocks at: ")

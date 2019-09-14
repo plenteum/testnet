@@ -22,7 +22,6 @@
 
 #include "CryptoNote.h"
 
-#include "cryptonotecore/Account.h"
 #include "cryptonotecore/CryptoNoteBasicImpl.h"
 #include "cryptonotecore/CryptoNoteFormatUtils.h"
 #include "cryptonotecore/Mixins.h"

@@ -13,7 +13,6 @@
 
 #include <config/WalletConfig.h>
 
-#include <cryptonotecore/Account.h>
 #include <common/TransactionExtra.h>
 
 #ifndef MSVC
