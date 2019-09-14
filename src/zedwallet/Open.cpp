@@ -18,7 +18,7 @@
 #include <zedwallet/Tools.h>
 #include <zedwallet/Transfer.h>
 #include <zedwallet/Types.h>
-#include <zedwallet/PasswordContainer.h>
+#include <utilities/PasswordContainer.h>
 #include <config/WalletConfig.h>
 #include <config/Constants.h>
 

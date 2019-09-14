@@ -264,10 +264,10 @@ const std::unordered_map<
 	const size_t   P2P_DEFAULT_HANDSHAKE_INVOKE_TIMEOUT = 5000;          // 5 seconds
 	const char     P2P_STAT_TRUSTED_PUB_KEY[] = "";
 
-	const uint64_t DATABASE_WRITE_BUFFER_MB_DEFAULT_SIZE = 1024;
-	const uint64_t DATABASE_READ_BUFFER_MB_DEFAULT_SIZE = 1024;
-	const uint32_t DATABASE_DEFAULT_MAX_OPEN_FILES = 500;
-	const uint16_t DATABASE_DEFAULT_BACKGROUND_THREADS_COUNT = 10;
+	const uint64_t DATABASE_WRITE_BUFFER_MB_DEFAULT_SIZE = 256;
+	const uint64_t DATABASE_READ_BUFFER_MB_DEFAULT_SIZE = 128;
+	const uint32_t DATABASE_DEFAULT_MAX_OPEN_FILES = 125;
+	const uint16_t DATABASE_DEFAULT_BACKGROUND_THREADS_COUNT = 4;
 
 	const char     LATEST_VERSION_URL[] = "http://latest.plenteum.com";
 	const std::string LICENSE_URL = "https://github.com/plenteum/plenteum/blob/master/LICENSE";

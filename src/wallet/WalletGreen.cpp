@@ -420,7 +420,9 @@ void WalletGreen::exportWallet(const std::string& path, bool encrypt, WalletSave
       }
     });
 
-    ContainerStorage newStorage(path, FileMappedVectorOpenMode::CREATE, m_containerStorage.prefixSize());
+    ContainerStorage newStorage(path, FileMappedVectorOpenMode::OPEN_OR_CREATE, m_containerStorage.prefixSize());
+    newStorage.clear();
+			
     storageCreated = true;
 
     chacha8_key newStorageKey;
