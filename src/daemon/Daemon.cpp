@@ -23,7 +23,6 @@
 #include "cryptonotecore/DatabaseBlockchainCache.h"
 #include "cryptonotecore/DatabaseBlockchainCacheFactory.h"
 #include "cryptonotecore/MainChainStorage.h"
-#include "cryptonotecore/MainChainStorageRocksdb.h"
 #include "cryptonotecore/RocksDBWrapper.h"
 #include "cryptonoteprotocol/CryptoNoteProtocolHandler.h"
 #include "p2p/NetNode.h"
@@ -172,7 +171,6 @@ int main(int argc, char* argv[])
       config.dataDirectory + "/" + CryptoNote::parameters::CRYPTONOTE_BLOCKS_FILENAME,
       config.dataDirectory + "/" + CryptoNote::parameters::CRYPTONOTE_BLOCKINDEXES_FILENAME,
       config.dataDirectory + "/" + CryptoNote::parameters::P2P_NET_DATA_FILENAME,
-      config.dataDirectory + "/" + CryptoNote::parameters::CRYPTONOTE_BLOCKS_FILENAME + ".rocksdb",
       config.dataDirectory + "/DB"
     };
 
@@ -238,16 +236,8 @@ int main(int argc, char* argv[])
     if (config.rewindToHeight > 0)
     {
       logger(INFO) << "Rewinding blockchain to: " << config.rewindToHeight << std::endl;
-      std::unique_ptr<IMainChainStorage> mainChainStorage;
-
-      if (config.useRocksdbForLocalCaches )
-      {
-        mainChainStorage = createSwappedMainChainStorageRocksdb(config.dataDirectory, currency, dbConfig);
-      }
-      else
-      {
-        mainChainStorage = createSwappedMainChainStorage(config.dataDirectory, currency);
-      }
+      
+	  std::unique_ptr<IMainChainStorage> mainChainStorage = createSwappedMainChainStorage(config.dataDirectory, currency);
 
       mainChainStorage->rewindTo(config.rewindToHeight);
 
@@ -305,15 +295,7 @@ int main(int argc, char* argv[])
     System::Dispatcher dispatcher;
     logger(INFO) << "Initializing core...";
 
-    std::unique_ptr<IMainChainStorage> tmainChainStorage;
-    if ( config.useRocksdbForLocalCaches )
-    {
-      tmainChainStorage = createSwappedMainChainStorageRocksdb(config.dataDirectory, currency, dbConfig);
-    }
-    else
-    {
-      tmainChainStorage = createSwappedMainChainStorage(config.dataDirectory, currency);
-    }
+    std::unique_ptr<IMainChainStorage> tmainChainStorage = createSwappedMainChainStorage(config.dataDirectory, currency);
 
     CryptoNote::Core ccore(
       currency,
