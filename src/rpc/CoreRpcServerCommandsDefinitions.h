@@ -67,10 +67,13 @@ namespace CryptoNote
             std::vector<Crypto::Hash>
                 block_ids; //*first 10 blocks id goes sequential, next goes in pow(2,n) offset, like 2, 4, 8, 16, 32, 64
                            // and so on, and the last one is always genesis block */
-
+			
+			uint32_t blockCount;
+			
             void serialize(ISerializer &s)
             {
                 KV_MEMBER(block_ids);
+				KV_MEMBER(blockCount);
             }
         };
 
