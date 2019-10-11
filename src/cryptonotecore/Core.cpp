@@ -1181,78 +1181,61 @@ std::error_code Core::addBlock(const CachedBlock& cachedBlock, RawBlock&& rawBlo
   return ret;
 }
 
-/* This method is a light version of transaction validation that is used
-    to clear the transaction pool of transactions that have been invalidated
-    by the addition of a block to the blockchain. As the transactions are already
-    in the pool, there are only a subset of normal transaction validation
-    tests that need to be completed to determine if the transaction can
-    stay in the pool at this time. */
-void Core::checkAndRemoveInvalidPoolTransactions(const TransactionValidatorState blockTransactionsState)
-{
-    auto &pool = *transactionPool;
-
-    const auto poolHashes = pool.getTransactionHashes();
-
-    const auto maxTransactionSize = getMaximumTransactionAllowedSize(blockMedianSize, currency);
-
-    for (const auto poolTxHash : poolHashes)
+   /* This method is a light version of transaction validation that is used
+       to clear the transaction pool of transactions that have been invalidated
+       by the addition of a block to the blockchain. As the transactions are already
+       in the pool, there are only a subset of normal transaction validation
+       tests that need to be completed to determine if the transaction can
+       stay in the pool at this time. */
+    void Core::checkAndRemoveInvalidPoolTransactions(
+        const TransactionValidatorState blockTransactionsState)
     {
-        const auto poolTx = pool.getTransaction(poolTxHash);
+        auto &pool = *transactionPool;
 
-        const auto poolTxState = extractSpentOutputs(poolTx);
+        const auto poolHashes = pool.getTransactionHashes();
 
-        auto [mixinSuccess, err] = Mixins::validate({poolTx}, getTopBlockIndex());
+        const auto maxTransactionSize = getMaximumTransactionAllowedSize(blockMedianSize, currency);
 
-        bool isValid = true;
+        for (const auto poolTxHash : poolHashes)
+        {
+            const auto poolTx = pool.getTransaction(poolTxHash);
 
-		/* If the transaction is in the chain but somehow was not previously removed, fail */
-        if (isTransactionInChain(poolTxHash))
-        {
-            isValid = false;
-        }
-        /* If the transaction does not have the right number of mixins, fail */
-        else if (!mixinSuccess)
-        {
-            isValid = false;
-        }
-        /* If the transaction exceeds the maximum size of a transaction, fail */
-        else if (poolTx.getTransactionBinaryArray().size() > maxTransactionSize)
-        {
-            isValid = false;
-        }
-        /* If the the transaction contains outputs that were spent in the new block, fail */
-        else if (hasIntersections(blockTransactionsState, poolTxState))
-        {
-            isValid = false;
-        }
+            const auto poolTxState = extractSpentOutputs(poolTx);
 
-        /* If the transaction is no longer valid, remove it from the pool
-           and tell everyone else that they should also remove it from the pool */
-        if (!isValid)
-        {
-            pool.removeTransaction(poolTxHash);
-            notifyObservers(makeDelTransactionMessage({poolTxHash}, Messages::DeleteTransaction::Reason::NotActual));
+            auto [mixinSuccess, err] = Mixins::validate({poolTx}, getTopBlockIndex());
+
+            bool isValid = true;
+
+            /* If the transaction is in the chain but somehow was not previously removed, fail */
+            if (isTransactionInChain(poolTxHash))
+            {
+                isValid = false;
+            }
+            /* If the transaction does not have the right number of mixins, fail */
+            else if (!mixinSuccess)
+            {
+                isValid = false;
+            }
+            /* If the transaction exceeds the maximum size of a transaction, fail */
+            else if (poolTx.getTransactionBinaryArray().size() > maxTransactionSize)
+            {
+                isValid = false;
+            }
+            /* If the the transaction contains outputs that were spent in the new block, fail */
+            else if (hasIntersections(blockTransactionsState, poolTxState))
+            {
+                isValid = false;
+            }
+
+            /* If the transaction is no longer valid, remove it from the pool
+               and tell everyone else that they should also remove it from the pool */
+            if (!isValid)
+            {
+                pool.removeTransaction(poolTxHash);
+                notifyObservers(makeDelTransactionMessage({poolTxHash}, Messages::DeleteTransaction::Reason::NotActual));
+            }
         }
     }
-}
- auto& pool = *transactionPool;
-  auto hashes = pool.getTransactionHashes();
-
-  TransactionValidatorState validator = validatorState;
-
-  for (auto& hash : hashes) {
-    auto tx = pool.getTransaction(hash);
-
-    auto txState = extractSpentOutputs(tx);
-
-	const auto [transactionValidForPool, error] = isTransactionValidForPool(tx, validator);
-    if (hasIntersections(validatorState, txState) || tx.getTransactionBinaryArray().size() > getMaximumTransactionAllowedSize(blockMedianSize, currency) || !transactionValidForPool)
-    {
-      pool.removeTransaction(hash);
-      notifyObservers(makeDelTransactionMessage({ hash }, Messages::DeleteTransaction::Reason::NotActual));
-    }
-  }
-}
 
 /* This quickly finds out if a transaction is in the blockchain somewhere */
 bool Core::isTransactionInChain(const Crypto::Hash &txnHash)
