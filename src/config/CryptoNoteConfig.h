@@ -241,7 +241,7 @@ const std::unordered_map<
     { BLOCK_MAJOR_VERSION_3, Crypto::cn_lite_slow_hash_v1 },        /* UPGRADE_HEIGHT_V3 */
     { BLOCK_MAJOR_VERSION_4, Crypto::cn_lite_slow_hash_v1 },        /* UPGRADE_HEIGHT_V4 */
     { BLOCK_MAJOR_VERSION_5, Crypto::cn_turtle_lite_slow_hash_v2 },  /* UPGRADE_HEIGHT_V5 */
-	{ BLOCK_MAJOR_VERSION_5, Crypto::chukwa_slow_hash }  /* UPGRADE_HEIGHT_V6 */
+	{ BLOCK_MAJOR_VERSION_6, Crypto::chukwa_slow_hash }  /* UPGRADE_HEIGHT_V6 */
 };
 
 	// This defines the minimum P2P version required for lite blocks propogation
