@@ -65,6 +65,7 @@
 #include <wallet/WalletUtils.h>
 
 #include <walletbackend/Constants.h>
+#include <walletbackend/Transfer.h>
 #include <walletbackend/WalletBackend.h>
 
 #undef ERROR
@@ -1535,7 +1536,14 @@ void WalletGreen::prepareTransaction(std::vector<WalletOuts>&& wallets,
   else {
 	  ////extract dust from decomposed outs (excluding change) and add new DUST transfer
 	  uint64_t dustLimit = CryptoNote::parameters::CRYPTONOTE_DUST_OUT_LIMIT;
-	  uint64_t dustAmount = 0;
+	  uint64_t dustAmount = 0; 
+	  
+	  if (fee > CryptoNote::parameters::MINIMUM_FEE) {
+		  //assign the fee amount above the minimum fee to the dust fund
+		  dustAmount = fee - CryptoNote::parameters::MINIMUM_FEE;
+		  //reset the fee to the minimum amount
+		  fee = CryptoNote::parameters::MINIMUM_FEE;
+	  }
 
 	  std::vector<ReceiverAmounts> newDecomposedOutputs;
 	  for (const auto& output : decomposedOutputs) {
@@ -2586,7 +2594,7 @@ CryptoNote::WalletGreen::ReceiverAmounts WalletGreen::splitAmount(
   ReceiverAmounts receiverAmounts;
 
   receiverAmounts.receiver = destination;
-  decomposeAmount(amount, dustThreshold, receiverAmounts.amounts);
+  receiverAmounts.amounts = SendTransaction::splitAmountIntoDenominations(amount);
   return receiverAmounts;
 }
 
@@ -3336,8 +3344,8 @@ size_t WalletGreen::createFusionTransaction(uint64_t threshold, uint16_t mixin,
 WalletGreen::ReceiverAmounts WalletGreen::decomposeFusionOutputs(const AccountPublicAddress& address, uint64_t inputsAmount) {
   WalletGreen::ReceiverAmounts outputs;
   outputs.receiver = address;
+  outputs.amounts = SendTransaction::splitAmountIntoDenominations(inputsAmount);
 
-  decomposeAmount(inputsAmount, 0, outputs.amounts);
   std::sort(outputs.amounts.begin(), outputs.amounts.end());
 
   return outputs;

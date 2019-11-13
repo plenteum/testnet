@@ -1890,7 +1890,13 @@ std::error_code Core::validateSemantic(const Transaction& transaction, uint64_t&
     if (output.amount == 0) {
       return error::TransactionValidationError::OUTPUT_ZERO_AMOUNT;
     }
-
+	if (blockIndex >= CryptoNote::parameters::MAX_OUTPUT_SIZE_HEIGHT)
+	{
+		if (output.amount > CryptoNote::parameters::MAX_OUTPUT_SIZE_NODE)
+		{
+			return error::TransactionValidationError::OUTPUT_AMOUNT_TOO_LARGE;
+		}
+	}
     if (output.target.type() == typeid(KeyOutput)) {
       if (!check_key(boost::get<KeyOutput>(output.target).key)) {
         return error::TransactionValidationError::OUTPUT_INVALID_KEY;

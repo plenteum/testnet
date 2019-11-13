@@ -87,7 +87,7 @@ namespace CryptoNote {
 		const uint64_t CRYPTONOTE_DUST_OUT_LIMIT = UINT64_C(1000000); //the limit up to which dust outs should be removed and contributed back to the dust fund
 		const char CRYPTONOTE_DUST_OUT_ADDRESS[] = "PLeafjfpaRWEXR4artCAer4yZFzeq5mRrMaLByP7Rkf3FL1URKUrBnP3ppfL6LVgz4hJYwk6DebUxZq6aQKHa8eT5f1ycM7j7d";
 
-		const uint64_t MINIMUM_FEE = UINT64_C(0); //0
+		const uint64_t MINIMUM_FEE = UINT64_C(1000000); //0.01 minimum fee
 
 		const uint64_t MINIMUM_MIXIN = 3;
 		const uint64_t MAXIMUM_MIXIN = 12;
@@ -124,8 +124,21 @@ namespace CryptoNote {
 		const uint64_t MAX_BLOCK_SIZE_GROWTH_SPEED_NUMERATOR = 100 * 1024;
 		const uint64_t MAX_BLOCK_SIZE_GROWTH_SPEED_DENOMINATOR = 365 * 24 * 60 * 60 / DIFFICULTY_TARGET;
 		const uint64_t MAX_EXTRA_SIZE = 140000;
-		const uint64_t MAX_EXTRA_SIZE_V2 = 10240;
-		const uint64_t MAX_EXTRA_SIZE_V2_HEIGHT = 1400; //height at which tx extra is limited to 10240 (testnet height of 1400)
+		const uint64_t MAX_EXTRA_SIZE_V2 = 1024;
+		const uint64_t MAX_EXTRA_SIZE_V2_HEIGHT = 2500; //height at which tx extra is limited to 10240 (testnet height of 1400)
+
+		/* 100 million PLE */
+		/* This is enforced on the daemon side. An output > 300 billion causes
+		 * an invalid block. */
+		const uint64_t MAX_OUTPUT_SIZE_NODE = 100'000'000'000'000'00;
+
+		/* 100 million PLE */
+		/* This is enforced on the client side. An output > 1 billion will not
+		 * be created in a transaction */
+		const uint64_t MAX_OUTPUT_SIZE_CLIENT = 1'000'000'000'000'000'00;
+
+		const uint64_t MAX_OUTPUT_SIZE_HEIGHT = 1900;
+
 
 		/* For new projects forked from this code base, the values immediately below
    should be changed to 0 to prevent issues with transaction processing
@@ -235,13 +248,13 @@ const std::unordered_map<
     std::function<void(const void *data, size_t length, Crypto::Hash &hash)>
 > HASHING_ALGORITHMS_BY_BLOCK_VERSION =
 {
-    { BLOCK_MAJOR_VERSION_0, Crypto::cn_slow_hash_v0 },             /* From zero */
-	{ BLOCK_MAJOR_VERSION_1, Crypto::cn_slow_hash_v0 },             /* UPGRADE_HEIGHT_V1 */
-    { BLOCK_MAJOR_VERSION_2, Crypto::cn_slow_hash_v0 },             /* UPGRADE_HEIGHT_V2 */
-    { BLOCK_MAJOR_VERSION_3, Crypto::cn_lite_slow_hash_v1 },        /* UPGRADE_HEIGHT_V3 */
-    { BLOCK_MAJOR_VERSION_4, Crypto::cn_lite_slow_hash_v1 },        /* UPGRADE_HEIGHT_V4 */
+    { BLOCK_MAJOR_VERSION_0, Crypto::cn_slow_hash_v0 },              /* From zero */
+	{ BLOCK_MAJOR_VERSION_1, Crypto::cn_slow_hash_v0 },              /* UPGRADE_HEIGHT_V1 */
+    { BLOCK_MAJOR_VERSION_2, Crypto::cn_slow_hash_v0 },              /* UPGRADE_HEIGHT_V2 */
+    { BLOCK_MAJOR_VERSION_3, Crypto::cn_lite_slow_hash_v1 },         /* UPGRADE_HEIGHT_V3 */
+    { BLOCK_MAJOR_VERSION_4, Crypto::cn_lite_slow_hash_v1 },         /* UPGRADE_HEIGHT_V4 */
     { BLOCK_MAJOR_VERSION_5, Crypto::cn_turtle_lite_slow_hash_v2 },  /* UPGRADE_HEIGHT_V5 */
-	{ BLOCK_MAJOR_VERSION_6, Crypto::chukwa_slow_hash }  /* UPGRADE_HEIGHT_V6 */
+	{ BLOCK_MAJOR_VERSION_6, Crypto::chukwa_slow_hash }				 /* UPGRADE_HEIGHT_V6 */
 };
 
 	// This defines the minimum P2P version required for lite blocks propogation

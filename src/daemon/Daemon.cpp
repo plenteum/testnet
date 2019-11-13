@@ -311,9 +311,11 @@ int main(int argc, char* argv[])
     }
 
     System::Dispatcher dispatcher;
-    logger(INFO) << "Initializing core...";
+	logger(INFO) << "Initializing core...";
 
     std::unique_ptr<IMainChainStorage> tmainChainStorage = createSwappedMainChainStorage(config.dataDirectory, currency);
+
+	logger(INFO) << "Swapped storage created...";
 
     CryptoNote::Core ccore(
       currency,
@@ -323,7 +325,7 @@ int main(int argc, char* argv[])
       std::unique_ptr<IBlockchainCacheFactory>(new DatabaseBlockchainCacheFactory(database, logger.getLogger())),
       std::move(tmainChainStorage)
     );
-
+	logger(INFO) << "loading core...";
     ccore.load();
     logger(INFO) << "Core initialized OK";
 

@@ -10,6 +10,7 @@ include_directories(${CMAKE_SOURCE_DIR}/external/rapidjson)
 include_directories(${CMAKE_SOURCE_DIR}/external/cxxopts)
 include_directories(${CMAKE_SOURCE_DIR}/external/cryptopp)
 include_directories(${CMAKE_SOURCE_DIR}/external/zstd)
+include_directories(${CMAKE_SOURCE_DIR}/external/lz4)
 include_directories(${CMAKE_SOURCE_DIR}/external/argon2/include)
 
 # Show cmake where the source files are
@@ -46,16 +47,16 @@ file(GLOB_RECURSE WalletUpgrader walletupgrader/*)
 file(GLOB_RECURSE zedwallet zedwallet/*)
 file(GLOB_RECURSE zedwallet++ zedwallet++/*)
 
-if(MSVC)
+if (MSVC)
     file(GLOB_RECURSE System system/* platform/windows/system/*)
-elseif(APPLE)
+elseif (APPLE)
     file(GLOB_RECURSE System system/* platform/osx/system/* platform/posix/system/*)
-else()
+else ()
     file(GLOB_RECURSE System system/* platform/linux/system/* platform/posix/system/*)
-endif()
+endif ()
 
 # Group the files together in IDEs
-source_group("" FILES $${Common} ${Crypto} ${CryptoNoteCore} ${CryptoNoteProtocol} ${Plenteumd} ${JsonRpcServer} ${Http} ${Logging} ${Logger} ${miner} ${Mnemonics} ${Nigel} ${NodeRpcProxy} ${P2p} ${Rpc} ${Serialization} ${System} ${Transfers} ${Wallet} ${WalletApi} ${WalletBackend} ${WalletService} ${zedwallet} ${zedwallet++} ${CryptoTest} ${Errors} ${Utilities} ${WalletUpgrader} ${SubWallets})
+source_group("" FILES $${Common} ${Config} ${Crypto} ${CryptoNoteCore} ${CryptoNoteProtocol} ${Plenteumd} ${JsonRpcServer} ${Http} ${Logging} ${Logger} ${miner} ${Mnemonics} ${Nigel} ${NodeRpcProxy} ${P2p} ${Rpc} ${Serialization} ${System} ${Transfers} ${Wallet} ${WalletApi} ${WalletBackend} ${WalletService} ${zedwallet} ${zedwallet++} ${CryptoTest} ${Errors} ${Utilities} ${WalletUpgrader} ${SubWallets})
 
 # Define a group of files as a library to link against
 add_library(BlockchainExplorer STATIC ${BlockchainExplorer})
@@ -81,29 +82,29 @@ add_library(Utilities STATIC ${Utilities})
 add_library(Wallet STATIC ${Wallet})
 add_library(WalletBackend STATIC ${WalletBackend})
 
-if(MSVC)
-  set(DAEMON_SOURCES_OS
-    binaryinfo/daemon.rc
-  )
-  set(ZED_WALLET_SOURCES_OS
-    binaryinfo/zedwallet.rc
-  )
-  set(MINER_SOURCES_OS
-    binaryinfo/miner.rc
-  )
-  set(PG_SOURCES_OS
-    binaryinfo/service.rc
-  )
-  set(CT_SOURCES_OS
-    binaryinfo/cryptotest.rc
-  )
-  set(WALLET_API_SOURCES_OS
-    binaryinfo/walletapi.rc
-  )
-  set(WALLET_UPGRADER_SOURCES_OS
+if (MSVC)
+    set(DAEMON_SOURCES_OS
+            binaryinfo/daemon.rc
+            )
+    set(ZED_WALLET_SOURCES_OS
+            binaryinfo/zedwallet.rc
+            )
+    set(MINER_SOURCES_OS
+            binaryinfo/miner.rc
+            )
+    set(PG_SOURCES_OS
+            binaryinfo/service.rc
+            )
+    set(CT_SOURCES_OS
+            binaryinfo/cryptotest.rc
+            )
+    set(WALLET_API_SOURCES_OS
+            binaryinfo/walletapi.rc
+            )
+    set(WALLET_UPGRADER_SOURCES_OS
             binaryinfo/walletupgrader.rc
-  )
-endif()
+            )
+endif ()
 
 add_executable(cryptotest ${CryptoTest} ${CT_SOURCES_OS})
 add_executable(miner ${miner} ${MINER_SOURCES_OS})
@@ -114,7 +115,7 @@ add_executable(WalletUpgrader ${WalletUpgrader} ${WALLET_UPGRADER_SOURCES_OS})
 add_executable(zedwallet ${zedwallet} ${ZED_WALLET_SOURCES_OS})
 add_executable(zedwallet++ ${zedwallet++} ${ZED_WALLET_SOURCES_OS})
 
-if(MSVC)
+if (MSVC)
     target_link_libraries(System ws2_32)
     target_link_libraries(Plenteumd Rpcrt4)
     target_link_libraries(WalletService Rpcrt4 ws2_32 advapi32 crypt32 gdi32 user32)
@@ -122,7 +123,7 @@ if(MSVC)
     target_link_libraries(WalletApi ws2_32 advapi32 crypt32 gdi32 user32)
     target_link_libraries(miner ws2_32 advapi32 crypt32 gdi32 user32)
     target_link_libraries(zedwallet ws2_32 advapi32 crypt32 gdi32 user32)
-	target_link_libraries(WalletUpgrader ws2_32 advapi32 crypt32 gdi32 user32)
+    target_link_libraries(WalletUpgrader ws2_32 advapi32 crypt32 gdi32 user32)
 endif ()
 
 # A bit of hackery so we don't have to do the if/else/ for every target that
@@ -134,13 +135,13 @@ if (APPLE)
     target_link_libraries(__filesystem INTERFACE /usr/local/opt/llvm/lib/libc++fs.a)
 elseif (UNIX)
     target_link_libraries(__filesystem INTERFACE stdc++fs)
-endif()
+endif ()
 
-if(MSVC)
-    target_link_libraries(Plenteumd System CryptoNoteCore rocksdb zstd Errors ${Boost_LIBRARIES})
-else()
-    target_link_libraries(Plenteumd System CryptoNoteCore rocksdblib zstd Errors ${Boost_LIBRARIES})
-endif()
+if (MSVC)
+    target_link_libraries(Plenteumd System CryptoNoteCore rocksdb zstd lz4 Errors ${Boost_LIBRARIES})
+else ()
+    target_link_libraries(Plenteumd System CryptoNoteCore rocksdblib zstd lz4 Errors ${Boost_LIBRARIES})
+endif ()
 
 # Add the dependencies we need
 target_link_libraries(Common __filesystem)
@@ -166,13 +167,13 @@ target_link_libraries(WalletUpgrader Utilities WalletBackend Common)
 target_link_libraries(zedwallet Mnemonics Wallet Utilities Errors)
 target_link_libraries(zedwallet++ WalletBackend)
 
-if(OPENSSL_FOUND)
-  target_link_libraries(miner ${OPENSSL_LIBRARIES})
-  target_link_libraries(Nigel ${OPENSSL_LIBRARIES})
-  target_link_libraries(WalletApi ${OPENSSL_LIBRARIES})
-  target_link_libraries(zedwallet++ ${OPENSSL_LIBRARIES})
-  target_link_libraries(WalletService ${OPENSSL_LIBRARIES})
-endif()
+if (OPENSSL_FOUND)
+    target_link_libraries(miner ${OPENSSL_LIBRARIES})
+    target_link_libraries(Nigel ${OPENSSL_LIBRARIES})
+    target_link_libraries(WalletApi ${OPENSSL_LIBRARIES})
+    target_link_libraries(zedwallet++ ${OPENSSL_LIBRARIES})
+    target_link_libraries(WalletService ${OPENSSL_LIBRARIES})
+endif ()
 
 # Add dependencies means we have to build the latter before we build the former
 # In this case it's because we need to have the current version name rather
