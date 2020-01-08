@@ -162,6 +162,10 @@ namespace CryptoNote {
 		   to help curtail fusion transaction spam. */
 		const size_t FUSION_TX_MAX_POOL_COUNT = 50;
 
+		/* This prevents tx's from having a rediculous number of outputs in relation to inputs */
+		const size_t NORMAL_TX_MAX_OUTPUT_COUNT_V1 = 90;
+		const size_t NORMAL_TX_MAX_OUTPUT_COUNT_V1_HEIGHT = 1900;
+
 		const uint32_t UPGRADE_HEIGHT_V2 = 1;
 		const uint32_t UPGRADE_HEIGHT_V3 = 2;
 		const uint32_t UPGRADE_HEIGHT_V4 = 3; // Upgrade height for CN-Lite Variant 1 switch.
