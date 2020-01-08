@@ -156,6 +156,12 @@ namespace CryptoNote {
 		const size_t   FUSION_TX_MIN_INPUT_COUNT = 12;
 		const size_t   FUSION_TX_MIN_IN_OUT_COUNT_RATIO = 4;
 
+		/* This sets the maximum number of fusion transactions that can be present in the pool
+		   at any given time. Incoming fusion transactions that attempt to exceed this limit
+		   will be rejected from the pool and will not be added. This mechanism is in place
+		   to help curtail fusion transaction spam. */
+		const size_t FUSION_TX_MAX_POOL_COUNT = 50;
+
 		const uint32_t UPGRADE_HEIGHT_V2 = 1;
 		const uint32_t UPGRADE_HEIGHT_V3 = 2;
 		const uint32_t UPGRADE_HEIGHT_V4 = 3; // Upgrade height for CN-Lite Variant 1 switch.

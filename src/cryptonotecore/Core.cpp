@@ -1490,6 +1490,15 @@ std::tuple<bool, std::string> Core::isTransactionValidForPool(const CachedTransa
 {
   const auto transactionHash = cachedTransaction.getTransactionHash();
   
+  /* If there are already a certain number of fusion transactions in
+		  the pool, then do not try to add another */
+  if (cachedTransaction.getTransactionFee() == 0 && transactionPool->getFusionTransactionCount() >= CryptoNote::parameters::FUSION_TX_MAX_POOL_COUNT)
+  {
+	  return { false, "Pool already contains the maximum amount of fusion transactions" };
+  }
+
+
+
   auto [success, err] = Mixins::validate({cachedTransaction}, getTopBlockIndex());
 
   if (!success)
