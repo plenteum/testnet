@@ -85,7 +85,7 @@ namespace CryptoNote {
 
 		//DustFund Parameters
 		const uint64_t CRYPTONOTE_DUST_OUT_LIMIT = UINT64_C(1000000); //the limit up to which dust outs should be removed and contributed back to the dust fund
-		const char CRYPTONOTE_DUST_OUT_ADDRESS[] = "PLeafjfpaRWEXR4artCAer4yZFzeq5mRrMaLByP7Rkf3FL1URKUrBnP3ppfL6LVgz4hJYwk6DebUxZq6aQKHa8eT5f1ycM7j7d";
+		const char CRYPTONOTE_DUST_OUT_ADDRESS[] = "PLeap8Ej6DwGo2Qcgur2s5Zj8iUTgTv8yAmUtFFkqAqte5CjQt9f1Zy7myMkbS785VdGy1pFnrBX24SzPRUynAd53FtKE5beYg";
 
 		const uint64_t MINIMUM_FEE = UINT64_C(1000000); //0.01 minimum fee
 
@@ -125,27 +125,25 @@ namespace CryptoNote {
 		const uint64_t MAX_BLOCK_SIZE_GROWTH_SPEED_DENOMINATOR = 365 * 24 * 60 * 60 / DIFFICULTY_TARGET;
 		const uint64_t MAX_EXTRA_SIZE = 140000;
 		const uint64_t MAX_EXTRA_SIZE_V2 = 1024;
-		const uint64_t MAX_EXTRA_SIZE_V2_HEIGHT = 2500; //height at which tx extra is limited to 10240 (testnet height of 1400)
+		const uint64_t MAX_EXTRA_SIZE_V2_HEIGHT = 1900; //height at which tx extra is limited to 10240
 
-		/* 100 million PLE */
-		/* This is enforced on the daemon side. An output > 300 billion causes
+		/* 1 billion PLE */
+		/* This is enforced on the daemon side. An output > 1 billion causes
 		 * an invalid block. */
-		const uint64_t MAX_OUTPUT_SIZE_NODE = 100'000'000'000'000'00;
+		const uint64_t MAX_OUTPUT_SIZE_NODE = 100000000000000000;
 
-		/* 100 million PLE */
+		/* 1 billion PLE */
 		/* This is enforced on the client side. An output > 1 billion will not
 		 * be created in a transaction */
-		const uint64_t MAX_OUTPUT_SIZE_CLIENT = 1'000'000'000'000'000'00;
+		const uint64_t MAX_OUTPUT_SIZE_CLIENT = 100000000000000000;
 
 		const uint64_t MAX_OUTPUT_SIZE_HEIGHT = 1900;
-
-
 		/* For new projects forked from this code base, the values immediately below
    should be changed to 0 to prevent issues with transaction processing
    and other possible unexpected behavior */
-		const uint64_t TRANSACTION_SIGNATURE_COUNT_VALIDATION_HEIGHT = 1400; //TESTNET HEIGHT
-		const uint64_t BLOCK_BLOB_SHUFFLE_CHECK_HEIGHT = 1400; //TESTNET HEIGHT
-        const uint64_t TRANSACTION_INPUT_BLOCKTIME_VALIDATION_HEIGHT = 1400; //testnet height
+		const uint64_t TRANSACTION_SIGNATURE_COUNT_VALIDATION_HEIGHT = 1400; //UPGRADE HEIGHT
+		const uint64_t BLOCK_BLOB_SHUFFLE_CHECK_HEIGHT = 1400; //UPGRADE HEIGHT
+        const uint64_t TRANSACTION_INPUT_BLOCKTIME_VALIDATION_HEIGHT = 1400; //UPGRADE HEIGHT
 
 		const uint64_t CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_BLOCKS = 1;
 		const uint64_t CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_SECONDS = DIFFICULTY_TARGET * CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_BLOCKS;
@@ -240,8 +238,8 @@ namespace CryptoNote {
 
 	// P2P Network Configuration Section - This defines our current P2P network version
 	// and the minimum version for communication between nodes
-	const uint8_t  P2P_CURRENT_VERSION = 6; //bump p2p version 
-	const uint8_t  P2P_MINIMUM_VERSION = 5; //bump min supported version
+	const uint8_t  P2P_CURRENT_VERSION = 7; //bump p2p version 
+	const uint8_t  P2P_MINIMUM_VERSION = 6; //bump min supported version
 	
 const std::unordered_map<
     uint8_t,
@@ -286,11 +284,12 @@ const std::unordered_map<
 	const std::string LICENSE_URL = "https://github.com/plenteum/plenteum/blob/master/LICENSE";
 	const static boost::uuids::uuid CRYPTONOTE_NETWORK =
 	{
-		{  0xa2, 0x7d, 0x4b, 0x2c, 0xcf, 0x52, 0x37, 0x41, 0x35, 0xf9, 0x41, 0xa4, 0xc6, 0xa1, 0x43, 0xa2  } //changed last char of network Id
+		{  0xa2, 0x7d, 0x4b, 0x2c, 0xcf, 0x52, 0x37, 0x41, 0x35, 0xf9, 0x41, 0xa4, 0xc6, 0xa1, 0x43, 0xa2  }
 	};
 
 	const char* const SEED_NODES[] = {
 		//add seed nodes
-		"197.81.192.74:44025", //DO-Seed2
+		"197.81.192.74:44025",
+		"88.208.210.12:44025"
 	};
 } // CryptoNote
