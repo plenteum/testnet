@@ -1034,7 +1034,14 @@ std::error_code Core::addBlock(const CachedBlock& cachedBlock, RawBlock&& rawBlo
     uint64_t fee = 0;
     auto transactionValidationResult = validateTransaction(transaction, validatorState, cache, fee, previousBlockIndex);
     if (transactionValidationResult) {
+	  const auto hash = transaction.getTransactionHash();
       logger(Logging::DEBUGGING) << "Failed to validate transaction " << transaction.getTransactionHash() << ": " << transactionValidationResult.message();
+	  if (transactionPool->checkIfTransactionPresent(hash))
+	  {
+		  logger(Logging::DEBUGGING) << "Invalid transaction " << hash << " is present in the pool, removing";
+		  transactionPool->removeTransaction(hash);
+		  notifyObservers(makeDelTransactionMessage({ hash }, Messages::DeleteTransaction::Reason::NotActual));
+	  }
       return transactionValidationResult;
     }
 
