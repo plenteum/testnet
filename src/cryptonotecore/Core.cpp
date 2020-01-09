@@ -2483,7 +2483,7 @@ bool Core::validateBlockTemplateTransaction(
 
 	/* Do not select transactions for inclusion in a block that create excessive outputs
 		   this is to prevent abuse whereby 1 input is used to create thousands of outputs */
-	if (transaction.outputs.size() > transaction.inputs.size()* CryptoNote::parameters::NORMAL_TX_MAX_OUTPUT_COUNT_V1)
+	if (transaction.outputs.size() > CryptoNote::parameters::NORMAL_TX_MAX_OUTPUT_COUNT_V1)
 	{
 		logger(Logging::TRACE) << "Not adding transaction " << cachedTransaction.getTransactionHash()
 			<< " to block template, excessive input deconstruction.";
